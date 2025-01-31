@@ -26,7 +26,7 @@ class GiphyApiService implements ImageProviderInterface
             ]
         ])->toArray();
 
-        $gifs = array_map(
+        return array_map(
             function ($gif) {
                 return new ImageDto(
                     $gif['id'],
@@ -37,8 +37,6 @@ class GiphyApiService implements ImageProviderInterface
             },
             $response['data']
         );
-
-        return $gifs;
     }
 
     public function getImageById(string $gifId): ImageDto

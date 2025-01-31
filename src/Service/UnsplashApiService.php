@@ -2,33 +2,58 @@
 
 namespace App\Service;
 
-use Unsplash\HttpClient;
-use Unsplash\Photo;
-use Unsplash\Search;
+use App\Contract\ImageProviderInterface;
+use App\Dto\ImageDto;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
+use Symfony\Contracts\HttpClient\HttpClientInterface;
 
-class UnsplashApiService
+class UnsplashApiService implements ImageProviderInterface
 {
-    public function __construct()
+    public const IMAGES_PER_PAGE = 12;
+
+    public function __construct(
+        private HttpClientInterface $client,
+        #[Autowire(env: 'UNSPLASH_API_ACCESS_KEY')] private string $unsplashApiKey
+    ) {}
+
+    public function getImagesByQuery(string $query): array
     {
-        HttpClient::init([
-            'applicationId'    => 'jYL_BA4S0dDVx2LlCE6h_9NuIUE6oVsGgT7HER-5jrM',
-            'secret'    => 'rli4eBYepjjy0wGIqA_U5-QyvxbsR6IGKCc2aYeb0yE',
-            'utmSource' => 'immersive_flashcards',
-        ]);
+        $response = $this->client->request('GET', 'https://api.unsplash.com/search/photos', [
+            'query' => [
+                'client_id' => $this->unsplashApiKey,
+                'query' => $query,
+                'per_page' => self::IMAGES_PER_PAGE
+            ]
+        ])->toArray();
+
+        return array_map(
+            function ($image) {
+                return new ImageDto(
+                    $image['id'],
+                    $image['urls']['small'],
+                    $image['alt_description'] ?? "",
+                    'unsplash'
+                );
+            },
+            $response['results']
+        );
     }
 
-    public function searchImages(string $search = 'chocolate')
+    public function getImageById(string $imageId): ImageDto
     {
 
-        $page = 1;
-        $per_page = 12;
-        $orientation = 'landscape';
+        $image = $this->client->request('GET', sprintf('https://api.unsplash.com/photos/%s', $imageId), [
+            'query' => [
+                'client_id' => $this->unsplashApiKey,
 
-        return Search::photos($search, $page, $per_page, $orientation);
-    }
+            ]
+        ])->toArray();
 
-    public function getImageById(string $photoId = "vdx5hPQhXFk")
-    {
-        return Photo::find($photoId);
+        return new ImageDto(
+            $image['id'],
+            $image['urls']['small'],
+            $image['alt_description'] ?? "",
+            'unsplash'
+        );
     }
 }
