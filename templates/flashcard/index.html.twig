@@ -6,17 +6,38 @@
 
 <div class="example-wrapper">
     
+    {% set query = app.request.get('query') %}
 
-    {% for image in images %}
-        <img src="{{ image.url }}" alt="{{ image.alt }}">
-    {% endfor %}
+    <form method="get">
+        <input value="{{ query }}" name="query" type="search">
+        <button>Search</button>
+    </form>
+
+    <form action="">
+        <div class="selection-grid">
+            {% for image in images %}
+
+                {% set unique_id = 'selected-image-' ~ loop.index %}
+
+                <div class="image-field">
+                    <label for="{{ unique_id }}">
+                        <input id="{{ unique_id }}" class="img-radio-btn" name="selected-image" value="{{ image.id }}" type="radio">
+                        <img class="img" src="{{ image.url }}" alt="{{ image.alt }}">
+                    </label>
+                </div>
+
+                <input type="hidden" value="{{ query }}">
+            {% endfor %}
+            <button>Submit</button>
+        </div>
+    </form>
 
 
-    {% for gif in gifs %}
+    {# {% for gif in gifs %}
         <div class="image-container">
             <img src="{{ gif.url }}" alt="{{ gif.alt }}">
         </div>
-    {% endfor %}
+    {% endfor %} #}
 
 
 

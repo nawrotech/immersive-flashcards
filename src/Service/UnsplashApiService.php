@@ -16,13 +16,14 @@ class UnsplashApiService implements ImageProviderInterface
         #[Autowire(env: 'UNSPLASH_API_ACCESS_KEY')] private string $unsplashApiKey
     ) {}
 
-    public function getImagesByQuery(string $query): array
+    public function getImagesByQuery(string $query, ?string $lang = 'en'): array
     {
         $response = $this->client->request('GET', 'https://api.unsplash.com/search/photos', [
             'query' => [
                 'client_id' => $this->unsplashApiKey,
                 'query' => $query,
-                'per_page' => self::IMAGES_PER_PAGE
+                'per_page' => self::IMAGES_PER_PAGE,
+                'lang' => $lang
             ]
         ])->toArray();
 

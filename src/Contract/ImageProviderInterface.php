@@ -11,5 +11,5 @@ interface ImageProviderInterface
     /**
      * @return ImageDto[]
      */
-    public function getImagesByQuery(string $query): array;
+    public function getImagesByQuery(string $query, ?string $lang): array;
 }
