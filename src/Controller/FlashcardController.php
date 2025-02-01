@@ -22,7 +22,6 @@ final class FlashcardController extends AbstractController
 
         $images = $query ? $unsplashApiService?->getImagesByQuery($query) : [];
 
-
         return $this->render('flashcard/index.html.twig', [
             'images' => $images,
         ]);
