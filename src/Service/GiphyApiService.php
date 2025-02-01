@@ -16,13 +16,14 @@ class GiphyApiService implements ImageProviderInterface
         #[Autowire(env: 'GIPHY_API_KEY')] private string $giphyApiKey
     ) {}
 
-    public function getImagesByQuery(string $query): array
+    public function getImagesByQuery(string $query, ?string $lang = 'es'): array
     {
         $response = $this->client->request('GET', 'https://api.giphy.com/v1/gifs/search', [
             'query' => [
                 'api_key' => $this->giphyApiKey,
                 'q' => $query,
-                'limit' => self::GIFS_PER_PAGE
+                'limit' => self::GIFS_PER_PAGE,
+                'lang' => $lang
             ]
         ])->toArray();
 

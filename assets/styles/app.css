@@ -1,17 +1,189 @@
-body {
-    background-color: skyblue;
+:root {
+    --ff-sans: sans-serif;
+    --ff-serif: serif;
+
+    --fs-8: 0.5rem;
+    --fs-12: 0.75rem;
+    --fs-14: 0.875rem;
+    --fs-16: 1rem;
+    --fs-18: 1.125rem;
+    --fs-20: 1.25rem;
+    --fs-22: 1.1.25rem;
+    --fs-24: 1.5rem;
+    --fs-28: 1.75rem;
+    --fs-32: 2rem;
+    --fs-36: 2rem;
+
+    --spacing-8: 0.5rem;
+    --spacing-16: 1rem;
+    --spacing-24: 1.5rem;
+    --spacing-32: 2rem;
+    --spacing-40: 2.5rem;
+    --spacing-48: 3rem;
+    --spacing-56: 3.5rem;
+    --spacing-64: 4rem;
+    --spacing-130: 8.125rem;
+
+    --fw-400: 400;
+    --fw-700: 700;
+
+    --borr-circle: 100vh;
+    --borr: 0.5rem;
+
+    --box-shadow-primary:0 8px 4px #0000001f;
+    --box-shadow-secondary: 0 0 2px #0000003d;
+
+    /* hsl */
+    --clr-primary-400: orangered;
+    --clr-secondary-400: white;
+    --clr-neutral-100: #fff;
+
+
+    --clr-overlay: rgba(0,0,0,0.87);
+
+
 }
 
-.image-container {
+/* resets */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
 
-    width: 200px;
-    height: 200px;
-    overflow: hidden;
 
-    img {
-        display: block;
-        max-width: 100%;
-        height: 100%;
-        object-fit: cover;
+ul[role='list'],
+ol[role='list'] {
+  list-style: none;
+}
+
+html:focus-within {
+  scroll-behavior: smooth;
+}
+
+a:not([class]) {
+  text-decoration-skip-ink: auto;
+} 
+
+a {
+  color: currentColor;
+  text-decoration: none;
+  &:hover {
+    cursor: pointer;
+  }
+
+}
+
+img,
+picture {
+  max-width: 100%;
+  display: block;
+}
+
+
+input,
+button,
+textarea,
+select {
+  font: inherit;
+}
+
+h1,h2,h3,h4,h5,h6 {
+    line-height: 1.1;
+    text-wrap: balance;
+
+}
+
+p, h1, h2, h3, h4, h5, h6 {
+  overflow-wrap: break-word;
+}
+
+p {
+  text-wrap: pretty;
+}
+
+
+@media (prefers-reduced-motion: reduce) {
+    html:focus-within {
+     scroll-behavior: auto;
     }
+    
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+}
+
+body {
+  text-rendering: optimizeSpeed;
+}
+
+/* utils */
+.sr-only:not(:focus):not(:active) {
+  clip: rect(0 0 0 0); 
+  clip-path: inset(50%);
+  height: 1px;
+  overflow: hidden;
+  position: absolute;
+  white-space: nowrap; 
+  width: 1px;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.upper {
+  text-transform: uppercase;
+}
+
+.fw-700 {
+  font-weight: var(--fw-700);
+}
+
+.flow > * + * {
+  margin-top: var(--flow-space, 1rem);
+}
+
+.container {
+  max-width: min(calc(100% - 2rem), 996px);
+  margin-inline: auto;
+}
+
+
+/* app */
+.img {
+    display: block;
+    width: 200px; 
+    height: 200px;
+    object-fit: fill; 
+}
+
+.selection-grid {
+    max-width: 400px;
+    max-height: 400px;
+    display: grid;
+    align-items: center;
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.image-field {
+    position: relative;
+    isolation: isolate;
+    &:has(input[type='radio']:checked) {
+        outline: 2px solid red;
+    } 
+}
+
+.img-radio-btn {
+    position: absolute;
+    z-index: -1;
+    inset-block-start: 0;
+    inset-block-end: 0;
 }
