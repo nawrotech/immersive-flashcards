@@ -13,17 +13,17 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class FlashcardController extends AbstractController
 {
-    #[Route('/flashcard', name: 'app_flashcard')]
+    #[Route('/', name: 'app_flashcard')]
     public function index(
         UnsplashApiService $unsplashApiService,
         GiphyApiService $giphyApiService,
         #[MapQueryParameter()] string $query = ""
     ): Response {
 
-        $images = $query ? $unsplashApiService?->getImagesByQuery($query) : [];
+        // $images = $query ? $unsplashApiService?->getImagesByQuery($query) : [];
 
         return $this->render('flashcard/index.html.twig', [
-            'images' => $images,
+            // 'images' => $images,
         ]);
     }
 }
