@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello DeckController!{% endblock %}
+
+{% block body %}
+
+    <a href="{{ path('app_deck_create') }}">Create deck</a>
+    
+    {% for deck in decks %}
+        <div class="">
+            <h2>{{deck.name}}</h2>
+            <p>Number of cards: {{deck.flashcards.count}}</p>
+        </div>
+    {% endfor %}
+
+{% endblock %}
