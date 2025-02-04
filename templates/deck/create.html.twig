@@ -5,6 +5,48 @@
 {% block body %}
 
 
-    {{form(form)}}
+    {{ form_start(form) }}
+        <div {{ stimulus_controller('ajax-images', {
+            'imagesUrl': path("app_flashcard"),
+            'index': form.flashcards|length > 0 ? form.flashcards|last.vars.name + 1 : 0,
+            'backPrototype': form_widget(form.flashcards.vars.prototype.back)|raw
+        }) }}>
+
+            {{form_row(form.name)}}
+            {{form_row(form.lang)}}
+
+            {% for flashcardForm in form.flashcards %}
+                <div data-flashcard-item class="flashcard-item">
+                    {{ form_row(flashcardForm.front, {
+                        'attr': {
+                            'data-ajax-images-target': 'searchTerm'
+                        }
+                    }) }}
+
+
+                    <div class="back-wrapper">
+                        {{ form_row(flashcardForm.back, {
+                            'attr': {
+                                'data-ajax-images-target': "flashcardBack",
+                                'data-index': loop.index0
+                            }
+                        }) }}
+                    </div>
+                
+
+                    <div class="row">
+                        {{ form_row(flashcardForm.searchGifs, {
+                            'attr': {
+                                'data-action': 'ajax-images#searchImages'
+                            }
+                        }) }}
+                        {{ form_row(flashcardForm.searchImages) }}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+    {{ form_end(form) }}
+
 
 {% endblock %}
