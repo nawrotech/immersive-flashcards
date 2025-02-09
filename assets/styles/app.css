@@ -173,7 +173,18 @@ a {
 nav {
   background-color: purple;
   padding: 2rem 4rem;
+
+  .split {
+    display: flex;
+    gap: 1.25rem;
+  }
+
+  li:last-of-type {
+    margin-left: auto;
+  }
+  
 }
+
 
 /* app */
 .selection-grid {
@@ -212,4 +223,27 @@ nav {
     z-index: -1;
     inset-block-start: 0;
     inset-block-end: 0;
+}
+
+
+
+
+/* flashcard details */
+.flashcard {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  border: 1px solid black;
+
+  img {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+
+    border-left: 1px solid black;
+  }
+
+  & > * {
+    flex: 1;
+  }
 }
