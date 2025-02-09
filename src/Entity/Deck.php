@@ -27,7 +27,7 @@ class Deck
     /**
      * @var Collection<int, Flashcard>
      */
-    #[ORM\OneToMany(targetEntity: Flashcard::class, mappedBy: 'deck')]
+    #[ORM\OneToMany(targetEntity: Flashcard::class, mappedBy: 'deck', cascade: ['persist'], orphanRemoval: true)]
     private Collection $flashcards;
 
     public function __construct()

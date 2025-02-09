@@ -10,7 +10,6 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Session\Flash\FlashBag;
 use Symfony\Component\Routing\Attribute\Route;
 
 final class DeckController extends AbstractController
@@ -33,15 +32,10 @@ final class DeckController extends AbstractController
         ?Deck $deck = null
     ): Response {
 
-        $flashcard1 = new Flashcard();
-        $flashcard2 = new Flashcard();
-        // $flashcard2 = new Flashcard();
-
         if ($deck == null) {
             $deck = new Deck();
             $deck->setCreator($this->getUser());
-            $deck->addFlashcard($flashcard1);
-            $deck->addFlashcard($flashcard2);
+            $deck->addFlashcard(new Flashcard());
         }
 
         $form = $this->createForm(DeckType::class, $deck);
@@ -51,11 +45,10 @@ final class DeckController extends AbstractController
 
             $deck = $form->getData();
 
-            dd($deck);
 
             $em->persist($deck);
             $em->flush();
-
+            // dd($deck);
             return $this->redirectToRoute('app_deck');
         }
 

@@ -176,20 +176,15 @@ nav {
 }
 
 /* app */
-.img {
-    display: block;
-    /* width: 150px; 
-    height: 150px; */
-    object-fit: fill; 
-}
-
 .selection-grid {
-    /* max-width: 200px; */
-    /* max-height: 200px; */
-    /* display: grid;
-    align-items: center;
-    grid-template-columns: repeat(3, 1fr); */
     display: flex;
+
+    .img {
+      display: block;
+      width: 100%;
+      object-fit: fill; 
+      height: 100px; 
+  }
 
     & > * {
       flex: 1 1 100px;

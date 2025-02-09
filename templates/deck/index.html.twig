@@ -10,6 +10,10 @@
         <div class="">
             <h2>{{deck.name}}</h2>
             <p>Number of cards: {{deck.flashcards.count}}</p>
+
+            <a class="link" href="{{ path('app_deck_details', { id: deck.id }) }}">Check deck</a>
+
+            <a class="link" href="{{ path('app_deck_create', { id: deck.id }) }}">Edit deck</a>
         </div>
     {% endfor %}
 
