@@ -5,13 +5,17 @@
 {% block body %}
 
 
-    <h1>Deck name: {{deck.name}}</h1>
+   
+    <div class="flashcards-container | flow">
+        <h1>Deck name: {{deck.name}}</h1>
+        {% for flashcard in flashcards %}
+            <div class="flashcard">
+                <h1>{{ flashcard.front }}</h1>
+                <img src="{{ flashcard.back }}" alt="{{ flashcard.front }}">
+            </div>
+        {% endfor %}
+    </div>
 
-    {% for flashcard in flashcards %}
-            <h1>{{ flashcard.front }}</h1>
-            <img src="{{ flashcard.back }}" alt="{{ flashcard.front }}">
-
-    {% endfor %}
 
 
     <a href="">add gif card</a>
