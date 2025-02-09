@@ -39,22 +39,4 @@ class UnsplashApiService implements ImageProviderInterface
             $response['results']
         );
     }
-
-    public function getImageById(string $imageId): ImageDto
-    {
-
-        $image = $this->client->request('GET', sprintf('https://api.unsplash.com/photos/%s', $imageId), [
-            'query' => [
-                'client_id' => $this->unsplashApiKey,
-
-            ]
-        ])->toArray();
-
-        return new ImageDto(
-            $image['id'],
-            $image['urls']['small'],
-            $image['alt_description'] ?? "",
-            'unsplash'
-        );
-    }
 }

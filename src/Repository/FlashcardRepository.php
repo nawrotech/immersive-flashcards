@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Deck;
 use App\Entity\Flashcard;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -16,26 +17,24 @@ class FlashcardRepository extends ServiceEntityRepository
         parent::__construct($registry, Flashcard::class);
     }
 
-    //    /**
-    //     * @return Flashcard[] Returns an array of Flashcard objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('f')
-    //            ->andWhere('f.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('f.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
+    /**
+     * @return Flashcard[] Returns an array of Flashcard objects
+     */
+    public function findByDeck(Deck $deck): array
+    {
+        return $this->createQueryBuilder('f')
+            ->andWhere('f.deck = :deck')
+            ->setParameter('deck', $deck)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
 
-    //    public function findOneBySomeField($value): ?Flashcard
+    //    public function findOneBySomeField($deck): ?Flashcard
     //    {
     //        return $this->createQueryBuilder('f')
     //            ->andWhere('f.exampleField = :val')
-    //            ->setParameter('val', $value)
+    //            ->setParameter('val', $deck)
     //            ->getQuery()
     //            ->getOneOrNullResult()
     //        ;

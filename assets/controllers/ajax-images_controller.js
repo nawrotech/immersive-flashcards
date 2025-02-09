@@ -76,6 +76,8 @@ export default class extends Controller {
 
 
     selectImage(e) {
+        console.log(e.currentTarget.value);
+
         const container = this.clickedElementContainer(e, '.flashcard-item');
         const backField = this.flashcardBackTargets.find(element => container.contains(element));
         backField.value = e.currentTarget.value;
@@ -97,7 +99,7 @@ export default class extends Controller {
                              id="${image?.id}" 
                              class="img-radio-btn" 
                              name="selected-image-${index}" 
-                             value="${image?.id}"
+                             value="${image?.url}"
                              type="radio">
                             <img class="img" src="${image?.url}" alt="${image?.alt}">
                         </label>

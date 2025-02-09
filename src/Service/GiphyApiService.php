@@ -7,6 +7,7 @@ use App\Dto\ImageDto;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
+
 class GiphyApiService implements ImageProviderInterface
 {
     public const GIFS_PER_PAGE = 12;
@@ -37,26 +38,6 @@ class GiphyApiService implements ImageProviderInterface
                 );
             },
             $response['data']
-        );
-    }
-
-    public function getImageById(string $gifId): ImageDto
-    {
-
-        $response = $this->client->request('GET', sprintf('https://api.giphy.com/v1/gifs/%s', $gifId), [
-            'query' => [
-                'api_key' => $this->giphyApiKey,
-
-            ]
-        ])->toArray();
-
-        $gif = $response['data'];
-
-        return new ImageDto(
-            $gif['id'],
-            $gif['images']['original']['url'],
-            $gif['alt_text'],
-            'giphy'
         );
     }
 }

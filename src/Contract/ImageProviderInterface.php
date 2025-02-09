@@ -6,8 +6,6 @@ use App\Dto\ImageDto;
 
 interface ImageProviderInterface
 {
-    public function getImageById(string $id): ?ImageDto;
-
     /**
      * @return ImageDto[]
      */
