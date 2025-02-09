@@ -19,19 +19,31 @@
             {{form_row(form.name)}}
             {{form_row(form.lang)}}
 
-            <ul {{ stimulus_target('ajax-images', 'collectionContainer') }}>
+            <ul class="" {{ stimulus_target('ajax-images', 'collectionContainer') }}>
                 {% for flashcardForm in form.flashcards %}
                     <li class="{{ wrapperClassName }}">
                      
-                            {{ form_row(flashcardForm.front) }}
+                            <div class="split">
+                                {{ form_row(flashcardForm.front) }}
         
+                                {% if flashcardForm.vars.value.back is defined %}
+                                    <img class="preview-flashcard-image" src="{{ flashcardForm.vars.value.back }}" alt="{{ flashcardForm.vars.value.front }}">
+                                {% endif %}
+                            </div>
+
+
                             {{ form_row(flashcardForm.back, {
                                 'attr': {
                                     'data-index': loop.index0
                                 }
                             }) }}
-                           
-                            <div class="row">
+
+                       
+
+                            
+                        
+
+                            <div class="split">
                                 {{ form_row(flashcardForm.searchGifs) }}
                                 {{ form_row(flashcardForm.searchImages) }}
                             </div>

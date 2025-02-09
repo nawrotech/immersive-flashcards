@@ -150,6 +150,11 @@ body {
   margin-top: var(--flow-space, 1rem);
 }
 
+.split {
+  display: flex;
+  gap: var(--split-space, 1rem);
+}
+
 .container {
   max-width: min(calc(100% - 2rem), 996px);
   margin-inline: auto;
@@ -171,13 +176,10 @@ a {
 
 /* nav */
 nav {
+  --split-space: 1.25rem;
   background-color: purple;
   padding: 2rem 4rem;
 
-  .split {
-    display: flex;
-    gap: 1.25rem;
-  }
 
   li:last-of-type {
     margin-left: auto;
@@ -224,6 +226,23 @@ nav {
     inset-block-start: 0;
     inset-block-end: 0;
 }
+
+
+/* deck creation */
+
+form[name='deck'] {
+
+
+  .preview-flashcard-image {
+    width: 50px; 
+    height: 50px;
+  }
+
+  .split {
+    align-items: center;
+  }
+}
+
 
 
 
