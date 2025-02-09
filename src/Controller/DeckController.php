@@ -6,6 +6,7 @@ use App\Entity\Deck;
 use App\Entity\Flashcard;
 use App\Form\DeckType;
 use App\Repository\DeckRepository;
+use App\Repository\FlashcardRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -39,16 +40,13 @@ final class DeckController extends AbstractController
         }
 
         $form = $this->createForm(DeckType::class, $deck);
-
         $form->handleRequest($request);
+
         if ($form->isSubmitted() && $form->isValid()) {
 
             $deck = $form->getData();
-
-
             $em->persist($deck);
             $em->flush();
-            // dd($deck);
             return $this->redirectToRoute('app_deck');
         }
 
@@ -58,12 +56,16 @@ final class DeckController extends AbstractController
     }
 
     #[Route("/decks/details/{id}", name: "app_deck_details")]
-    public function details(Deck $deck): Response
-    {
+    public function details(
+        Deck $deck,
+        FlashcardRepository $flashcardRepository,
+    ): Response {
 
+        $flashcards = $flashcardRepository->findByDeck($deck);
 
         return $this->render('deck/details.html.twig', [
-            'deck' => $deck
+            'deck' => $deck,
+            'flashcards' => $flashcards
         ]);
     }
 }
