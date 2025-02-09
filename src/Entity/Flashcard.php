@@ -22,6 +22,10 @@ class Flashcard
     #[ORM\ManyToOne(inversedBy: 'flashcards')]
     private ?Deck $deck = null;
 
+    #[ORM\Column(length: 10)]
+    private ?string $imageType = null;
+
+
     public function getId(): ?int
     {
         return $this->id;
@@ -59,6 +63,18 @@ class Flashcard
     public function setDeck(?Deck $deck): static
     {
         $this->deck = $deck;
+
+        return $this;
+    }
+
+    public function getImageType(): ?string
+    {
+        return $this->imageType;
+    }
+
+    public function setImageType(string $imageType): static
+    {
+        $this->imageType = $imageType;
 
         return $this;
     }

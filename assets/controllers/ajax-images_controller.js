@@ -3,25 +3,111 @@ import { Controller } from '@hotwired/stimulus';
 
 /* stimulusFetch: 'lazy' */
 export default class extends Controller {
- 
-    static targets = ['searchTerm', 'flashcardBack']
+    static targets = ['flashcardFront', 'flashcardBack', 'flashcardImageType', 'collectionContainer', 'removeButton', ]
    
     static values = {
         imagesUrl: String,
-        backPrototype: String,
-        index: Number
+        index: Number,
+        prototype: String,
+        wrapperClassName: String
     }
 
-    connect() {
-        console.log(this.indexValue);
-        // console.log(this.prototypeValue);
-        // console.log(this.flashcardBackTargets.at(0));
+    addFlashcard()
+    {
+        const item = document.createElement("li");
+        item.classList = this.wrapperClassNameValue;
+        item.innerHTML = this.prototypeValue.replace(/__name__/g, this.indexValue);
+        this.collectionContainerTarget.appendChild(item);
+        this.indexValue++;
+
     }
 
-    async fetchImages(params = {"query": 'cat', 'flashcardType': 'image'}) {
+    deleteFlashcard(event) {
+        event.target.closest(`.${this.wrapperClassNameValue}`).remove();
+    }
 
+    async search(e, imageType) {
+        const container = e.currentTarget.closest(`.${this.wrapperClassNameValue}`);
+        if (!container) 
+            return;
+
+        const backField = this.flashcardBackTargets.find(element => container.contains(element));
+
+        const searchTermField = this.flashcardFrontTargets.find(element => container.contains(element));
+        if (!searchTermField?.value) 
+            return;
+        
+        const imageTypeField = this.flashcardImageTypeTargets.find(element => container.contains(element));
+        imageTypeField.value = imageType;
+
+        const backFieldWrapper = backField.closest('.back-wrapper');
+
+        try {
+            backFieldWrapper.querySelector('.selection-grid')?.remove();
+
+            const images = await this.fetchImages({'query': searchTermField?.value, 'flashcardType': imageType});
+            const imageGridWrapper = this.createImageSelectionWrapperElement();
+            
+            images?.forEach(image => {
+                const imageElement = this.createImageElement(image, this.indexValue);
+                imageGridWrapper.appendChild(imageElement);
+            });
+            backFieldWrapper.appendChild(imageGridWrapper);
+
+          } catch (error) {
+            console.error('Error fetching images:', error);
+          }
+
+    }
+
+    searchImages(e) {
+        this.search(e, 'image');
+    }
+
+    searchGifs(e) {
+        this.search(e, 'gif');
+    }
+
+    clickedElementContainer(e, className) {
+        const container = e.currentTarget.closest(className);
+        if (!container) return;
+        return container;
+    }
+
+
+    selectImage(e) {
+        const container = this.clickedElementContainer(e, '.flashcard-item');
+        const backField = this.flashcardBackTargets.find(element => container.contains(element));
+        backField.value = e.currentTarget.value;
+    }
+
+
+    createImageSelectionWrapperElement() {
+        const imageSelectionGrid = document.createElement('div');
+        imageSelectionGrid.className = 'selection-grid';
+        return imageSelectionGrid;
+    }
+
+    createImageElement(image, index) {
+        const imageElement = document.createElement('div');
+        imageElement.classList = 'image-field';
+        imageElement.innerHTML = `
+                        <label for="${image?.id}">
+                            <input data-action="click->ajax-images#selectImage"
+                             id="${image?.id}" 
+                             class="img-radio-btn" 
+                             name="selected-image-${index}" 
+                             value="${image?.id}"
+                             type="radio">
+                            <img class="img" src="${image?.url}" alt="${image?.alt}">
+                        </label>
+                    `;
+        return imageElement;
+    }
+
+    
+    async fetchImages(params) {
         const queryString = new URLSearchParams(params).toString();
-
         return fetch(`${this.imagesUrlValue}?${queryString}`)
                 .then(response => {
                     if (!response.ok) {
@@ -32,90 +118,6 @@ export default class extends Controller {
                 .then(data => data)
                 .catch(error => console.error('Error fetching images:', error));
     
-    }
-
-
-    async searchImages(e) {
-        const container = e.currentTarget.closest('[data-flashcard-item]');
-        if (!container) return;
-
-        console.log(container);
-
-        const backField = this.flashcardBackTargets.find(element => container.contains(element));
-        const searchTerm = this.searchTermTargets.find(element => container.contains(element))?.value;
-
-        const backFieldWrapper = backField.closest('.back-wrapper');
-        const index = backField.dataset.index;
-
-        try {
-            backFieldWrapper.querySelector('.selection-grid')?.remove();
-
-            console.log(searchTerm);
-
-            const data = await this.fetchImages({'query': searchTerm, 'flashcardType': 'image'});
-            const imageGridWrapper = this.createImageSelectionWrapperElement();
-            data?.forEach(image => {
-                const imageEl = this.createImageFieldElement(image, index);
-
-                const imageField = document.createElement('div');
-                imageField.classList = 'image-field';
-                imageField.innerHTML = imageEl;
-
-                imageGridWrapper.appendChild(imageField);
-            });
-
-            backFieldWrapper.appendChild(imageGridWrapper);
-
-            const selectedImage = document.querySelector('.img-radio-btn:checked');
-            if (selectedImage) {
-                console.log('Selected Image ID:', selectedImage.value);
-            }
-            
-
-          } catch (error) {
-            console.error('Error fetching images:', error);
-          }
-
-    }
-
-
-    selectImage(e) {
-        const container = e.currentTarget.closest('[data-flashcard-item]');
-        if (!container) return;
-
-        const backField = this.flashcardBackTargets.find(element => container.contains(element));
-        backField.value = e.currentTarget.value;
-        console.log(backField);
-
-        // console.log(e.currentTarget)
-    }
-
-
-    createImageSelectionWrapperElement() {
-        const imageSelectionGrid = document.createElement('div');
-        imageSelectionGrid.className = 'selection-grid';
-
-        return imageSelectionGrid;
-
-    }
-
-    createImageFieldElement(image, index) {
-        const imageFieldElement = `
-                        <label for="${image?.id}">
-                            <input data-action="click->ajax-images#selectImage" id="${image?.id}" class="img-radio-btn" name="selected-image-${index}" value="${image?.id}" type="radio">
-                            <img class="img" src="${image?.url}" alt="${image?.alt}">
-                        </label>
-                    `;
-        return imageFieldElement;
-    }
-
-    searchGifs() {
-
-    }
-
-
-    createSelectionGrid(images) {
- 
     }
 
 

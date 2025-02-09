@@ -1,49 +1,52 @@
 {% extends 'base.html.twig' %}
 
+{% set wrapperClassName = "flashcard-item" %}
+
 {% block title %}Deck form{% endblock %}
 
 {% block body %}
 
-
-    {{ form_start(form) }}
+    {{ form_start(form, {'attr': {
+        'novalidate': 'novalidate'
+    }}) }}
         <div {{ stimulus_controller('ajax-images', {
             'imagesUrl': path("app_flashcard"),
             'index': form.flashcards|length > 0 ? form.flashcards|last.vars.name + 1 : 0,
-            'backPrototype': form_widget(form.flashcards.vars.prototype.back)|raw
+            'prototype': form_widget(form.flashcards.vars.prototype)|raw,
+            'wrapperClassName': wrapperClassName
         }) }}>
 
             {{form_row(form.name)}}
             {{form_row(form.lang)}}
 
-            {% for flashcardForm in form.flashcards %}
-                <div data-flashcard-item class="flashcard-item">
-                    {{ form_row(flashcardForm.front, {
-                        'attr': {
-                            'data-ajax-images-target': 'searchTerm'
-                        }
-                    }) }}
+            <ul {{ stimulus_target('ajax-images', 'collectionContainer') }}>
+                {% for flashcardForm in form.flashcards %}
+                    <li class="{{ wrapperClassName }}">
+                     
+                            {{ form_row(flashcardForm.front) }}
+        
+                            {{ form_row(flashcardForm.back, {
+                                'attr': {
+                                    'data-index': loop.index0
+                                }
+                            }) }}
+                           
+                            <div class="row">
+                                {{ form_row(flashcardForm.searchGifs) }}
+                                {{ form_row(flashcardForm.searchImages) }}
+                            </div>
 
+                            {{ form_row(flashcardForm.imageType) }}
 
-                    <div class="back-wrapper">
-                        {{ form_row(flashcardForm.back, {
-                            'attr': {
-                                'data-ajax-images-target': "flashcardBack",
-                                'data-index': loop.index0
-                            }
-                        }) }}
-                    </div>
-                
+                            {{form_row(flashcardForm.deleteFlashcard)}}
+                    </li>
+                {% endfor %}
+            </ul>
 
-                    <div class="row">
-                        {{ form_row(flashcardForm.searchGifs, {
-                            'attr': {
-                                'data-action': 'ajax-images#searchImages'
-                            }
-                        }) }}
-                        {{ form_row(flashcardForm.searchImages) }}
-                    </div>
-                </div>
-            {% endfor %}
+            <button class="btn btn-success" type="button" {{ stimulus_action('ajax-images', 'addFlashcard') }}>
+               Add flashcard
+            </button>
+
         </div>
 
     {{ form_end(form) }}

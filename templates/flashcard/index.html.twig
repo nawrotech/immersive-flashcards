@@ -15,16 +15,18 @@
 
     <form action="">
         <div class="selection-grid">
+
+            <div class="image-field">
+                <label for="{{ unique_id }}">
+                    <input id="{{ unique_id }}" class="img-radio-btn" name="selected-image" value="{{ image.id }}" type="radio">
+                    <img class="img" src="{{ image.url }}" alt="{{ image.alt }}">
+                </label>
+            </div>
+        </div>
             {% for image in images %}
 
                 {% set unique_id = 'selected-image-' ~ loop.index %}
 
-                <div class="image-field">
-                    <label for="{{ unique_id }}">
-                        <input id="{{ unique_id }}" class="img-radio-btn" name="selected-image" value="{{ image.id }}" type="radio">
-                        <img class="img" src="{{ image.url }}" alt="{{ image.alt }}">
-                    </label>
-                </div>
 
                 <input type="hidden" value="{{ query }}">
                 {# <input type="hidden" value="{{csrf_token("")}}"> #}
