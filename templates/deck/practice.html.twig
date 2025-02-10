@@ -1,0 +1,86 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Practice deck{% endblock %}
+
+{% block body %}
+
+
+    
+        <div
+            {{stimulus_controller('flashcards-slider', {
+                'numOfCards': flashcards|length
+            })}}
+                class="practice-flashcards-wrapper">
+               
+                <button
+                    {{ stimulus_action('flashcards-slider', 'reverseSides') }}  
+                    type="button">
+                    Reverse sides
+                </button>
+
+                <div 
+                    class="practice-flashcards-slider"
+                    {{ stimulus_target('flashcards-slider', 'flashcardContainer') }}
+
+                >
+                    {% for flashcard in flashcards %}
+                            <div 
+                                class="practice-flashcard-container">
+                                <div 
+                                    {{ stimulus_target('flashcards-slider', 'flashcard') }}
+                                    class="practice-flashcard"
+
+                                    >
+
+                                    <div class="front">
+                                        {{flashcard.front}}
+                                    </div>
+                            
+                                    <div class="back">
+                                        <img src="{{ flashcard.back }}" alt="{{ flashcard.front }}">
+                                    </div>
+
+                                    <div class="split score-buttons">
+                                        <button
+                                            {{ stimulus_action('flashcards-slider', 'correct') }}  
+                                        >
+                                            I know
+                                        </button>
+                                        <button
+                                            {{ stimulus_action('flashcards-slider', 'incorrect') }}  
+                                        >I don't know</button>
+                                    </div>
+
+                                    <button 
+                                        {{ stimulus_action('flashcards-slider', 'rotate') }}
+                                        class="rotate-btn">
+                                        Rotate
+                                    </button>
+                                </div>
+                            </div>
+
+                            
+                    {% endfor %}
+                  
+
+                    <button 
+                        {{ stimulus_target('flashcards-slider', 'prevButton') }}
+                        {{ stimulus_action('flashcards-slider', 'prev') }}  
+                        type="button"
+                        class="slider-btn left hidden">
+                        Left
+                    </button>
+
+                    <button 
+                        {{ stimulus_target('flashcards-slider', 'nextButton') }}
+                        {{ stimulus_action('flashcards-slider', 'next') }}  
+                        type="button"
+                        class="slider-btn right">
+                        Right
+                    </button>
+                </div>
+           
+        </div>
+      
+
+{% endblock %}

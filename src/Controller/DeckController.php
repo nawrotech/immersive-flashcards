@@ -7,6 +7,7 @@ use App\Entity\Flashcard;
 use App\Form\DeckType;
 use App\Repository\DeckRepository;
 use App\Repository\FlashcardRepository;
+use ContainerRxqonmw\getFlashcardFormTypeService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -64,6 +65,18 @@ final class DeckController extends AbstractController
         $flashcards = $flashcardRepository->findByDeck($deck);
 
         return $this->render('deck/details.html.twig', [
+            'deck' => $deck,
+            'flashcards' => $flashcards
+        ]);
+    }
+
+
+    #[Route("/decks/practice/{id}", name: "app_deck_practice")]
+    public function practice(Deck $deck, FlashcardRepository $flashcardRepository)
+    {
+        $flashcards = $flashcardRepository->findByDeck($deck);
+
+        return $this->render('deck/practice.html.twig', [
             'deck' => $deck,
             'flashcards' => $flashcards
         ]);
