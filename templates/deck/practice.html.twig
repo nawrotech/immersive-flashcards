@@ -8,7 +8,8 @@
     
         <div
             {{stimulus_controller('flashcards-slider', {
-                'numOfCards': flashcards|length
+                'numOfCards': flashcards|length,
+                'storePracticeResultsUrl': path('app_deck_store_practice_results', {id: app.current_route_parameters.id})
             })}}
                 class="practice-flashcards-wrapper">
                
@@ -29,6 +30,7 @@
                                 <div 
                                     {{ stimulus_target('flashcards-slider', 'flashcard') }}
                                     class="practice-flashcard"
+                                    data-flashcard-id="{{ flashcard.id }}"
 
                                     >
 

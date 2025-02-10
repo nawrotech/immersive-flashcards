@@ -7,18 +7,16 @@ export default class extends Controller {
     static targets = ['prevButton', 'nextButton', 'flashcardContainer', 'flashcard'];
 
     static values = {
-        numOfCards: Number
+        numOfCards: Number,
+        storePracticeResultsUrl: String
     };
 
     results = [];
     counter = 0;
 
     connect() {
-        console.log(this.counter, this.numOfCardsValue);
-        console.log(this.nextButtonTarget, this.prevButtonTarget);
-        this.hideButtons();
+        console.log(this.storePracticeResultsUrlValue);
     }
-
 
     reverseSides() {
         this.flashcardTargets.forEach(flashcard => flashcard.classList.toggle('inversed')); 
@@ -54,14 +52,52 @@ export default class extends Controller {
             id,
             correct
         };
-        this.results.push(obj);
+
+        const existingIndex = this.results.findIndex(result => result.id === id);
+        if (existingIndex !== -1) {
+          this.results[existingIndex] = flashcardScore;
+        } else {
+          this.results.push(flashcardScore);
+        }
+
+        const lastFlashcardId = this.flashcardTargets.at(-1).dataset.flashcardId;
+        if (lastFlashcardId == id && this.results.find(flashcard => flashcard.id == lastFlashcardId)) {
+            this.sendResults();
+        }
     }
 
-    correct(e) {
-        const flashcardScore = this.storeResult(id, true);
+    sendResults() {
+        fetch(this.storePracticeResultsUrlValue, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest'
+            },
+            body: JSON.stringify(this.results,
+            )
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.redirect) {
+                window.location.href = data.url;
+            }
+        })
+        .catch(error => console.error('Error fetching images:', error));
+        ;
+    }
+
+    correct(e) {    
+        const practiceFlashcard = e.currentTarget.closest('.practice-flashcard');
+        const flashcardId = practiceFlashcard.dataset.flashcardId;
+        this.storeResult(flashcardId, true);
+
     }
 
     incorrect(e) {
-        const flashcardScore = this.storeResult(id, false);
+        const practiceFlashcard = e.currentTarget.closest('.practice-flashcard');
+        const flashcardId = practiceFlashcard.dataset.flashcardId;
+        this.storeResult(flashcardId, false);
     }
+
+
 }
