@@ -25,6 +25,9 @@ class Flashcard
     #[ORM\Column(length: 10)]
     private ?string $imageType = null;
 
+    #[ORM\Column(nullable: true)]
+    private ?bool $isCorrect = null;
+
 
     public function getId(): ?int
     {
@@ -75,6 +78,18 @@ class Flashcard
     public function setImageType(string $imageType): static
     {
         $this->imageType = $imageType;
+
+        return $this;
+    }
+
+    public function isCorrect(): ?bool
+    {
+        return $this->isCorrect;
+    }
+
+    public function setIsCorrect(?bool $isCorrect): static
+    {
+        $this->isCorrect = $isCorrect;
 
         return $this;
     }

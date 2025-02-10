@@ -7,15 +7,17 @@ use App\Entity\Flashcard;
 use App\Form\DeckType;
 use App\Repository\DeckRepository;
 use App\Repository\FlashcardRepository;
-use ContainerRxqonmw\getFlashcardFormTypeService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
 final class DeckController extends AbstractController
 {
+
+    public function __construct(private EntityManagerInterface $em) {}
 
     #[Route('/', name: 'app_deck')]
     public function index(DeckRepository $deckRepository): Response
@@ -79,6 +81,35 @@ final class DeckController extends AbstractController
         return $this->render('deck/practice.html.twig', [
             'deck' => $deck,
             'flashcards' => $flashcards
+        ]);
+    }
+
+    #[Route("/decks/practice/results/{id}", name: "app_deck_store_practice_results", methods: ['POST'])]
+    public function storePracticeResults(Request $request, Deck $deck, FlashcardRepository $flashcardRepository): JsonResponse
+    {
+
+        if ($request->isXmlHttpRequest()) {
+            $data = $request->toArray();
+
+            $answers = array_column($data, 'correct', 'id');
+            $flashcards = $flashcardRepository->findby(['deck' => $deck]);
+
+            foreach ($flashcards as $flashcard) {
+                if (isset($answers[$flashcard->getId()])) {
+                    $flashcard->setIsCorrect($answers[$flashcard->getId()]);
+                } else {
+                    $flashcard->setIsCorrect(null);
+                }
+            }
+
+            $this->em->flush();
+        }
+
+        return $this->json([
+            'redirect' => true,
+            'url' => $this->generateUrl("app_deck_details", [
+                'id' => $deck->getId()
+            ])
         ]);
     }
 }
