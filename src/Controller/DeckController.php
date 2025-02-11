@@ -9,7 +9,6 @@ use App\Form\DeckType;
 use App\Repository\DeckRepository;
 use App\Repository\FlashcardRepository;
 use App\Service\FlashcardService;
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -81,7 +80,6 @@ final class DeckController extends AbstractController
     #[Route("/decks/practice/{id}", name: "app_deck_practice")]
     public function practice(Deck $deck, FlashcardRepository $flashcardRepository)
     {
-
 
         $flashcards = $flashcardRepository->findByDeck($deck);
 

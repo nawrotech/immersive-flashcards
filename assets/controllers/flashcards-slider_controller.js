@@ -24,13 +24,17 @@ export default class extends Controller {
 
 
     next() {
-        this.counter += 1;
+        if (this.counter < this.numOfCardsValue - 1) {
+            this.counter += 1;
+        }
         this.flashcardContainerTarget.style.setProperty("--counter", this.counter);
         this.hideButtons();
     }
 
     prev() {
-        this.counter -= 1;
+        if (this.counter >= 0) {
+            this.counter -= 1;
+        }
         this.flashcardContainerTarget.style.setProperty("--counter", this.counter);    
         this.hideButtons();
     }
@@ -90,6 +94,7 @@ export default class extends Controller {
         const practiceFlashcard = e.currentTarget.closest('.practice-flashcard');
         const flashcardId = practiceFlashcard.dataset.flashcardId;
         this.storeResult(flashcardId, 'correct');
+        this.next();
 
     }
 
@@ -97,6 +102,7 @@ export default class extends Controller {
         const practiceFlashcard = e.currentTarget.closest('.practice-flashcard');
         const flashcardId = practiceFlashcard.dataset.flashcardId;
         this.storeResult(flashcardId, 'incorrect');
+        this.next();
 
     }
 
