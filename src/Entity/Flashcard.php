@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Enum\FlashcardResult;
 use App\Repository\FlashcardRepository;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -25,9 +26,8 @@ class Flashcard
     #[ORM\Column(length: 10)]
     private ?string $imageType = null;
 
-    #[ORM\Column(nullable: true)]
-    private ?bool $isCorrect = null;
-
+    #[ORM\Column(enumType: FlashcardResult::class)]
+    private ?FlashcardResult $result = FlashcardResult::UNANSWERED;
 
     public function getId(): ?int
     {
@@ -82,14 +82,14 @@ class Flashcard
         return $this;
     }
 
-    public function isCorrect(): ?bool
+    public function getResult(): ?FlashcardResult
     {
-        return $this->isCorrect;
+        return $this->result;
     }
 
-    public function setIsCorrect(?bool $isCorrect): static
+    public function setResult(FlashcardResult $result): static
     {
-        $this->isCorrect = $isCorrect;
+        $this->result = $result;
 
         return $this;
     }
