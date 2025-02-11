@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
+
 #[ORM\Entity(repositoryClass: DeckRepository::class)]
 class Deck
 {
@@ -18,7 +19,7 @@ class Deck
     #[ORM\Column(length: 100)]
     private ?string $name = null;
 
-    #[ORM\Column(length: 35)]
+    #[ORM\Column(length: 2, nullable: true)]
     private ?string $lang = null;
 
     #[ORM\ManyToOne(inversedBy: 'decks')]
@@ -45,7 +46,7 @@ class Deck
         return $this->name;
     }
 
-    public function setName(string $name): static
+    public function setName(?string $name): static
     {
         $this->name = $name;
 

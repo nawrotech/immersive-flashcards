@@ -13,11 +13,21 @@
             'imagesUrl': path("app_flashcard"),
             'index': form.flashcards|length > 0 ? form.flashcards|last.vars.name + 1 : 0,
             'prototype': form_widget(form.flashcards.vars.prototype)|raw,
-            'wrapperClassName': wrapperClassName
+            'wrapperClassName': wrapperClassName,
+            'maxFlashcardsInDeck': constant('App\\Controller\\DeckController::MAX_FLASHCARDS_IN_DECK') 
+
         }) }}>
 
             {{form_row(form.name)}}
-            {{form_row(form.lang)}}
+       
+
+            {% if not form.flashcards.vars.valid %}
+            <div class="error">
+                {% for error in form.flashcards.vars.errors %}
+                    {{ error.message }}
+                {% endfor %}
+            </div>
+        {% endif %}
 
             <ul class="" {{ stimulus_target('ajax-images', 'collectionContainer') }}>
                 {% for flashcardForm in form.flashcards %}
@@ -38,11 +48,6 @@
                                 }
                             }) }}
 
-                       
-
-                            
-                        
-
                             <div class="split">
                                 {{ form_row(flashcardForm.searchGifs) }}
                                 {{ form_row(flashcardForm.searchImages) }}
@@ -55,7 +60,12 @@
                 {% endfor %}
             </ul>
 
-            <button class="btn btn-success" type="button" {{ stimulus_action('ajax-images', 'addFlashcard') }}>
+            <button 
+                class="btn btn-success"
+                type="button" 
+                {{ stimulus_action('ajax-images', 'addFlashcard') }}
+                {{ stimulus_target('ajax-images', 'addButton') }}
+                >
                Add flashcard
             </button>
 
