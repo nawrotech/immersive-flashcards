@@ -8,6 +8,8 @@ use App\Enum\FlashcardResult;
 use App\Form\DeckType;
 use App\Repository\DeckRepository;
 use App\Repository\FlashcardRepository;
+use App\Service\FlashcardService;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -62,13 +64,16 @@ final class DeckController extends AbstractController
     public function details(
         Deck $deck,
         FlashcardRepository $flashcardRepository,
+        FlashcardService $flashcardService
     ): Response {
 
-        $flashcards = $flashcardRepository->findByDeck($deck);
+        $flashcards = $flashcardRepository->findByDeck($deck, true);
+        $deckResultSummary = $flashcardService->getDeckResultsSummary($flashcards);
 
         return $this->render('deck/details.html.twig', [
             'deck' => $deck,
-            'flashcards' => $flashcards
+            'flashcards' => $flashcards,
+            'deckResultSummary' => $deckResultSummary
         ]);
     }
 
@@ -76,6 +81,8 @@ final class DeckController extends AbstractController
     #[Route("/decks/practice/{id}", name: "app_deck_practice")]
     public function practice(Deck $deck, FlashcardRepository $flashcardRepository)
     {
+
+
         $flashcards = $flashcardRepository->findByDeck($deck);
 
         return $this->render('deck/practice.html.twig', [
