@@ -14,6 +14,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
 use Symfony\Component\Routing\Attribute\Route;
 
 final class DeckController extends AbstractController
@@ -47,7 +48,6 @@ final class DeckController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
             $deck = $form->getData();
             $this->em->persist($deck);
             $this->em->flush();
@@ -78,10 +78,19 @@ final class DeckController extends AbstractController
 
 
     #[Route("/decks/practice/{id}", name: "app_deck_practice")]
-    public function practice(Deck $deck, FlashcardRepository $flashcardRepository)
-    {
+    public function practice(
+        Deck $deck,
+        FlashcardRepository $flashcardRepository,
+        #[MapQueryParameter()] ?string $flashcardResult = null
+    ) {
 
-        $flashcards = $flashcardRepository->findByDeck($deck);
+        $flashcards = $flashcardRepository
+            ->findByDeck($deck, result: FlashcardResult::tryFrom($flashcardResult));
+
+        foreach ($flashcards as $flashcard) {
+            $flashcard->setResult(FlashcardResult::UNANSWERED);
+            $this->em->flush();
+        }
 
         return $this->render('deck/practice.html.twig', [
             'deck' => $deck,
@@ -95,13 +104,13 @@ final class DeckController extends AbstractController
         if ($request->isXmlHttpRequest()) {
             $data = $request->toArray();
             $answers = array_column($data, 'result', 'id');
-            $flashcards = $flashcardRepository->findby(['deck' => $deck]);
+
+            $flashcardIdsList = array_keys($answers);
+            $flashcards = $flashcardRepository->findBy(["id" => $flashcardIdsList]);
 
             foreach ($flashcards as $flashcard) {
                 if (isset($answers[$flashcard->getId()])) {
                     $flashcard->setResult(FlashcardResult::tryFrom($answers[$flashcard->getId()]));
-                } else {
-                    $flashcard->setResult(FlashcardResult::UNANSWERED);
                 }
             }
 

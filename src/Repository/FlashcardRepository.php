@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Deck;
 use App\Entity\Flashcard;
+use App\Enum\FlashcardResult;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -20,14 +21,14 @@ class FlashcardRepository extends ServiceEntityRepository
     /**
      * @return Flashcard[] Returns an array of Flashcard objects
      */
-    public function findByDeck(Deck $deck, bool $orderByStudyPriority = false): array
+    public function findByDeck(Deck $deck, bool $orderByResult = false, ?FlashcardResult $result = null): array
     {
         $qb = $this->createQueryBuilder('f')
             ->andWhere('f.deck = :deck')
             ->setParameter('deck', $deck);
 
 
-        if ($orderByStudyPriority) {
+        if ($orderByResult) {
             $qb = $qb->addSelect("
                     CASE 
                         WHEN f.result = 'incorrect' THEN 1
@@ -38,18 +39,13 @@ class FlashcardRepository extends ServiceEntityRepository
                 ")->orderBy('sort_order', 'ASC');
         };
 
+        if ($result) {
+            $qb = $qb->andWhere('f.result = :result')
+                ->setParameter('result', $result);
+        }
+
         return $qb
             ->getQuery()
             ->getResult();
     }
-
-    //    public function findOneBySomeField($deck): ?Flashcard
-    //    {
-    //        return $this->createQueryBuilder('f')
-    //            ->andWhere('f.exampleField = :val')
-    //            ->setParameter('val', $deck)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
 }
