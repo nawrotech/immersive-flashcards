@@ -9,7 +9,7 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class UnsplashApiService implements ImageProviderInterface
 {
-    public const IMAGES_PER_PAGE = 12;
+    public const IMAGES_PER_PAGE = 3;
 
     public function __construct(
         private HttpClientInterface $client,

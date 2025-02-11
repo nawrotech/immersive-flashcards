@@ -47,6 +47,10 @@ export default class extends Controller {
 
             const images = await this.fetchImages({'query': searchTermField?.value, 'flashcardType': imageType});
             const imageGridWrapper = this.createImageSelectionWrapperElement();
+
+            if (images.length < 1) {
+                imageGridWrapper.innerHTML = "<p>No images matched your search, but let's try something else!</p>"
+            }
             
             images?.forEach(image => {
                 const imageElement = this.createImageElement(image, this.indexValue);

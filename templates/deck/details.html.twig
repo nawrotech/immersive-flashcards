@@ -6,21 +6,34 @@
 
 
     <div class="flashcard-details | flow">
-        <div class="split">
-            <h1>Deck name: {{deck.name}}</h1>
-            <a href="{{ path('app_deck_practice', {id: deck.id}) }}">Practice deck</a>
-        </div>
+      
+        <h1>Deck name: {{deck.name}}</h1>
+            
+    
 
+        <a href="{{ path('app_deck_practice', {id: deck.id}) }}">Practice deck</a>
         {% if deckResultSummary.hasCorrect %}
-            <a href="">Practice Correct part</a>
+            <a href="{{ path('app_deck_practice', {
+                id: deck.id, 
+                flashcardResult: enum('App\\Enum\\FlashcardResult').CORRECT.value })
+                 }}"
+                >Practice Correct part
+            </a>
         {% endif %}
 
         {% if deckResultSummary.hasIncorrect %}
-            <a href="">Practice Incorrect part</a>
+            <a href="{{ path('app_deck_practice', {
+                id: deck.id, 
+                flashcardResult: enum('App\\Enum\\FlashcardResult').INCORRECT.value })
+                 }}">Practice Incorrect part</a>
         {% endif %}
-        
+
         {% if deckResultSummary.hasUnanswered %}
-            <a href="">Practice Unanswered part</a>
+            <a href="{{ path('app_deck_practice', {
+                id: deck.id, 
+                flashcardResult: enum('App\\Enum\\FlashcardResult').UNANSWERED.value })
+                 }}">Practice Unanswered part
+            </a>
         {% endif %}
         
      

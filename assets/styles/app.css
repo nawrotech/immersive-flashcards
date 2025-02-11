@@ -188,19 +188,19 @@ nav {
 }
 
 
-/* app */
+/* deck create */
 .selection-grid {
     display: flex;
 
     .img {
       display: block;
-      width: 100%;
+      max-width: 100;
       object-fit: fill; 
       height: 100px; 
   }
 
     & > * {
-      flex: 1 1 100px;
+      flex: 0 1 100px;
     }
 }
 
