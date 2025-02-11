@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Deck;
 use App\Entity\Flashcard;
+use App\Enum\FlashcardResult;
 use App\Form\DeckType;
 use App\Repository\DeckRepository;
 use App\Repository\FlashcardRepository;
@@ -88,17 +89,18 @@ final class DeckController extends AbstractController
     public function storePracticeResults(Request $request, Deck $deck, FlashcardRepository $flashcardRepository): JsonResponse
     {
 
+
         if ($request->isXmlHttpRequest()) {
             $data = $request->toArray();
 
-            $answers = array_column($data, 'correct', 'id');
+            $answers = array_column($data, 'result', 'id');
             $flashcards = $flashcardRepository->findby(['deck' => $deck]);
 
             foreach ($flashcards as $flashcard) {
                 if (isset($answers[$flashcard->getId()])) {
-                    $flashcard->setIsCorrect($answers[$flashcard->getId()]);
+                    $flashcard->setResult(FlashcardResult::tryFrom($answers[$flashcard->getId()]));
                 } else {
-                    $flashcard->setIsCorrect(null);
+                    $flashcard->setResult(FlashcardResult::UNANSWERED);
                 }
             }
 

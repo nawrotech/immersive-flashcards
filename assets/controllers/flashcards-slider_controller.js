@@ -11,7 +11,7 @@ export default class extends Controller {
         storePracticeResultsUrl: String
     };
 
-    results = [];
+    result = [];
     counter = 0;
 
     connect() {
@@ -47,33 +47,33 @@ export default class extends Controller {
     }
 
 
-    storeResult(id, correct) {
+    storeResult(id, result) {
         const flashcardScore = {
             id,
-            correct
+            result
         };
 
-        const existingIndex = this.results.findIndex(result => result.id === id);
+        const existingIndex = this.result.findIndex(result => result.id === id);
         if (existingIndex !== -1) {
-          this.results[existingIndex] = flashcardScore;
+          this.result[existingIndex] = flashcardScore;
         } else {
-          this.results.push(flashcardScore);
+          this.result.push(flashcardScore);
         }
 
         const lastFlashcardId = this.flashcardTargets.at(-1).dataset.flashcardId;
-        if (lastFlashcardId == id && this.results.find(flashcard => flashcard.id == lastFlashcardId)) {
-            this.sendResults();
+        if (lastFlashcardId == id && this.result.find(flashcard => flashcard.id == lastFlashcardId)) {
+            this.sendResult();
         }
     }
 
-    sendResults() {
+    sendResult() {
         fetch(this.storePracticeResultsUrlValue, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
                 'X-Requested-With': 'XMLHttpRequest'
             },
-            body: JSON.stringify(this.results,
+            body: JSON.stringify(this.result,
             )
         })
         .then(response => response.json())
@@ -89,14 +89,15 @@ export default class extends Controller {
     correct(e) {    
         const practiceFlashcard = e.currentTarget.closest('.practice-flashcard');
         const flashcardId = practiceFlashcard.dataset.flashcardId;
-        this.storeResult(flashcardId, true);
+        this.storeResult(flashcardId, 'correct');
 
     }
 
     incorrect(e) {
         const practiceFlashcard = e.currentTarget.closest('.practice-flashcard');
         const flashcardId = practiceFlashcard.dataset.flashcardId;
-        this.storeResult(flashcardId, false);
+        this.storeResult(flashcardId, 'incorrect');
+
     }
 
 
