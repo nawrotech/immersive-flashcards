@@ -2,15 +2,16 @@
 
 namespace App\Form;
 
+use App\Controller\DeckController;
 use App\Entity\Deck;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
-use Symfony\Component\Form\Extension\Core\Type\LocaleType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Validator\Constraints\NotNull;
+use Symfony\Component\Validator\Constraints\Count;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 class DeckType extends AbstractType
 {
@@ -19,17 +20,24 @@ class DeckType extends AbstractType
         $builder
             ->add('name', TextType::class, [
                 'constraints' => [
-                    new NotNull()
+                    new NotBlank(),
                 ]
             ])
-            ->add('lang', LocaleType::class)
             ->add('flashcards', CollectionType::class, [
                 'entry_type' => FlashcardFormType::class,
                 'entry_options' => ['label' => false],
                 'prototype' => true,
                 'allow_add' => true,
                 'allow_delete' => true,
-                'by_reference' => false
+                'by_reference' => false,
+                'constraints' => [
+                    new Count([
+                        'min' => 1,
+                        'max' => DeckController::MAX_FLASHCARDS_IN_DECK,
+                        'minMessage' => 'At least {{ limit }} flashcard(s) has(have) to be added.',
+                        'maxMessage' => 'There can\'t be more than {{ limit }} flashcards',
+                    ])
+                ],
             ])
             ->add('submit', SubmitType::class)
         ;

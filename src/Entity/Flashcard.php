@@ -39,7 +39,7 @@ class Flashcard
         return $this->front;
     }
 
-    public function setFront(string $front): static
+    public function setFront(?string $front): static
     {
         $this->front = $front;
 
@@ -51,7 +51,7 @@ class Flashcard
         return $this->back;
     }
 
-    public function setBack(string $back): static
+    public function setBack(?string $back): static
     {
         $this->back = $back;
 
@@ -75,7 +75,7 @@ class Flashcard
         return $this->imageType;
     }
 
-    public function setImageType(string $imageType): static
+    public function setImageType(?string $imageType): static
     {
         $this->imageType = $imageType;
 

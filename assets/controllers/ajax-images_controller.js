@@ -3,13 +3,18 @@ import { Controller } from '@hotwired/stimulus';
 
 /* stimulusFetch: 'lazy' */
 export default class extends Controller {
-    static targets = ['flashcardFront', 'flashcardBack', 'flashcardImageType', 'collectionContainer', 'removeButton', ]
+    static targets = ['flashcardFront', 'flashcardBack', 'flashcardImageType', 'collectionContainer', 'removeButton', 'addButton']
    
     static values = {
         imagesUrl: String,
         index: Number,
         prototype: String,
-        wrapperClassName: String
+        wrapperClassName: String,
+        maxFlashcardsInDeck: Number
+    }
+
+    connect() {
+        console.log(this.collectionContainerTarget.children.length);
     }
 
     addFlashcard()
@@ -19,11 +24,17 @@ export default class extends Controller {
         item.innerHTML = this.prototypeValue.replace(/__name__/g, this.indexValue);
         this.collectionContainerTarget.appendChild(item);
         this.indexValue++;
-
+        this.hideAddButton(); 
+       
     }
 
     deleteFlashcard(event) {
         event.target.closest(`.${this.wrapperClassNameValue}`).remove();
+        this.hideAddButton(); 
+    }
+
+    hideAddButton() {
+        this.addButtonTarget.classList.toggle('hidden', this.collectionContainerTarget.children.length >= this.maxFlashcardsInDeckValue);
     }
 
     async search(e, imageType) {

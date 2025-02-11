@@ -20,6 +20,8 @@ use Symfony\Component\Routing\Attribute\Route;
 final class DeckController extends AbstractController
 {
 
+    public const MAX_FLASHCARDS_IN_DECK = 30;
+
     public function __construct(private EntityManagerInterface $em) {}
 
     #[Route('/', name: 'app_deck')]
