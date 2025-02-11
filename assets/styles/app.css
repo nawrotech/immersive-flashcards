@@ -248,25 +248,39 @@ form[name='deck'] {
 
 
 /* flashcard details */
-.flashcard {
-  display: flex;
-  align-items: center;
-  text-align: center;
-  border: 1px solid black;
 
-  img {
-    width: 100%;
-    height: 300px;
-    object-fit: cover;
+.flashcard-details {
+  .flashcard {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    border: 1px solid black;
 
-    border-left: 1px solid black;
+    &.correct {
+      border-left: 8px solid green;
+    }
+
+    &.incorrect {
+      border-left: 8px solid red;
+    }
+
+    &.unanswered {
+      border-left: 8px solid gray;
+    }
+
+    img {
+      width: 100%;
+      height: 300px;
+      object-fit: cover;
+      border-left: 1px solid black;
+    }
+  
+    & > * {
+      flex: 1;
+    }
   }
-
-  & > * {
-    flex: 1;
-  }
+  
 }
-
 
 
 /* flashcard practice */

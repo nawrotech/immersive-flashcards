@@ -33,7 +33,6 @@ final class DeckController extends AbstractController
     #[Route("/decks/create/{id?}", name: "app_deck_create")]
     public function create(
         Request $request,
-        EntityManagerInterface $em,
         ?Deck $deck = null
     ): Response {
 
@@ -49,8 +48,8 @@ final class DeckController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
 
             $deck = $form->getData();
-            $em->persist($deck);
-            $em->flush();
+            $this->em->persist($deck);
+            $this->em->flush();
             return $this->redirectToRoute('app_deck');
         }
 
@@ -88,11 +87,8 @@ final class DeckController extends AbstractController
     #[Route("/decks/practice/results/{id}", name: "app_deck_store_practice_results", methods: ['POST'])]
     public function storePracticeResults(Request $request, Deck $deck, FlashcardRepository $flashcardRepository): JsonResponse
     {
-
-
         if ($request->isXmlHttpRequest()) {
             $data = $request->toArray();
-
             $answers = array_column($data, 'result', 'id');
             $flashcards = $flashcardRepository->findby(['deck' => $deck]);
 
