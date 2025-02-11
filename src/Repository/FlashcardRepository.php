@@ -23,6 +23,15 @@ class FlashcardRepository extends ServiceEntityRepository
     public function findByDeck(Deck $deck): array
     {
         return $this->createQueryBuilder('f')
+            ->addSelect("
+                CASE 
+                    WHEN f.result = 'incorrect' THEN 1
+                    WHEN f.result = 'unanswered' THEN 2
+                    WHEN f.result = 'correct' THEN 3
+                    ELSE 4 
+                END AS HIDDEN sort_order
+            ")
+            ->orderBy('sort_order', 'ASC')
             ->andWhere('f.deck = :deck')
             ->setParameter('deck', $deck)
             ->getQuery()

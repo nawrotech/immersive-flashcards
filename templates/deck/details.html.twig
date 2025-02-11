@@ -5,21 +5,19 @@
 {% block body %}
 
 
-   
-    <div class="flashcards-container | flow">
-        <h1>Deck name: {{deck.name}}</h1>
+    <div class="flashcard-details | flow">
+        <div class="split">
+            <h1>Deck name: {{deck.name}}</h1>
+            <a href="{{ path('app_deck_practice', {id: deck.id}) }}">Practice deck</a>
+        </div>
+     
         {% for flashcard in flashcards %}
-            <div 
-
-            class="flashcard">
+            <div class="flashcard {{ flashcard.result.value }}">
                 <h1>{{ flashcard.front }}</h1>
                 <img src="{{ flashcard.back }}" alt="{{ flashcard.front }}">
             </div>
         {% endfor %}
     </div>
 
-
-
-    <a href="">add gif card</a>
-
+    
 {% endblock %}
