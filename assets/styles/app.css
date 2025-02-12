@@ -162,6 +162,7 @@ body {
 .container {
   max-width: min(calc(100% - 2rem), 996px);
   margin-inline: auto;
+  
 }
 
 .padding-block {
@@ -247,7 +248,6 @@ form[name='deck'] {
 
 
 
-
 /* flashcard details */
 .flashcard-details {
   .flashcard {
@@ -298,10 +298,6 @@ form[name='deck'] {
 
 }
 
-.practice-flashcard-container {
-  /* this makes border real */
-  padding: 1rem;
-}
 
 .slider-btn {
   position: absolute;
@@ -323,11 +319,13 @@ form[name='deck'] {
 }
 
 .practice-flashcard-container {
-  isolation: isolate;
   height: 450px;
   width: 350px;
-  transform: translateX(calc(-100% * var(--counter, 0)));
-  transition: transform 0.3s ease-in-out;
+  translate: calc(-100% * var(--counter, 0));
+  padding: 1rem;
+
+  transition: translate 0.4s ease-in-out var(--delay, 0.8s);
+
 
   .split {
     position: absolute;
@@ -335,10 +333,9 @@ form[name='deck'] {
 
 }
 
-.success-border {
+.scored {
   --border-thickness: 0.75rem;
-  --border-color: var(--color-accent, red);
-
+  --border-color: var(--color-accent, hotpink);
   position: relative;
   padding: 20px;
   text-transform: uppercase;
@@ -346,6 +343,8 @@ form[name='deck'] {
   text-decoration: none;
   color: #222;
   cursor: pointer;
+
+
 
   &::before {
     content: '';
@@ -383,7 +382,8 @@ form[name='deck'] {
     transition-delay: 0.6s, 0.3s, 0s;
   }
 
-  &:hover::before {
+  /* &::before { */
+  &.active::before {
     background-size: 
     200% calc(var(--border-thickness) / 2),   /* bottom */
     calc(var(--border-thickness) / 2) 400%,   /* left */
@@ -398,6 +398,20 @@ form[name='deck'] {
     0% 0%;      /* top-left */
   transform: scaleX(1);
   transition-delay: 0s, 0.3s, 0.6s;
+  }
+
+  &.correct,
+  &.incorrect {
+    pointer-events: none;
+  }
+
+  &.correct {
+    --border-color: var(--color-success, green);
+
+  }
+
+  &.incorrect {
+    --border-color: var(--color-danger, red);
   }
 
 }
@@ -479,66 +493,4 @@ form[name='deck'] {
 }
 
 
-
-.magic-border {
-  position: relative;
-  padding: 20px;
-  background: #efefef;
-  text-transform: uppercase;
-  text-align: center;
-  text-decoration: none;
-  color: #222;
-  cursor: pointer;
-}
-
-.magic-border::before {
-  content: '';
-  position: absolute;
-  width: calc(100% + 4px);  /* 2px * 2 for border width */
-  height: calc(100% + 4px);
-  top: -2px;
-  left: -2px;
-  background: 
-    linear-gradient(to right, blue 0%, blue 100%), 
-    linear-gradient(to top, blue 50%, transparent 50%), 
-    linear-gradient(to top, blue 50%, transparent 50%), 
-    linear-gradient(to right, blue 0%, blue 100%), 
-    linear-gradient(to left, blue 0%, blue 100%);
-  background-size: 
-    100% 2px,  /* bottom */
-    2px 200%,  /* left */
-    2px 200%,  /* right */
-    0% 2px,    /* top-right */
-    0% 2px;    /* top-left */
-  background-position: 
-    50% 100%,  /* bottom */
-    0% 0%,     /* left */
-    100% 0%,   /* right */
-    100% 0%,   /* top-right */
-    0% 0%;     /* top-left */
-  background-repeat: no-repeat;
-  transition: 
-    transform 0.3s ease-in-out,
-    background-position 0.3s ease-in-out,
-    background-size 0.3s ease-in-out;
-  transform: scaleX(0);
-  transition-delay: 0.6s, 0.3s, 0s;
-}
-
-.magic-border:hover::before {
-  background-size: 
-    200% 2px,   /* bottom */
-    2px 400%,   /* left */
-    2px 400%,   /* right */
-    55% 2px,    /* top-right */
-    55% 2px;    /* top-left */
-  background-position: 
-    50% 100%,   /* bottom */
-    0% 100%,    /* left */
-    100% 100%,  /* right */
-    100% 0%,    /* top-right */
-    0% 0%;      /* top-left */
-  transform: scaleX(1);
-  transition-delay: 0s, 0.3s, 0.6s;
-}
 

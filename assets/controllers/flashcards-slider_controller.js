@@ -94,6 +94,10 @@ export default class extends Controller {
         const practiceFlashcard = e.currentTarget.closest('.practice-flashcard');
         const flashcardId = practiceFlashcard.dataset.flashcardId;
         this.storeResult(flashcardId, 'correct');
+
+        // const scoredFlashcard = this.result.find(el => el.id = flashcardId);
+
+        practiceFlashcard.classList.add("correct", "active");
         this.next();
 
     }
@@ -101,7 +105,11 @@ export default class extends Controller {
     incorrect(e) {
         const practiceFlashcard = e.currentTarget.closest('.practice-flashcard');
         const flashcardId = practiceFlashcard.dataset.flashcardId;
+
+        
+
         this.storeResult(flashcardId, 'incorrect');
+        practiceFlashcard.classList.add("incorrect", "active");
         this.next();
 
     }
