@@ -15,7 +15,7 @@ export default class extends Controller {
     counter = 0;
 
     connect() {
-        console.log(this.storePracticeResultsUrlValue);
+        this.hideButtons();
     }
 
     reverseSides() {
