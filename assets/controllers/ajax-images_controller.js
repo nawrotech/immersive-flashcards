@@ -64,7 +64,7 @@ export default class extends Controller {
             }
             
             images?.forEach(image => {
-                const imageElement = this.createImageElement(image, this.indexValue);
+                const imageElement = this.createImageElement(image);
                 imageGridWrapper.appendChild(imageElement);
             });
             backFieldWrapper.appendChild(imageGridWrapper);
@@ -105,7 +105,7 @@ export default class extends Controller {
         return imageSelectionGrid;
     }
 
-    createImageElement(image, index) {
+    createImageElement(image) {
         const imageElement = document.createElement('div');
         imageElement.classList = 'image-field';
         imageElement.innerHTML = `
@@ -113,7 +113,7 @@ export default class extends Controller {
                             <input data-action="click->ajax-images#selectImage"
                              id="${image?.id}" 
                              class="img-radio-btn" 
-                             name="selected-image-${index}" 
+                             name="selected-image-${this.indexValue}" 
                              value="${image?.url}"
                              type="radio">
                             <img class="img" src="${image?.url}" alt="${image?.alt}">
