@@ -107,6 +107,8 @@ final class DeckController extends AbstractController
             $data = $request->toArray();
             $answers = array_column($data, 'result', 'id');
 
+            dump($answers);
+
             $flashcardIdsList = array_keys($answers);
             $flashcards = $flashcardRepository->findBy(["id" => $flashcardIdsList]);
 
