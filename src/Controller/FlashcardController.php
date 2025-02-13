@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Contract\ImageProviderInterface;
 use App\Service\GiphyApiService;
+use App\Service\SentenceService;
 use App\Service\UnsplashApiService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
@@ -22,11 +23,21 @@ final class FlashcardController extends AbstractController
         #[MapQueryParameter()] string $flashcardType = "image",
     ): Response {
 
-        // check csrf for the ajax call as well as 
         $images = $flashcardType == 'image' ?
             $unsplashApiService?->getImagesByQuery($query, $lang = 'en') :
             $giphyApiService?->getImagesByQuery($query, $lang = 'en');
 
         return $this->json($images);
+    }
+
+
+    #[Route('/flashcard/sentences', name: 'app_flashcard_sentences')]
+    public function sentences(
+        SentenceService $sentenceService,
+        #[MapQueryParameter()] string $query = "smart",
+        #[MapQueryParameter()] string $lang = "eng",
+    ) {
+
+        return $this->json($sentenceService->getSentences($query, $lang));
     }
 }
