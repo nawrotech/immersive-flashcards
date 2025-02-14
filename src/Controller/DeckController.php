@@ -9,6 +9,7 @@ use App\Form\DeckType;
 use App\Repository\DeckRepository;
 use App\Repository\FlashcardRepository;
 use App\Service\FlashcardService;
+use App\Service\LocaleMappingService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -25,8 +26,10 @@ final class DeckController extends AbstractController
     public function __construct(private EntityManagerInterface $em) {}
 
     #[Route('/', name: 'app_deck')]
-    public function index(DeckRepository $deckRepository): Response
-    {
+    public function index(
+        DeckRepository $deckRepository,
+    ): Response {
+
         $decks = $deckRepository->findBy(['creator' => $this->getUser()]);
 
         return $this->render('deck/index.html.twig', [
@@ -37,6 +40,7 @@ final class DeckController extends AbstractController
     #[Route("/decks/create/{id?}", name: "app_deck_create")]
     public function create(
         Request $request,
+        LocaleMappingService $localeMappingService,
         ?Deck $deck = null
     ): Response {
 
@@ -49,6 +53,8 @@ final class DeckController extends AbstractController
         $form = $this->createForm(DeckType::class, $deck);
         $form->handleRequest($request);
 
+        $serviceLocalesMapping = $localeMappingService->getServiceMappings(['image_service']);
+
         if ($form->isSubmitted() && $form->isValid()) {
             $deck = $form->getData();
             $this->em->persist($deck);
@@ -58,6 +64,7 @@ final class DeckController extends AbstractController
 
         return $this->render('deck/create.html.twig', [
             'form' => $form,
+            'serviceLocalesMapping' => $serviceLocalesMapping
         ]);
     }
 
@@ -84,7 +91,7 @@ final class DeckController extends AbstractController
         Deck $deck,
         FlashcardRepository $flashcardRepository,
         #[MapQueryParameter()] ?string $flashcardResult = null
-    ) {
+    ): Response {
 
         $flashcards = $flashcardRepository
             ->findByDeck($deck, result: FlashcardResult::tryFrom($flashcardResult));
@@ -101,13 +108,14 @@ final class DeckController extends AbstractController
     }
 
     #[Route("/decks/practice/results/{id}", name: "app_deck_store_practice_results", methods: ['POST'])]
-    public function storePracticeResults(Request $request, Deck $deck, FlashcardRepository $flashcardRepository): JsonResponse
-    {
+    public function storePracticeResults(
+        Request $request,
+        Deck $deck,
+        FlashcardRepository $flashcardRepository
+    ): JsonResponse {
         if ($request->isXmlHttpRequest()) {
             $data = $request->toArray();
             $answers = array_column($data, 'result', 'id');
-
-            dump($answers);
 
             $flashcardIdsList = array_keys($answers);
             $flashcards = $flashcardRepository->findBy(["id" => $flashcardIdsList]);
