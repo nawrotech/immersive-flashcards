@@ -4,15 +4,16 @@ import { Controller } from '@hotwired/stimulus';
 /* stimulusFetch: 'lazy' */
 export default class extends Controller {
     static targets = ['flashcardFront', 'flashcardBack', 'flashcardImageType', 'collectionContainer', 'removeButton', 'addButton']
-   
+
     static values = {
         imagesUrl: String,
         index: Number,
         prototype: String,
-        wrapperClassName: String,
         maxFlashcardsInDeck: Number,
         serviceLocales: Object
     }
+
+    static classes = ['hidden' ,'flashcardItemWrapper', 'backFieldWrapper', 'selectionGrid'];
 
     selectedLanguage = 'en';
 
@@ -24,7 +25,8 @@ export default class extends Controller {
     addFlashcard()
     {
         const item = document.createElement("li");
-        item.classList = this.wrapperClassNameValue;
+        item.className = this.flashcardItemWrapperClass;
+        item.dataset.index = this.indexValue;
         item.innerHTML = this.prototypeValue.replace(/__name__/g, this.indexValue);
         this.collectionContainerTarget.appendChild(item);
         this.indexValue++;
@@ -32,47 +34,52 @@ export default class extends Controller {
     }
 
     deleteFlashcard(event) {
-        event.target.closest(`.${this.wrapperClassNameValue}`).remove();
+        event.target.closest(`.${this.flashcardItemWrapperClass}`).remove();
         this.hideAddButton(); 
     }
 
     hideAddButton() {
-        this.addButtonTarget.classList.toggle('hidden', 
+        this.addButtonTarget.classList.toggle(this.hiddenClass, 
             this.collectionContainerTarget.children.length >= this.maxFlashcardsInDeckValue);
     }
 
     async search(e, imageType, selectedLanguage = '') {
-        const container = e.currentTarget.closest(`.${this.wrapperClassNameValue}`);
-        if (!container) 
+        const flashcardItem = e.currentTarget.closest(`.${this.flashcardItemWrapperClass}`);
+        if (!flashcardItem) 
             return;
 
-        const backField = this.flashcardBackTargets.find(element => container.contains(element));
+        const currentFlashcardIndex = flashcardItem.dataset.index;
 
-        const searchTermField = this.flashcardFrontTargets.find(element => container.contains(element));
+        const backField = this.flashcardBackTargets.find(element => flashcardItem.contains(element));
+
+        const searchTermField = this.flashcardFrontTargets.find(element => flashcardItem.contains(element));
         if (!searchTermField?.value) 
             return;
         
-        const imageTypeField = this.flashcardImageTypeTargets.find(element => container.contains(element));
+        const imageTypeField = this.flashcardImageTypeTargets.find(element => flashcardItem.contains(element));
         imageTypeField.value = imageType;
 
-        const backFieldWrapper = backField.closest('.back-wrapper');
+        const backFieldWrapper = backField.closest(`.${this.backFieldWrapperClass}`);
 
         try {
-            backFieldWrapper.querySelector('.selection-grid')?.remove();
+            backFieldWrapper.querySelector(`.${this.selectionGridClass}`)?.remove();
 
-            const images = await this.fetchImages({'query': searchTermField?.value, 'flashcardType': imageType, 'lang': selectedLanguage});
+            const images = await this.fetchImages({
+                'query': searchTermField?.value, 
+                'flashcardType': imageType,
+                'lang': selectedLanguage});
+
             const imageGridWrapper = this.createImageSelectionWrapperElement();
 
             if (images.length < 1) {
                 imageGridWrapper.innerHTML = "<p>No images matched your search, but let's try something else!</p>"
             }
             
-            images?.forEach(image => {
-                const imageElement = this.createImageElement(image, this.indexValue);
+            images?.forEach((image) => {
+                const imageElement = this.createImageElement(image, currentFlashcardIndex);
                 imageGridWrapper.appendChild(imageElement);
             });
             backFieldWrapper.appendChild(imageGridWrapper);
-
           } catch (error) {
             console.error('Error fetching images:', error);
           }
@@ -88,14 +95,13 @@ export default class extends Controller {
     }
 
     clickedElementContainer(e, className) {
-        const container = e.currentTarget.closest(className);
+        const container = e.currentTarget.closest(`.${className}`);
         if (!container) return;
         return container;
     }
 
-
     selectImage(e) {
-        const container = this.clickedElementContainer(e, '.flashcard-item');
+        const container = this.clickedElementContainer(e, this.flashcardItemWrapperClass);
         const backField = this.flashcardBackTargets.find(element => container.contains(element));
         backField.value = e.currentTarget.value;
     }
@@ -103,25 +109,23 @@ export default class extends Controller {
 
     createImageSelectionWrapperElement() {
         const imageSelectionGrid = document.createElement('div');
-        imageSelectionGrid.className = 'selection-grid';
+        imageSelectionGrid.className = this.selectionGridClass;
         return imageSelectionGrid;
     }
 
 
-    createImageElement(image) {
+    createImageElement(image, index) {
         const imageElement = document.createElement('div');
-        imageElement.classList = 'image-field';
-
-        const uniq = Date.now().toString(36) + Math.random().toString(36).substring(2, 9);
+        imageElement.className = 'image-field';
 
         imageElement.innerHTML = `
                         <label for="${image?.id}">
                             <input data-action="click->ajax-images#selectImage"
-                             id="${image?.id}" 
-                             class="img-radio-btn" 
-                             name="selected-image-${uniq}" 
-                             value="${image?.url}"
-                             type="radio">
+                                name="selected-image-${index}" 
+                                id="${image?.id}" 
+                                class="img-radio-btn" 
+                                value="${image?.url}"
+                                type="radio">
                             <img class="img" src="${image?.url}" alt="${image?.alt}">
                         </label>
                     `;
