@@ -1,11 +1,10 @@
 {% extends 'base.html.twig' %}
 
-{% set wrapperClassName = "flashcard-item" %}
+{% set flashcardItemWrapper = "flashcard-item" %}
 
 {% block title %}Deck form{% endblock %}
 
 {% block body %}
-
     {{ form_start(form, {'attr': {
         'novalidate': 'novalidate'
     }}) }}
@@ -13,11 +12,19 @@
             'imagesUrl': path("app_flashcard"),
             'index': form.flashcards|length > 0 ? form.flashcards|last.vars.name + 1 : 0,
             'prototype': form_widget(form.flashcards.vars.prototype)|raw,
-            'wrapperClassName': wrapperClassName,
             'maxFlashcardsInDeck': constant('App\\Controller\\DeckController::MAX_FLASHCARDS_IN_DECK'),
             'serviceLocales': serviceLocalesMapping|json_encode|raw
 
-        }) }}>
+        },
+        {
+            'hidden': 'hidden',
+            'flashcardItemWrapper': flashcardItemWrapper,
+            'backFieldWrapper': 'back-wrapper',
+            'selectionGrid': 'selection-grid'
+            
+        }
+        
+        ) }}>
 
             {{form_row(form.name)}}
             {{form_row(form.lang, {
@@ -26,10 +33,11 @@
                 }
             })}}
   
-            <ul class="" {{ stimulus_target('ajax-images', 'collectionContainer') }}>
+            <ul class="flashcards-collection-container" {{ stimulus_target('ajax-images', 'collectionContainer') }}>
                 {% for flashcardForm in form.flashcards %}
-                    <li class="{{ wrapperClassName }}">
-                     
+                    <li 
+                        data-index="{{ loop.index0 }}"
+                        class="{{ flashcardItemWrapper }}">
                             <div class="split">
                                 {{ form_row(flashcardForm.front) }}
         
