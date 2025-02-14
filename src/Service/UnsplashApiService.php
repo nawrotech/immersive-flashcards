@@ -9,14 +9,14 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class UnsplashApiService implements ImageProviderInterface
 {
-    public const IMAGES_PER_PAGE = 3;
+    public const IMAGES_PER_PAGE = 12;
 
     public function __construct(
         private HttpClientInterface $client,
         #[Autowire(env: 'UNSPLASH_API_ACCESS_KEY')] private string $unsplashApiKey
     ) {}
 
-    public function getImagesByQuery(string $query, ?string $lang = 'en'): array
+    public function getImagesByQuery(string $query, ?string $lang): array
     {
         $response = $this->client->request('GET', 'https://api.unsplash.com/search/photos', [
             'query' => [

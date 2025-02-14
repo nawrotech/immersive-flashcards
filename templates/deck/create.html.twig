@@ -14,21 +14,18 @@
             'index': form.flashcards|length > 0 ? form.flashcards|last.vars.name + 1 : 0,
             'prototype': form_widget(form.flashcards.vars.prototype)|raw,
             'wrapperClassName': wrapperClassName,
-            'maxFlashcardsInDeck': constant('App\\Controller\\DeckController::MAX_FLASHCARDS_IN_DECK') 
+            'maxFlashcardsInDeck': constant('App\\Controller\\DeckController::MAX_FLASHCARDS_IN_DECK'),
+            'serviceLocales': serviceLocalesMapping|json_encode|raw
 
         }) }}>
 
             {{form_row(form.name)}}
-       
-
-            {% if not form.flashcards.vars.valid %}
-            <div class="error">
-                {% for error in form.flashcards.vars.errors %}
-                    {{ error.message }}
-                {% endfor %}
-            </div>
-        {% endif %}
-
+            {{form_row(form.lang, {
+                'attr': {
+                    'data-action': 'change->ajax-images#selectLanguage',
+                }
+            })}}
+  
             <ul class="" {{ stimulus_target('ajax-images', 'collectionContainer') }}>
                 {% for flashcardForm in form.flashcards %}
                     <li class="{{ wrapperClassName }}">
@@ -41,12 +38,7 @@
                                 {% endif %}
                             </div>
 
-
-                            {{ form_row(flashcardForm.back, {
-                                'attr': {
-                                    'data-index': loop.index0
-                                }
-                            }) }}
+                            {{ form_row(flashcardForm.back) }}
 
                             <div class="split">
                                 {{ form_row(flashcardForm.searchGifs) }}
@@ -54,7 +46,7 @@
                             </div>
 
                             {{ form_row(flashcardForm.imageType) }}
-
+                            
                             {{form_row(flashcardForm.deleteFlashcard)}}
                     </li>
                 {% endfor %}

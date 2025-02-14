@@ -10,11 +10,15 @@ export default class extends Controller {
         index: Number,
         prototype: String,
         wrapperClassName: String,
-        maxFlashcardsInDeck: Number
+        maxFlashcardsInDeck: Number,
+        serviceLocales: Object
     }
 
-    connect() {
-        console.log(this.collectionContainerTarget.children.length);
+    selectedLanguage = 'en';
+
+    selectLanguage(e) {
+        const selectedLocale = e.currentTarget.value;
+        this.selectedLanguage = this.serviceLocalesValue[selectedLocale]['image_service'];
     }
 
     addFlashcard()
@@ -25,7 +29,6 @@ export default class extends Controller {
         this.collectionContainerTarget.appendChild(item);
         this.indexValue++;
         this.hideAddButton(); 
-       
     }
 
     deleteFlashcard(event) {
@@ -34,10 +37,11 @@ export default class extends Controller {
     }
 
     hideAddButton() {
-        this.addButtonTarget.classList.toggle('hidden', this.collectionContainerTarget.children.length >= this.maxFlashcardsInDeckValue);
+        this.addButtonTarget.classList.toggle('hidden', 
+            this.collectionContainerTarget.children.length >= this.maxFlashcardsInDeckValue);
     }
 
-    async search(e, imageType) {
+    async search(e, imageType, selectedLanguage = '') {
         const container = e.currentTarget.closest(`.${this.wrapperClassNameValue}`);
         if (!container) 
             return;
@@ -56,7 +60,7 @@ export default class extends Controller {
         try {
             backFieldWrapper.querySelector('.selection-grid')?.remove();
 
-            const images = await this.fetchImages({'query': searchTermField?.value, 'flashcardType': imageType});
+            const images = await this.fetchImages({'query': searchTermField?.value, 'flashcardType': imageType, 'lang': selectedLanguage});
             const imageGridWrapper = this.createImageSelectionWrapperElement();
 
             if (images.length < 1) {
@@ -64,7 +68,7 @@ export default class extends Controller {
             }
             
             images?.forEach(image => {
-                const imageElement = this.createImageElement(image);
+                const imageElement = this.createImageElement(image, this.indexValue);
                 imageGridWrapper.appendChild(imageElement);
             });
             backFieldWrapper.appendChild(imageGridWrapper);
@@ -76,11 +80,11 @@ export default class extends Controller {
     }
 
     searchImages(e) {
-        this.search(e, 'image');
+        this.search(e, 'image', this.selectedLanguage);
     }
 
     searchGifs(e) {
-        this.search(e, 'gif');
+        this.search(e, 'gif', this.selectedLanguage);
     }
 
     clickedElementContainer(e, className) {
@@ -91,8 +95,6 @@ export default class extends Controller {
 
 
     selectImage(e) {
-        console.log(e.currentTarget.value);
-
         const container = this.clickedElementContainer(e, '.flashcard-item');
         const backField = this.flashcardBackTargets.find(element => container.contains(element));
         backField.value = e.currentTarget.value;
@@ -105,15 +107,19 @@ export default class extends Controller {
         return imageSelectionGrid;
     }
 
+
     createImageElement(image) {
         const imageElement = document.createElement('div');
         imageElement.classList = 'image-field';
+
+        const uniq = Date.now().toString(36) + Math.random().toString(36).substring(2, 9);
+
         imageElement.innerHTML = `
                         <label for="${image?.id}">
                             <input data-action="click->ajax-images#selectImage"
                              id="${image?.id}" 
                              class="img-radio-btn" 
-                             name="selected-image-${this.indexValue}" 
+                             name="selected-image-${uniq}" 
                              value="${image?.url}"
                              type="radio">
                             <img class="img" src="${image?.url}" alt="${image?.alt}">
