@@ -13,7 +13,7 @@ export default class extends Controller {
         serviceLocales: Object
     }
 
-    static classes = ['hidden' ,'flashcardItemWrapper', 'backFieldWrapper', 'selectionGrid'];
+    static classes = ['hidden' ,'flashcardItemWrapper', 'backFieldWrapper', 'selectionGrid', 'loadingSpinner'];
 
     selectedLanguage = 'en';
 
@@ -58,13 +58,13 @@ export default class extends Controller {
             this.collectionContainerTarget.children.length >= this.maxFlashcardsInDeckValue);
     }
 
+    
     async search(e, imageType, selectedLanguage = '') {
         const flashcardItem = e.currentTarget.closest(`.${this.flashcardItemWrapperClass}`);
         if (!flashcardItem) 
             return;
 
         const currentFlashcardIndex = flashcardItem.dataset.index;
-
         const backField = this.flashcardBackTargets.find(element => flashcardItem.contains(element));
 
         const searchTermField = this.flashcardFrontTargets.find(element => flashcardItem.contains(element));
@@ -72,12 +72,21 @@ export default class extends Controller {
             return;
         
         const imageTypeField = this.flashcardImageTypeTargets.find(element => flashcardItem.contains(element));
-        imageTypeField.value = imageType;
+        if (imageTypeField) {
+            imageTypeField.value = imageType;
+        }
+          
+        const flashcardButtons = flashcardItem.querySelectorAll('button');
+        flashcardButtons.forEach(button => button.disabled = true);
 
         const backFieldWrapper = backField.closest(`.${this.backFieldWrapperClass}`);
 
         try {
             backFieldWrapper.querySelector(`.${this.selectionGridClass}`)?.remove();
+
+
+            const loadingSpinner = this.createLoadingSpinnerElement();
+            backFieldWrapper.appendChild(loadingSpinner);
 
             const images = await this.fetchImages({
                 'query': searchTermField?.value, 
@@ -86,8 +95,9 @@ export default class extends Controller {
 
             const imageGridWrapper = this.createImageSelectionWrapperElement();
 
+
             if (images.length < 1) {
-                imageGridWrapper.innerHTML = "<p>No images matched your search, but let's try something else!</p>"
+                imageGridWrapper.innerHTML = "<p>No images matched your search, but let's try something else!</p>";
             }
             
             images?.forEach((image) => {
@@ -95,9 +105,12 @@ export default class extends Controller {
                 imageGridWrapper.appendChild(imageElement);
             });
 
-            console.log(imageGridWrapper);
+
+            backFieldWrapper.querySelector(`.${this.loadingSpinnerClass}`)?.remove();
 
             backFieldWrapper.appendChild(imageGridWrapper);
+            flashcardButtons.forEach(button => button.disabled = false);
+
           } catch (error) {
             console.error('Error fetching images:', error);
           }
@@ -119,10 +132,9 @@ export default class extends Controller {
     }
 
     selectImage(e) {
-        console.log(e.currentTarget);
-
         const container = this.clickedElementContainer(e, this.flashcardItemWrapperClass);
         const backField = this.flashcardBackTargets.find(element => container.contains(element));
+        console.log(backField);
         backField.value = e.currentTarget.value;
     }
 
@@ -152,7 +164,11 @@ export default class extends Controller {
         return imageElement;
     }
 
-
+    createLoadingSpinnerElement() {
+        const loadingSpinnerElement = document.createElement('span');
+        loadingSpinnerElement.classList.add(this.loadingSpinnerClass);
+        return loadingSpinnerElement;
+    }
 
       
 }
