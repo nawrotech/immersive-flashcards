@@ -6,7 +6,6 @@ use App\Entity\Deck;
 use App\Entity\Flashcard;
 use App\Enum\FlashcardResult;
 use App\Form\DeckType;
-use App\Repository\DeckRepository;
 use App\Repository\FlashcardRepository;
 use App\Service\FlashcardService;
 use App\Service\LocaleMappingService;
@@ -26,15 +25,9 @@ final class DeckController extends AbstractController
     public function __construct(private EntityManagerInterface $em) {}
 
     #[Route('/', name: 'app_deck')]
-    public function index(
-        DeckRepository $deckRepository,
-    ): Response {
-
-        $decks = $deckRepository->findBy(['creator' => $this->getUser()]);
-
-        return $this->render('deck/index.html.twig', [
-            'decks' => $decks
-        ]);
+    public function index(): Response
+    {
+        return $this->render('deck/index.html.twig');
     }
 
     #[Route("/decks/create/{id?}", name: "app_deck_create")]

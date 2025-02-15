@@ -165,8 +165,12 @@ body {
   
 }
 
-.padding-block {
-  padding-block: 4rem;
+.p-block {
+  padding-block: 1.5rem;
+
+  @media (width > 48em) {
+    padding-block: 3.5em;
+  }
 }
 
 /* base */
@@ -178,17 +182,37 @@ a {
   }
 }
 
+.main-layout {
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: grid;
+  grid-template-rows: 
+    auto
+    1fr
+    auto;
+}
+
+
 
 /* nav */
-nav {
+:is(nav, footer) {
   background-color: purple;
-  padding: 2rem 4rem;
+  padding-block: 2rem;
 
+  @media(width > 48em) {
+    padding-block: 2.25rem;
+  }
 
+}
+
+nav {
   li:last-of-type {
     margin-left: auto;
   }
-  
+}
+
+footer {
+  font-size: var(--fs-14);
 }
 
 
@@ -243,8 +267,6 @@ form[name='deck'] {
     align-items: center;
   }
 }
-
-
 
 
 /* flashcard details */
@@ -527,6 +549,26 @@ form[name='deck'] {
   }
 }
 
+
+/* decks-column component */
+.decks-column {
+
+  .decks-wrapper {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1rem;
+  }
+
+  .deck {
+    border: 2px solid black;
+    padding: 2rem;
+  }
+
+  .links {
+    display: flex;
+    gap: 1em;
+  }
+}
 
 
 

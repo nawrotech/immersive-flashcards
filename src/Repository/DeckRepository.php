@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Deck;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -11,12 +12,13 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class DeckRepository extends ServiceEntityRepository
 {
+
+    public const PER_PAGE = 12;
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Deck::class);
     }
-
-
 
     /**
      * @return Deck[] Returns an array of Deck objects
@@ -32,13 +34,18 @@ class DeckRepository extends ServiceEntityRepository
         ;
     }
 
-    //    public function findOneBySomeField($user): ?Deck
-    //    {
-    //        return $this->createQueryBuilder('d')
-    //            ->andWhere('d.exampleField = :val')
-    //            ->setParameter('val', $user)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+    public function findDecksPaginator(int $offset = 0, ?string $searchTerm = null): Paginator
+    {
+        $qb = $this->createQueryBuilder('d');
+
+        if ($searchTerm != null) {
+            $qb = $qb->andWhere('d.name LIKE :searchTerm')
+                ->setParameter('searchTerm', "%$searchTerm%");
+        }
+
+        $query = $qb->setFirstResult($offset)
+            ->setMaxResults($this::PER_PAGE);
+
+        return new Paginator($query);
+    }
 }
