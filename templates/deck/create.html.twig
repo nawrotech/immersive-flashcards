@@ -39,15 +39,16 @@
                     <li 
                         data-index="{{ loop.index0 }}"
                         class="{{ flashcardItemWrapper }}">
-                            <div class="split">
+               
                                 {{ form_row(flashcardForm.front) }}
         
+                            <div class="split">
+                                {{ form_row(flashcardForm.back) }}
                                 {% if flashcardForm.vars.value.back is not null %}
                                     <img class="preview-flashcard-image" src="{{ flashcardForm.vars.value.back }}" alt="{{ flashcardForm.vars.value.front }}">
                                 {% endif %}
                             </div>
-
-                            {{ form_row(flashcardForm.back) }}
+                     
 
                             <div class="split">
                                 {{ form_row(flashcardForm.searchGifs) }}

@@ -17,6 +17,21 @@ export default class extends Controller {
 
     selectedLanguage = 'en';
 
+    async fetchImages(params) {
+        const queryString = new URLSearchParams(params).toString();
+        return fetch(`${this.imagesUrlValue}?${queryString}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! Status: ${response.status}`);
+                    }
+                    return response.json(); 
+                })
+                .then(data => data)
+                .catch(error => console.error('Error fetching images:', error));
+    
+    }
+
+
     selectLanguage(e) {
         const selectedLocale = e.currentTarget.value;
         this.selectedLanguage = this.serviceLocalesValue[selectedLocale]['image_service'];
@@ -79,6 +94,9 @@ export default class extends Controller {
                 const imageElement = this.createImageElement(image, currentFlashcardIndex);
                 imageGridWrapper.appendChild(imageElement);
             });
+
+            console.log(imageGridWrapper);
+
             backFieldWrapper.appendChild(imageGridWrapper);
           } catch (error) {
             console.error('Error fetching images:', error);
@@ -101,6 +119,8 @@ export default class extends Controller {
     }
 
     selectImage(e) {
+        console.log(e.currentTarget);
+
         const container = this.clickedElementContainer(e, this.flashcardItemWrapperClass);
         const backField = this.flashcardBackTargets.find(element => container.contains(element));
         backField.value = e.currentTarget.value;
@@ -132,20 +152,6 @@ export default class extends Controller {
         return imageElement;
     }
 
-    
-    async fetchImages(params) {
-        const queryString = new URLSearchParams(params).toString();
-        return fetch(`${this.imagesUrlValue}?${queryString}`)
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! Status: ${response.status}`);
-                    }
-                    return response.json(); 
-                })
-                .then(data => data)
-                .catch(error => console.error('Error fetching images:', error));
-    
-    }
 
 
       
