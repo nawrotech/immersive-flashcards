@@ -14,6 +14,9 @@
         {% endblock %}
     </head>
     <body>
+            {# <div class="audio-wrapper">
+                <audio class="audio" controls src="https://tatoeba.org/en/audio/download/186899"></audio>
+            </div> #}
             {{ include('partials/_navigation.html.twig') }}
             <main>
                 <div class="container">
@@ -24,6 +27,12 @@
             </main>
 
             <footer>
+                <div class="container">
+                    <p>
+                        All exmple senteces are coming from awesome <a href="https://tatoeba.org">Tatoeba.org</a>
+                        released under CC-BY License.
+                    </p>
+                </div>
             </footer>
     </body>
 </html>

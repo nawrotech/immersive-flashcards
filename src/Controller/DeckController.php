@@ -90,11 +90,15 @@ final class DeckController extends AbstractController
     public function practice(
         Deck $deck,
         FlashcardRepository $flashcardRepository,
+        LocaleMappingService $localeMappingService,
         #[MapQueryParameter()] ?string $flashcardResult = null
     ): Response {
 
         $flashcards = $flashcardRepository
             ->findByDeck($deck, result: FlashcardResult::tryFrom($flashcardResult));
+
+        $sentencesLanguage = $localeMappingService
+            ->getServiceMapping($deck->getLang(), 'sentence_service');
 
         foreach ($flashcards as $flashcard) {
             $flashcard->setResult(FlashcardResult::UNANSWERED);
@@ -103,7 +107,8 @@ final class DeckController extends AbstractController
 
         return $this->render('deck/practice.html.twig', [
             'deck' => $deck,
-            'flashcards' => $flashcards
+            'flashcards' => $flashcards,
+            'sentencesLanguage' => $sentencesLanguage
         ]);
     }
 

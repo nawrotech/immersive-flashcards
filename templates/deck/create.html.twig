@@ -8,7 +8,8 @@
     {{ form_start(form, {'attr': {
         'novalidate': 'novalidate'
     }}) }}
-        <div {{ stimulus_controller('ajax-images', {
+        <div {{ stimulus_controller('ajax-images', 
+        {
             'imagesUrl': path("app_flashcard"),
             'index': form.flashcards|length > 0 ? form.flashcards|last.vars.name + 1 : 0,
             'prototype': form_widget(form.flashcards.vars.prototype)|raw,
@@ -41,7 +42,7 @@
                             <div class="split">
                                 {{ form_row(flashcardForm.front) }}
         
-                                {% if flashcardForm.vars.value.back is defined %}
+                                {% if flashcardForm.vars.value.back is not null %}
                                     <img class="preview-flashcard-image" src="{{ flashcardForm.vars.value.back }}" alt="{{ flashcardForm.vars.value.front }}">
                                 {% endif %}
                             </div>

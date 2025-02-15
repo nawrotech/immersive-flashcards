@@ -4,7 +4,9 @@ namespace App\Form;
 
 use App\Controller\DeckController;
 use App\Entity\Deck;
+use App\Service\LocaleMappingService;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -15,13 +17,26 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 
 class DeckType extends AbstractType
 {
+
+
+    public function __construct(private LocaleMappingService $localeMappingService) {}
+
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        $languageChoices = array_flip($this->localeMappingService->getLanguagesMapping());
+
+
         $builder
             ->add('name', TextType::class, [
                 'constraints' => [
                     new NotBlank(),
                 ]
+            ])
+            ->add('lang', ChoiceType::class, [
+                'choices' => $languageChoices,
+                'choice_label' => function ($choice, string $key) {
+                    return ucfirst($key);
+                }
             ])
             ->add('flashcards', CollectionType::class, [
                 'entry_type' => FlashcardFormType::class,
