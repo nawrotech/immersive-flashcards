@@ -216,47 +216,8 @@ footer {
 }
 
 
+
 /* deck create */
-.selection-grid {
-    display: flex;
-
-    .img {
-      display: block;
-      max-width: 100;
-      object-fit: fill; 
-      height: 100px; 
-    }
-
-    & > * {
-      flex: 0 1 100px;
-    }
-}
-
-.image-field {
-    position: relative;
-    isolation: isolate;
- 
-    &:has(input[type='radio']:checked) {
-        outline: 2px solid red;
-        z-index: 10;
-        scale: 1.25;
-    } 
-
-    &:hover {
-      scale: 1.25;
-      z-index: 10;
-    }
-}
-
-.img-radio-btn {
-    position: absolute;
-    z-index: -1;
-    inset-block-start: 0;
-    inset-block-end: 0;
-}
-
-
-/* deck creation */
 form[name='deck'] {
   .preview-flashcard-image {
     width: 50px; 
@@ -267,6 +228,54 @@ form[name='deck'] {
     align-items: center;
   }
 }
+
+.selection-grid {
+    --image-multiplier: 1;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    
+    .img {
+      width: 100%;
+      height: calc(100px * var(--image-multiplier)); 
+      object-fit: cover; 
+    }
+
+    @media (width > 768px) {
+      --image-multiplier: 2;
+    }
+
+    &:has(.image-field input:checked) .image-field:not(:has(input:checked)) {
+      display: none;
+    }
+
+    .image-field {
+        position: relative;
+
+        &:has(input[type='radio']:checked) {
+            outline: 2px solid green;
+            z-index: 10;
+            display: block;
+            width: calc(100px * var(--image-multiplier)); 
+            height: calc(100px * var(--image-multiplier)); 
+            scale: 1;
+        } 
+    
+        &:hover {
+          scale: 1.25;
+          z-index: 10;
+          cursor: pointer;
+        }
+
+        .img-radio-btn {
+          position: absolute;
+          z-index: -1;
+          inset-block-start: 0;
+          inset-block-end: 0;
+      }
+    }
+}
+
+
 
 
 /* flashcard details */
@@ -552,7 +561,6 @@ form[name='deck'] {
 
 /* decks-column component */
 .decks-column {
-
   .decks-wrapper {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
