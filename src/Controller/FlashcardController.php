@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Contract\ImageProviderInterface;
+use App\Service\DefinitionService;
 use App\Service\GiphyApiService;
 use App\Service\SentenceService;
 use App\Service\UnsplashApiService;
@@ -20,12 +21,13 @@ final class FlashcardController extends AbstractController
         #[Autowire(service: UnsplashApiService::class)] ImageProviderInterface $unsplashApiService,
         #[Autowire(service: GiphyApiService::class)] ImageProviderInterface $giphyApiService,
         #[MapQueryParameter()] string $query = "",
-        #[MapQueryParameter()] string $flashcardType = "image",
+        #[MapQueryParameter()] string $flashcardType = "",
+        #[MapQueryParameter()] string $lang = ""
     ): Response {
 
         $images = $flashcardType == 'image' ?
-            $unsplashApiService?->getImagesByQuery($query, $lang = 'en') :
-            $giphyApiService?->getImagesByQuery($query, $lang = 'en');
+            $unsplashApiService?->getImagesByQuery($query, $lang) :
+            $giphyApiService?->getImagesByQuery($query, $lang);
 
         return $this->json($images);
     }
@@ -34,8 +36,8 @@ final class FlashcardController extends AbstractController
     #[Route('/flashcard/sentences', name: 'app_flashcard_sentences')]
     public function sentences(
         SentenceService $sentenceService,
-        #[MapQueryParameter()] string $query = "smart",
-        #[MapQueryParameter()] string $lang = "eng",
+        #[MapQueryParameter()] string $query = "",
+        #[MapQueryParameter()] string $lang = "",
     ) {
 
         return $this->json($sentenceService->getSentences($query, $lang));
