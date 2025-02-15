@@ -6,26 +6,32 @@
 parameters:
     locale_mappings:
         en:
+            language: 'english'
             service_mappings:
                 sentence_service: eng
                 image_service: en
         fr:
+            language: 'french'
             service_mappings:
                 sentence_service: fra
                 image_service: fr
         ru:
+            language: 'russian'
             service_mappings:
                 sentence_service: rus
                 image_service: ru
         it:
+            language: 'italian'
             service_mappings:
                 sentence_service: ita
                 image_service: it
         de:
+            language: 'german'
             service_mappings:
                 sentence_service: deu
                 image_service: de
         es:
+            language: 'spanish'
             service_mappings:
                 sentence_service: spa
                 image_service: es
