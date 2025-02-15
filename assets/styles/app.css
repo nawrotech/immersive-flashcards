@@ -233,11 +233,12 @@ form[name='deck'] {
     --image-multiplier: 1;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
+    gap: 0.5rem;
     
     .img {
-      width: 100%;
-      height: calc(100px * var(--image-multiplier)); 
-      object-fit: cover; 
+      inline-size: 100%;
+      block-size: calc(100px * var(--image-multiplier)); 
+      object-fit: fill; 
     }
 
     @media (width > 768px) {
@@ -255,8 +256,8 @@ form[name='deck'] {
             outline: 2px solid green;
             z-index: 10;
             display: block;
-            width: calc(100px * var(--image-multiplier)); 
-            height: calc(100px * var(--image-multiplier)); 
+            inline-size: calc(100px * var(--image-multiplier)); 
+            block-size: calc(100px * var(--image-multiplier)); 
             scale: 1;
         } 
     

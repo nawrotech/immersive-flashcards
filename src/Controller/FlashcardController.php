@@ -39,7 +39,6 @@ final class FlashcardController extends AbstractController
         #[MapQueryParameter()] string $query = "",
         #[MapQueryParameter()] string $lang = "",
     ) {
-
         return $this->json($sentenceService->getSentences($query, $lang));
     }
 }
