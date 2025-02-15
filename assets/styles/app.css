@@ -181,7 +181,6 @@ a {
 
 /* nav */
 nav {
-  --split-space: 1.25rem;
   background-color: purple;
   padding: 2rem 4rem;
 
@@ -202,7 +201,7 @@ nav {
       max-width: 100;
       object-fit: fill; 
       height: 100px; 
-  }
+    }
 
     & > * {
       flex: 0 1 100px;
@@ -319,13 +318,12 @@ form[name='deck'] {
 }
 
 .practice-flashcard-container {
+  /* --delay: 0s; */
   height: 450px;
   width: 350px;
   translate: calc(-100% * var(--counter, 0));
   padding: 1rem;
-
   transition: translate 0.4s ease-in-out var(--delay, 0.8s);
-
 
   .split {
     position: absolute;
@@ -333,18 +331,56 @@ form[name='deck'] {
 
 }
 
+/* flashcard sentences */
+.sentences-list {
+  --flow-space: 0.25rem;
+  overflow: scroll;
+  /* text-transform: lowercase; */
+  text-align: left;
+  font-size: 0.875rem;
+  padding: 1.25rem;
+  height: 200px;
+
+  .sentence-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .author {
+    font-size: 0.75rem;
+    text-transform: capitalize;
+  }
+
+  .sentence-wrapper {
+      
+  }
+
+
+  .sound-button {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    background-color: none;
+    border: 1px solid black;
+
+    &:hover {
+      cursor: pointer;
+    }
+  }
+}
+
+
+
 .scored {
   --border-thickness: 0.75rem;
   --border-color: var(--color-accent, hotpink);
   position: relative;
   padding: 20px;
-  text-transform: uppercase;
   text-align: center;
   text-decoration: none;
   color: #222;
   cursor: pointer;
-
-
 
   &::before {
     content: '';
@@ -426,6 +462,7 @@ form[name='deck'] {
   transform-style: preserve-3d;
   transition: all 0.8s ease;
   transform: rotateY(0deg);
+
   
 
   .front,
@@ -494,3 +531,24 @@ form[name='deck'] {
 
 
 
+
+/* loading spinner */
+.loading-spinner {
+  width: 48px;
+  height: 48px;
+  border: 5px solid #ddd;
+  border-bottom-color: transparent;
+  border-radius: 50%;
+  display: inline-block;
+  box-sizing: border-box;
+  animation: rotation 1s linear infinite;
+}
+
+@keyframes rotation {
+0% {
+    transform: rotate(0deg);
+}
+100% {
+    transform: rotate(360deg);
+}
+} 

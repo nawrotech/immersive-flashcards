@@ -4,19 +4,28 @@
 
 {% block body %}
 
-
-    
+<figure>
         <div
-            {{stimulus_controller('flashcards-slider', {
-                'numOfCards': flashcards|length,
-                'storePracticeResultsUrl': path('app_deck_store_practice_results', {id: app.current_route_parameters.id})
-            })}}
-                class="practice-flashcards-wrapper">
+            {{stimulus_controller('flashcards-slider ajax-sentences')}}
+                data-flashcards-slider-num-of-cards-value="{{ flashcards|length }}"
+                data-flashcards-slider-store-practice-results-url-value="{{  path('app_deck_store_practice_results', {id: app.current_route_parameters.id}) }}"
+             
+                data-ajax-sentences-sentences-url-value="{{path('app_flashcard_sentences', {lang: sentencesLanguage })}}"
+                
+                data-ajax-sentences-loading-spinner-class="loading-spinner"
+                data-ajax-sentences-sound-button-class="sound-button"
+                data-ajax-sentences-hidden-class="hidden"
+                data-ajax-sentences-sentence-list-class="sentences-list flow"
+                data-ajax-sentences-sentence-item-class="sentence-item"
+             
+                class="practice-flashcards-wrapper"
+                >
                
                 <button
                     {{ stimulus_action('flashcards-slider', 'reverseSides') }}  
                     type="button">
-                    Reverse sides
+                    <span class="sr-only">Reverse sides</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.95 11a8 8 0 1 0-.5 4m.5 5v-5h-5"/></svg>
                 </button>
 
                 <div 
@@ -26,16 +35,31 @@
                 >
                     {% for flashcard in flashcards %}
                             <div 
-                                class="practice-flashcard-container">
+                                class="practice-flashcard-container"
+                                >
                                 <div 
                                     {{ stimulus_target('flashcards-slider', 'flashcard') }}
                                     class="practice-flashcard scored"
                                     data-flashcard-id="{{ flashcard.id }}"
-
                                     >
 
                                     <div class="front">
-                                        {{flashcard.front}}
+                                        <div class="front-inner">
+                                            <p>{{flashcard.front}}</p>
+                                            <button 
+                                                type="button"
+                                                {{ stimulus_action('ajax-sentences', 'searchSentences', 'click', { 'query': flashcard.front }) }}
+                                                data-ajax-sentences-id="{{ flashcard.id }}"
+                                            >Show examples
+                                            </button>
+
+                                            <div 
+                                                {{ stimulus_target('ajax-sentences', 'sentencesContainer') }}
+                                                class="sentences"
+                                                data-ajax-sentences-id="{{ flashcard.id }}"
+                                                >
+                                            </div>
+                                        </div>
                                     </div>
                             
                                     <div class="back">
@@ -56,8 +80,7 @@
                                     <button 
                                         {{ stimulus_action('flashcards-slider', 'rotate') }}
                                         class="rotate-btn">
-                                        Rotate
-                                    </button>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21.5 9a10 10 0 0 0-19 0M2 5v4h4m12 6h4v4M2.5 15a10 10 0 0 0 19 0"/></svg>                                    </button>
                                 </div>
                             </div>
 
