@@ -5,7 +5,7 @@
         <title>{% block title %}Welcome!{% endblock %}</title>
         <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
         {% block stylesheets %}
-
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
         {% endblock %}
 
@@ -14,25 +14,23 @@
         {% endblock %}
     </head>
     <body>
-            {# <div class="audio-wrapper">
-                <audio class="audio" controls src="https://tatoeba.org/en/audio/download/186899"></audio>
-            </div> #}
+        <div class="main-layout">
             {{ include('partials/_navigation.html.twig') }}
             <main>
-                <div class="container">
-
+                <div class="container | p-block">
                     {% block body %}{% endblock %}
-
                 </div>
             </main>
 
-            <footer>
+            <footer class="text-center">
                 <div class="container">
                     <p>
-                        All exmple senteces are coming from awesome <a href="https://tatoeba.org">Tatoeba.org</a>
+                        All exmple sentences are coming from awesome <a href="https://tatoeba.org">Tatoeba.org</a>
                         released under CC-BY License.
                     </p>
                 </div>
             </footer>
+        </div>
+     
     </body>
 </html>
