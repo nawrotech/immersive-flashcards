@@ -37,6 +37,14 @@
     --clr-primary-400: orangered;
     --clr-secondary-400: white;
     --clr-neutral-100: #fff;
+    --clr-neutral-400: #d3d3d3;
+
+
+
+
+    --clr-correct: green;
+    --clr-incorrect: red;
+    --clr-unanswered: var(--clr-neutral-400); 
 
 
     --clr-overlay: rgba(0,0,0,0.87);
@@ -279,39 +287,110 @@ form[name='deck'] {
 
 
 
-/* flashcard details */
-.flashcard-details {
-  .flashcard {
+/* flashcard results */
+.flashcard-results {
+  --flow-space: 1.5rem;
+
+  header {
     display: flex;
+    justify-content: space-between;
     align-items: center;
-    text-align: center;
-    border: 1px solid black;
 
-    &.correct {
-      border-left: 8px solid green;
-    }
-
-    &.incorrect {
-      border-left: 8px solid red;
-    }
-
-    &.unanswered {
-      border-left: 8px solid gray;
-    }
-
-    img {
-      width: 100%;
-      height: 300px;
-      object-fit: cover;
-      border-left: 1px solid black;
-    }
-  
-    & > * {
-      flex: 1;
+    h1 {
+      font-size: var(--fs-28);
+      @media(width > 48em) {
+        font-size: var(--fs-36);
+      }
     }
   }
-  
+
+  .wrapper {
+    --flow-space: 1.25rem;
+  }
+
+  .practice-link {
+    display: inline-block;
+    text-decoration-color: var(--main-theme, black);
+    text-decoration-thickness: 3px;
+
+    &:hover {
+      color: var(--main-theme);
+    }
+  }
+
+  .unanswered {
+    --main-theme: var(--clr-unanswered);
+  }
+
+  .correct {
+    --main-theme: var(--clr-correct);
+  }
+
+  .incorrect {
+    --main-theme: var(--clr-incorrect);
+  }
+
+
+
 }
+
+
+/* _result_flashcard */
+.result-flashcard {
+  --border-width: 1px;
+  --border-color: black;
+
+  display: flex;
+  text-align: center;
+  border: var(--border-width, 1px) solid var(--border-color, black);
+
+  & > * {
+    flex: 1;
+  }
+
+  .side-wrapper {
+    overflow-block: auto;
+    block-size: 200px;
+    align-content: center;
+
+    @media (width > 48em) {
+      block-size: 300px;
+    }
+
+    &:first-of-type {
+      border-inline-end: var(--border-width, 1px) solid var(--border-color, black);
+    }
+  
+  }
+
+  img {
+    inline-size: 100%;
+    block-size: 100%;
+    object-fit: cover;
+  }
+
+  p {
+    font-size: var(--fs-16);
+    padding: 1rem;
+    @media(width > 48em) {
+      font-size: var(--fs-20);
+    }
+  }
+
+  &.correct {
+    border-inline-start: 8px solid var(--clr-correct);
+  }
+
+  &.incorrect {
+    border-inline-start: 8px solid var(--clr-incorrect);
+  }
+
+  &.unanswered {
+    border-inline-start: 8px solid var(--clr-unanswered);
+  }
+
+}
+
 
 
 /* flashcard practice */
@@ -583,14 +662,15 @@ form[name='deck'] {
 
 /* loading spinner */
 .loading-spinner {
-  width: 48px;
-  height: 48px;
+  inline-size: 48px;
+  block-size: 48px;
   border: 5px solid #ddd;
-  border-bottom-color: transparent;
+  border-block-end-color: transparent;
   border-radius: 50%;
-  display: inline-block;
-  box-sizing: border-box;
+  display: block;
   animation: rotation 1s linear infinite;
+  margin-inline: auto;
+
 }
 
 @keyframes rotation {
@@ -601,3 +681,4 @@ form[name='deck'] {
     transform: rotate(360deg);
 }
 } 
+
