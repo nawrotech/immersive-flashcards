@@ -1,6 +1,6 @@
 {% set per_page = constant('App\\Repository\\FlashcardRepository::PER_PAGE') %}
 <div
-    class="flashcard-details-wrapper | flow"
+    class="wrapper | flow"
     {{ attributes.defaults(stimulus_controller('appear')) }}
     >
     {% if page > 0 %}
@@ -8,14 +8,7 @@
     {% endif %}
 
     {% for flashcard in this.items %}
-        <article
-            id="item--{{ page }}-{{ loop.index }}"
-            data-live-ignore
-            class="flashcard {{ flashcard.result.value }}"
-        >
-            <h2>{{ flashcard.front }}</h2>
-            <img src="{{ flashcard.back }}" alt="{{ flashcard.front }}">
-        </article>
+        {{ include('partials/_result_flashcard.html.twig') }}
     {% endfor %}
 
     {% if this.hasMore %}

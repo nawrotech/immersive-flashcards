@@ -13,7 +13,7 @@
                     <p>Number of cards: {{deck.flashcards.count}}</p>
                     
                     <div class="links">
-                        <a href="{{ path('app_deck_details', { id: deck.id }) }}">Check deck</a>
+                        <a href="{{ path('app_deck_results', { id: deck.id }) }}">Check deck results</a>
         
                         <a href="{{ path('app_deck_create', { id: deck.id }) }}">Edit deck</a>
             
@@ -26,7 +26,7 @@
 
         <div>
             {% if this.hasMore %}
-                <button data-action="live#action" data-live-action-param="more" class="">
+                <button data-action="live#action" data-live-action-param="more">
                     Load More
                 </button>
             {% endif %}

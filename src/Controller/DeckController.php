@@ -30,6 +30,7 @@ final class DeckController extends AbstractController
         return $this->render('deck/index.html.twig');
     }
 
+
     #[Route("/decks/create/{id?}", name: "app_deck_create")]
     public function create(
         Request $request,
@@ -61,8 +62,8 @@ final class DeckController extends AbstractController
         ]);
     }
 
-    #[Route("/decks/details/{id}", name: "app_deck_details")]
-    public function details(
+    #[Route("/decks/{id}/results", name: "app_deck_results")]
+    public function results(
         Deck $deck,
         FlashcardRepository $flashcardRepository,
         FlashcardService $flashcardService
@@ -71,9 +72,8 @@ final class DeckController extends AbstractController
         $flashcards = $flashcardRepository->findByDeck($deck, true);
         $deckResultSummary = $flashcardService->getDeckResultsSummary($flashcards);
 
-        return $this->render('deck/details.html.twig', [
+        return $this->render('deck/results.html.twig', [
             'deck' => $deck,
-            'flashcards' => $flashcards,
             'deckResultSummary' => $deckResultSummary
         ]);
     }
@@ -129,7 +129,7 @@ final class DeckController extends AbstractController
 
         return $this->json([
             'redirect' => true,
-            'url' => $this->generateUrl("app_deck_details", [
+            'url' => $this->generateUrl("app_deck_results", [
                 'id' => $deck->getId()
             ])
         ]);

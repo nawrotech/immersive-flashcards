@@ -3,7 +3,6 @@
 namespace App\Controller;
 
 use App\Contract\ImageProviderInterface;
-use App\Service\DefinitionService;
 use App\Service\GiphyApiService;
 use App\Service\SentenceService;
 use App\Service\UnsplashApiService;

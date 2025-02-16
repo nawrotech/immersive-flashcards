@@ -1,0 +1,53 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Deck details{% endblock %}
+
+{% block body %}
+    <div class="flashcard-results | flow">
+        
+        <header class="header">
+            <h1>Deck name: {{deck.name}}</h1>
+            <p>Number of cards: {{ deck.flashcards.count }}</p>
+        </header>
+            
+        <a 
+            class="practice-link"
+            href="{{ path('app_deck_practice', {id: deck.id}) }}">Practice deck</a>
+
+        {% if deckResultSummary.hasCorrect %}
+            <a 
+                class="practice-link correct"
+                href="{{ path('app_deck_practice', {
+                id: deck.id, 
+                flashcardResult: enum('App\\Enum\\FlashcardResult').CORRECT.value })
+                 }}"
+                >Practice Correct part
+            </a>
+        {% endif %}
+
+        {% if deckResultSummary.hasIncorrect %}
+            <a 
+                class="practice-link incorrect"
+                href="{{ path('app_deck_practice', {
+                id: deck.id, 
+                flashcardResult: enum('App\\Enum\\FlashcardResult').INCORRECT.value })
+                 }}">Practice Incorrect part
+            </a>
+        {% endif %}
+
+        {% if deckResultSummary.hasUnanswered %}
+            <a 
+                class="practice-link unanswered"
+                href="{{ path('app_deck_practice', {
+                id: deck.id, 
+                flashcardResult: enum('App\\Enum\\FlashcardResult').UNANSWERED.value })
+                 }}">Practice Unanswered part
+            </a>
+        {% endif %}
+        
+        {{ component('FlashcardResultsDisplay', {deckId:  app.current_route_parameters.id}) }}
+
+    </div>
+
+    
+{% endblock %}
