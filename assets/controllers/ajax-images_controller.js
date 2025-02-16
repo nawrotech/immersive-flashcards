@@ -13,7 +13,7 @@ export default class extends Controller {
         serviceLocales: Object
     }
 
-    static classes = ['hidden' ,'flashcardItemWrapper', 'backFieldWrapper', 'selectionGrid', 'loadingSpinner'];
+    static classes = ['hidden' ,'flashcardItemWrapper', 'backFieldWrapper', 'selectionGrid', 'loadingSpinner', 'imageField', 'imageRadioButton'];
 
     selectedLanguage = 'en';
 
@@ -84,7 +84,6 @@ export default class extends Controller {
         try {
             backFieldWrapper.querySelector(`.${this.selectionGridClass}`)?.remove();
 
-
             const loadingSpinner = this.createLoadingSpinnerElement();
             backFieldWrapper.appendChild(loadingSpinner);
 
@@ -94,7 +93,6 @@ export default class extends Controller {
                 'lang': selectedLanguage});
 
             const imageGridWrapper = this.createImageSelectionWrapperElement();
-
 
             if (images.length < 1) {
                 imageGridWrapper.innerHTML = "<p>No images matched your search, but let's try something else!</p>";
@@ -125,37 +123,36 @@ export default class extends Controller {
         this.search(e, 'gif', this.selectedLanguage);
     }
 
-    clickedElementContainer(e, className) {
+    clickedFlashcardContainer(e, className) {
         const container = e.currentTarget.closest(`.${className}`);
         if (!container) return;
         return container;
     }
 
     selectImage(e) {
-        const container = this.clickedElementContainer(e, this.flashcardItemWrapperClass);
+        const container = this.clickedFlashcardContainer(e, this.flashcardItemWrapperClass);
         const backField = this.flashcardBackTargets.find(element => container.contains(element));
-        console.log(backField);
         backField.value = e.currentTarget.value;
     }
 
 
     createImageSelectionWrapperElement() {
         const imageSelectionGrid = document.createElement('div');
-        imageSelectionGrid.className = this.selectionGridClass;
+        imageSelectionGrid.classList.add(this.selectionGridClass);
         return imageSelectionGrid;
     }
 
 
     createImageElement(image, index) {
         const imageElement = document.createElement('div');
-        imageElement.className = 'image-field';
+        imageElement.classList.add(this.imageFieldClass);
 
         imageElement.innerHTML = `
                         <label for="${image?.id}">
                             <input data-action="click->ajax-images#selectImage"
                                 name="selected-image-${index}" 
                                 id="${image?.id}" 
-                                class="img-radio-btn" 
+                                class=${this.imageRadioButtonClass}
                                 value="${image?.url}"
                                 type="radio">
                             <img class="img" src="${image?.url}" alt="${image?.alt}">

@@ -12,9 +12,7 @@
         {
             'imagesUrl': path("app_flashcard"),
             'index': form.flashcards|length > 0 ? form.flashcards|last.vars.name + 1 : 0,
-            'prototype': form_widget(form.flashcards.vars.prototype)|raw,
             'maxFlashcardsInDeck': constant('App\\Controller\\DeckController::MAX_FLASHCARDS_IN_DECK'),
-            'serviceLocales': serviceLocalesMapping|json_encode|raw
 
         },
         {
@@ -22,11 +20,16 @@
             'flashcardItemWrapper': flashcardItemWrapper,
             'backFieldWrapper': 'back-wrapper',
             'selectionGrid': 'selection-grid',
-            'loadingSpinner': 'loading-spinner'
-            
+            'loadingSpinner': 'loading-spinner',
+            'imageField': 'image-field',
+            'imageRadioButton': 'img-radio-btn'
         }
-        
-        ) }}>
+       
+        ) }}
+            data-ajax-images-service-locales-value="{{ serviceLocalesMapping|json_encode|e('html_attr') }}"
+            data-ajax-images-prototype-value="{{ form_widget(form.flashcards.vars.prototype)|e('html_attr') }}"
+
+        >
 
             {{form_row(form.name)}}
             {{form_row(form.lang, {
