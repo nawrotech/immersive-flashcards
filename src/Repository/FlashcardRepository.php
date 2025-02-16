@@ -6,6 +6,7 @@ use App\Entity\Deck;
 use App\Entity\Flashcard;
 use App\Enum\FlashcardResult;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -13,6 +14,9 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class FlashcardRepository extends ServiceEntityRepository
 {
+
+    public const PER_PAGE = 10;
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Flashcard::class);
@@ -47,5 +51,22 @@ class FlashcardRepository extends ServiceEntityRepository
         return $qb
             ->getQuery()
             ->getResult();
+    }
+
+
+    public function findFlashcardsByDeckPaginator(int $deckId, int $offset = 0): Paginator
+    {
+        $qb = $this->createQueryBuilder('f')
+            ->andWhere('IDENTITY(f.deck) = :deckId')
+            ->setParameter('deckId', $deckId);
+
+        $query = $qb->setFirstResult($offset)
+            ->setMaxResults($this::PER_PAGE);
+
+
+        $paginator = new Paginator($query);
+        $paginator->setUseOutputWalkers(false);
+
+        return $paginator;
     }
 }

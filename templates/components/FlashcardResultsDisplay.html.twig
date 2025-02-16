@@ -1,0 +1,37 @@
+{% set per_page = constant('App\\Repository\\FlashcardRepository::PER_PAGE') %}
+<div
+    class="flashcard-details-wrapper | flow"
+    {{ attributes.defaults(stimulus_controller('appear')) }}
+    >
+    {% if page > 0 %}
+        <article id="item--{{ page - 1 }}-{{ per_page }}"></article>
+    {% endif %}
+
+    {% for flashcard in this.items %}
+        <article
+            id="item--{{ page }}-{{ loop.index }}"
+            data-live-ignore
+            class="flashcard {{ flashcard.result.value }}"
+        >
+            <h2>{{ flashcard.front }}</h2>
+            <img src="{{ flashcard.back }}" alt="{{ flashcard.front }}">
+        </article>
+    {% endfor %}
+
+    {% if this.hasMore %}
+        {% for i in 1..per_page %}
+            <article
+                id="item--{{ page + 1 }}-{{ i }}"
+                
+                {% if loop.first %}
+                    data-appear-target="loader"
+                    data-action="appear->live#action"
+                    data-live-action-param="debounce(750)|more"
+                {% endif %}
+            >
+            </article>
+        {% endfor %}
+        <span class="loading-spinner"></span>
+    {% endif %}
+</div>
+

@@ -1,0 +1,15 @@
+<article
+    id="item--{{ page }}-{{ loop.index }}"
+    data-live-ignore
+    class="result-flashcard {{ flashcard.result.value }}"
+>
+
+    <div class="side-wrapper">
+        <p>{{ flashcard.front }}</p>
+    </div>
+
+    <div class="side-wrapper">
+        <img src="{{ flashcard.back }}" alt="{{ flashcard.front }}">
+    </div>
+
+</article>
