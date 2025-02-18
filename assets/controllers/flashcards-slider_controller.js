@@ -8,7 +8,8 @@ export default class extends Controller {
 
     static values = {
         numOfCards: Number,
-        storePracticeResultsUrl: String
+        storePracticeResultsUrl: String,
+        slidingTransitionDelay: String
     };
 
     result = [];
@@ -22,21 +23,26 @@ export default class extends Controller {
         this.flashcardTargets.forEach(flashcard => flashcard.classList.toggle('inversed')); 
     }
 
-
-    next() {
+    next(delay = 0) {
         if (this.counter < this.numOfCardsValue - 1) {
             this.counter += 1;
         }
-        this.flashcardContainerTarget.style.setProperty("--counter", this.counter);
+
+        this.slide(this.counter, delay);
         this.hideButtons();
     }
 
-    prev() {
+    prev(delay = 0) {
         if (this.counter >= 0) {
             this.counter -= 1;
         }
-        this.flashcardContainerTarget.style.setProperty("--counter", this.counter);    
+        this.slide(this.counter, delay);
         this.hideButtons();
+    }
+
+    slide(counter, delay) {
+        this.flashcardContainerTarget.style.setProperty("--counter", counter);  
+        this.flashcardContainerTarget.style.setProperty("--delay", delay);  
     }
 
     hideButtons() {
@@ -95,10 +101,8 @@ export default class extends Controller {
         const flashcardId = practiceFlashcard.dataset.flashcardId;
         this.storeResult(flashcardId, 'correct');
 
-        // const scoredFlashcard = this.result.find(el => el.id = flashcardId);
-
         practiceFlashcard.classList.add("correct", "active");
-        this.next();
+        this.next(this.slidingTransitionDelayValue);
 
     }
 
@@ -106,11 +110,9 @@ export default class extends Controller {
         const practiceFlashcard = e.currentTarget.closest('.practice-flashcard');
         const flashcardId = practiceFlashcard.dataset.flashcardId;
 
-        
-
         this.storeResult(flashcardId, 'incorrect');
         practiceFlashcard.classList.add("incorrect", "active");
-        this.next();
+        this.next(this.slidingTransitionDelayValue);
 
     }
 

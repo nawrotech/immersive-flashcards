@@ -98,9 +98,6 @@ select {
 }
 
 button {
-  /* background: transparent;
-  border: none; */
-
   &:hover {
     cursor: pointer;
   }
@@ -461,9 +458,9 @@ form[name='deck'] {
 .practice-flashcard-container {
   height: 450px;
   width: 350px;
-  translate: calc(-100% * var(--counter, 0));
   padding: 1rem;
-  transition: translate 0.4s ease-in-out var(--delay, 0.8s);
+  translate: calc(-100% * var(--counter, 0));
+  transition: translate 0.4s ease-in-out var(--delay, 0);
 
 
   .split {
@@ -482,8 +479,6 @@ form[name='deck'] {
   max-block-size: 250px;
   overflow-y: auto; 
   position: relative;
-  z-index: 3;
-
 
   .sentence-item {
     display: flex;
@@ -515,7 +510,6 @@ form[name='deck'] {
   transition: all 0.8s ease;
   transform: rotateY(0deg);
 
-  
 
   .front,
   .back {
@@ -637,9 +631,6 @@ form[name='deck'] {
   }
 
 }
-
-
-
 
 
 
