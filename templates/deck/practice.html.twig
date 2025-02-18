@@ -17,6 +17,8 @@
                 data-ajax-sentences-hidden-class="hidden"
                 data-ajax-sentences-sentence-list-class="sentences-list flow"
                 data-ajax-sentences-sentence-item-class="sentence-item"
+                data-ajax-sentences-author-class="author"
+                data-ajax-sentences-flow-class="flow"
              
                 class="practice-flashcards-wrapper"
                 >
@@ -25,13 +27,12 @@
                     {{ stimulus_action('flashcards-slider', 'reverseSides') }}  
                     type="button">
                     <span class="sr-only">Reverse sides</span>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.95 11a8 8 0 1 0-.5 4m.5 5v-5h-5"/></svg>
+                    <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.95 11a8 8 0 1 0-.5 4m.5 5v-5h-5"/></svg>
                 </button>
 
                 <div 
                     class="practice-flashcards-slider"
                     {{ stimulus_target('flashcards-slider', 'flashcardContainer') }}
-
                 >
                     {% for flashcard in flashcards %}
                             <div 
@@ -44,43 +45,63 @@
                                     >
 
                                     <div class="front">
+
                                         <div class="front-inner">
                                             <p>{{flashcard.front}}</p>
                                             <button 
+                                                class="flashcard-practice-btn"
                                                 type="button"
                                                 {{ stimulus_action('ajax-sentences', 'searchSentences', 'click', { 'query': flashcard.front }) }}
                                                 data-ajax-sentences-id="{{ flashcard.id }}"
-                                            >Show examples
+                                            >
+                                                <span class="sr-only">Show sentences examples</span> 
+                                                <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="currentColor" fill-rule="evenodd" d="M7 14a2 2 0 1 0 0-4a2 2 0 0 0 0 4m3.465-4a4.002 4.002 0 0 0-7.339 1H2a1 1 0 1 0 0 2h1.126A4.002 4.002 0 0 0 11 12h2a4 4 0 0 0 7.874 1H22a1 1 0 1 0 0-2h-1.126a4.002 4.002 0 0 0-7.339-1zM15 12a2 2 0 1 0 4 0a2 2 0 0 0-4 0" clip-rule="evenodd"/></svg>
                                             </button>
 
                                             <div 
                                                 {{ stimulus_target('ajax-sentences', 'sentencesContainer') }}
                                                 class="sentences"
+                                              
                                                 data-ajax-sentences-id="{{ flashcard.id }}"
                                                 >
                                             </div>
                                         </div>
+                                      
                                     </div>
                             
                                     <div class="back">
-                                        <img src="{{ flashcard.back }}" alt="{{ flashcard.front }}">
+                                        <div class="back-inner">
+                                            <img src="{{ flashcard.back }}" alt="{{ flashcard.front }}">
+                                        </div>
                                     </div>
 
-                                    <div class="split score-buttons">
-                                        <button
+                                    <div class="score-buttons">
+                                        <div class="wrapper">
+                                            <button
+                                                class="correct-btn flashcard-practice-btn"
                                             {{ stimulus_action('flashcards-slider', 'correct') }}  
-                                        >
-                                            I know
-                                        </button>
-                                        <button
-                                            {{ stimulus_action('flashcards-slider', 'incorrect') }}  
-                                        >I don't know</button>
+                                            >
+                                                <span class="sr-only">I know</span>  
+                                                <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><g fill="none" fill-rule="evenodd"><path d="m12.593 23.258l-.011.002l-.071.035l-.02.004l-.014-.004l-.071-.035q-.016-.005-.024.005l-.004.01l-.017.428l.005.02l.01.013l.104.074l.015.004l.012-.004l.104-.074l.012-.016l.004-.017l-.017-.427q-.004-.016-.017-.018m.265-.113l-.013.002l-.185.093l-.01.01l-.003.011l.018.43l.005.012l.008.007l.201.093q.019.005.029-.008l.004-.014l-.034-.614q-.005-.018-.02-.022m-.715.002a.02.02 0 0 0-.027.006l-.006.014l-.034.614q.001.018.017.024l.015-.002l.201-.093l.01-.008l.004-.011l.017-.43l-.003-.012l-.01-.01z"/><path fill="currentColor" d="M9.821 3.212c.296-.69 1.06-1.316 2.024-1.13c1.474.283 3.039 1.401 3.149 3.214L15 5.5V8h2.405a4 4 0 0 1 3.966 4.522l-.03.194l-.91 5a4 4 0 0 1-3.736 3.28l-.199.004H6a3 3 0 0 1-2.995-2.824L3 18v-6a3 3 0 0 1 2.824-2.995L6 9h1.34zM7 11H6a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h1zm4.625-6.92l-2.544 5.937a1 1 0 0 0-.072.259L9 10.41V19h7.496a2 2 0 0 0 1.933-1.486l.035-.156l.91-5a2 2 0 0 0-1.82-2.353L17.405 10H15a2 2 0 0 1-1.995-1.85L13 8V5.5c0-.553-.434-1.116-1.205-1.37z"/></g></svg>
+                                            </button>
+                                            <button
+                                                class="incorrect-btn flashcard-practice-btn"
+                                                {{ stimulus_action('flashcards-slider', 'incorrect') }}  
+                                            >
+                                                <span class="sr-only"> I don't know</span>
+                                                <svg class="icon" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 24 24"><g fill="none" fill-rule="evenodd"><path d="m12.593 23.258l-.011.002l-.071.035l-.02.004l-.014-.004l-.071-.035q-.016-.005-.024.005l-.004.01l-.017.428l.005.02l.01.013l.104.074l.015.004l.012-.004l.104-.074l.012-.016l.004-.017l-.017-.427q-.004-.016-.017-.018m.265-.113l-.013.002l-.185.093l-.01.01l-.003.011l.018.43l.005.012l.008.007l.201.093q.019.005.029-.008l.004-.014l-.034-.614q-.005-.018-.02-.022m-.715.002a.02.02 0 0 0-.027.006l-.006.014l-.034.614q.001.018.017.024l.015-.002l.201-.093l.01-.008l.004-.011l.017-.43l-.003-.012l-.01-.01z"/><path fill="currentColor" d="M16.496 2.998a4 4 0 0 1 3.936 3.285l.909 5a4 4 0 0 1-3.936 4.715H15v2.5c0 1.933-1.626 3.124-3.155 3.419c-.964.185-1.729-.442-2.024-1.131l-2.48-5.788H6a3 3 0 0 1-3-3v-6a3 3 0 0 1 3-3zm0 2H9v8.59a1 1 0 0 0 .08.394l2.545 5.936c.877-.224 1.375-.828 1.375-1.42v-2.5a2 2 0 0 1 2-2h2.405a2 2 0 0 0 1.968-2.358l-.909-5a2 2 0 0 0-1.968-1.642M7 4.998H6a1 1 0 0 0-.993.883L5 5.998v6a1 1 0 0 0 .883.993l.117.007h1z"/></g></svg>
+                                            </button>
+                                        </div>
                                     </div>
 
-                                    <button 
-                                        {{ stimulus_action('flashcards-slider', 'rotate') }}
-                                        class="rotate-btn">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21.5 9a10 10 0 0 0-19 0M2 5v4h4m12 6h4v4M2.5 15a10 10 0 0 0 19 0"/></svg>                                    </button>
+                                    <div class="rotate-btn-wrapper">
+                                        <button 
+                                            {{ stimulus_action('flashcards-slider', 'rotate') }}
+                                            class="rotate-btn flashcard-practice-btn">
+                                            <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21.5 9a10 10 0 0 0-19 0M2 5v4h4m12 6h4v4M2.5 15a10 10 0 0 0 19 0"/></svg>                                   
+                                        </button>
+                                    </div>
+                               
                                 </div>
                             </div>
 
@@ -92,16 +113,19 @@
                         {{ stimulus_target('flashcards-slider', 'prevButton') }}
                         {{ stimulus_action('flashcards-slider', 'prev') }}  
                         type="button"
-                        class="slider-btn left hidden">
-                        Left
+                        class="slider-btn left flashcard-practice-btn hidden">
+                        
+                        <span class="sr-only">Previous card</span>
+                        <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024"><path fill="currentColor" d="M609.408 149.376L277.76 489.6a32 32 0 0 0 0 44.672l331.648 340.352a29.12 29.12 0 0 0 41.728 0a30.59 30.59 0 0 0 0-42.752L339.264 511.936l311.872-319.872a30.59 30.59 0 0 0 0-42.688a29.12 29.12 0 0 0-41.728 0"/></svg>
                     </button>
 
                     <button 
                         {{ stimulus_target('flashcards-slider', 'nextButton') }}
                         {{ stimulus_action('flashcards-slider', 'next') }}  
                         type="button"
-                        class="slider-btn right">
-                        Right
+                        class="slider-btn flashcard-practice-btn right">
+                        <span class="sr-only">Next card</span>
+                        <svg class="icon" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 1024 1024"><path fill="currentColor" d="M340.864 149.312a30.59 30.59 0 0 0 0 42.752L652.736 512L340.864 831.872a30.59 30.59 0 0 0 0 42.752a29.12 29.12 0 0 0 41.728 0L714.24 534.336a32 32 0 0 0 0-44.672L382.592 149.376a29.12 29.12 0 0 0-41.728 0z"/></svg>
                     </button>
                 </div>
            
