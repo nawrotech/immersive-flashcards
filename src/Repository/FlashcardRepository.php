@@ -57,7 +57,16 @@ class FlashcardRepository extends ServiceEntityRepository
     public function findFlashcardsByDeckPaginator(int $deckId, int $offset = 0): Paginator
     {
         $qb = $this->createQueryBuilder('f')
+            ->addSelect("
+                    CASE 
+                        WHEN f.result = 'incorrect' THEN 1
+                        WHEN f.result = 'unanswered' THEN 2
+                        WHEN f.result = 'correct' THEN 3
+                        ELSE 4 
+                    END AS HIDDEN sort_order
+                ")->orderBy('sort_order', 'ASC')
             ->andWhere('IDENTITY(f.deck) = :deckId')
+
             ->setParameter('deckId', $deckId);
 
         $query = $qb->setFirstResult($offset)
