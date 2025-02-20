@@ -39,13 +39,9 @@
     --clr-neutral-100: #fff;
     --clr-neutral-400: #d3d3d3;
 
-
-
-
     --clr-correct: green;
     --clr-incorrect: red;
     --clr-unanswered: var(--clr-neutral-400); 
-
 
     --clr-overlay: rgba(0,0,0,0.87);
 
