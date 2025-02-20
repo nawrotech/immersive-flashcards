@@ -10,12 +10,13 @@ export default class extends Controller {
         index: Number,
         prototype: String,
         maxFlashcardsInDeck: Number,
-        serviceLocales: Object
+        serviceLocales: Object,
+        defaultLanguage: String
     }
 
-    static classes = ['hidden' ,'flashcardItemWrapper', 'backFieldWrapper', 'selectionGrid', 'loadingSpinner', 'imageField', 'imageRadioButton'];
+    static classes = ['hidden' ,'flashcardItemWrapper', 'backFieldWrapper', 'selectionGrid', 'loadingSpinner', 'imageField', 'imageRadioButton', 'errorMessage'];
 
-    selectedLanguage = 'en';
+    selectedLanguage = this.defaultLanguageValue;
 
     async fetchImages(params) {
         const queryString = new URLSearchParams(params).toString();
@@ -79,8 +80,9 @@ export default class extends Controller {
         const flashcardButtons = flashcardItem.querySelectorAll('button');
         flashcardButtons.forEach(button => button.disabled = true);
 
-        const backFieldWrapper = backField.closest(`.${this.backFieldWrapperClass}`);
+        const backFieldWrapper = backField?.closest(`.${this.backFieldWrapperClass}`);
 
+        
         try {
             backFieldWrapper.querySelector(`.${this.selectionGridClass}`)?.remove();
 
@@ -92,10 +94,22 @@ export default class extends Controller {
                 'flashcardType': imageType,
                 'lang': selectedLanguage});
 
+            if (!images) {
+                backFieldWrapper.querySelector(`.${this.loadingSpinnerClass}`)?.remove();
+                flashcardButtons.forEach(button => button.disabled = false);
+
+                const errorParagraph = this.createErrorMessageElement();
+
+                if (!backFieldWrapper.querySelector(`.${this.errorMessageClass}`)) {
+                    backFieldWrapper.appendChild(errorParagraph);
+                }
+                return;
+            }
+
             const imageGridWrapper = this.createImageSelectionWrapperElement();
 
             if (images.length < 1) {
-                imageGridWrapper.innerHTML = "<p>No images matched your search, but let's try something else!</p>";
+                imageGridWrapper.innerHTML = `<p class="${this.errorMessageClass}">No images matched your search, but let's try something else!</p>`;
             }
             
             images?.forEach((image) => {
@@ -103,8 +117,8 @@ export default class extends Controller {
                 imageGridWrapper.appendChild(imageElement);
             });
 
-
             backFieldWrapper.querySelector(`.${this.loadingSpinnerClass}`)?.remove();
+            backFieldWrapper.querySelector(`.${this.errorMessageClass}`)?.remove();
 
             backFieldWrapper.appendChild(imageGridWrapper);
             flashcardButtons.forEach(button => button.disabled = false);
@@ -114,6 +128,7 @@ export default class extends Controller {
           }
 
     }
+
 
     searchImages(e) {
         this.search(e, 'image', this.selectedLanguage);
@@ -135,6 +150,12 @@ export default class extends Controller {
         backField.value = e.currentTarget.value;
     }
 
+    createErrorMessageElement() {
+        const errorParagraph = document.createElement('p');
+        errorParagraph.classList.add(this.errorMessageClass);
+        errorParagraph.textContent = 'An error occurred, please try again';
+        return errorParagraph;
+    }
 
     createImageSelectionWrapperElement() {
         const imageSelectionGrid = document.createElement('div');

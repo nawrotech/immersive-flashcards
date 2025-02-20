@@ -13,10 +13,12 @@
             'imagesUrl': path("app_flashcard"),
             'index': form.flashcards|length > 0 ? form.flashcards|last.vars.name + 1 : 0,
             'maxFlashcardsInDeck': constant('App\\Controller\\DeckController::MAX_FLASHCARDS_IN_DECK'),
+            'defaultLanguage': form.lang.vars.choices|first.value
 
         },
         {
             'hidden': 'hidden',
+            'errorMessage': 'error-message',
             'flashcardItemWrapper': flashcardItemWrapper,
             'backFieldWrapper': 'back-wrapper',
             'selectionGrid': 'selection-grid',
@@ -30,6 +32,7 @@
             data-ajax-images-prototype-value="{{ form_widget(form.flashcards.vars.prototype)|e('html_attr') }}"
 
         >
+
 
             {{form_row(form.name)}}
             {{form_row(form.lang, {
