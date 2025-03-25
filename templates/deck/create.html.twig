@@ -47,7 +47,7 @@
                         data-index="{{ loop.index0 }}"
                         class="{{ flashcardItemWrapper }}">
                
-                                {{ form_row(flashcardForm.front) }}
+                            {{ form_row(flashcardForm.front) }}
         
                             <div class="split">
                                 {{ form_row(flashcardForm.back) }}
@@ -75,9 +75,8 @@
                 {{ stimulus_action('ajax-images', 'addFlashcard') }}
                 {{ stimulus_target('ajax-images', 'addButton') }}
                 >
-               Add flashcard
+                Add flashcard
             </button>
-
         </div>
 
     {{ form_end(form) }}
