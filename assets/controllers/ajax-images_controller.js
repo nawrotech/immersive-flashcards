@@ -20,6 +20,7 @@ export default class extends Controller {
 
     async fetchImages(params) {
         const queryString = new URLSearchParams(params).toString();
+
         return fetch(`${this.imagesUrlValue}?${queryString}`)
                 .then(response => {
                     if (!response.ok) {
@@ -28,7 +29,10 @@ export default class extends Controller {
                     return response.json(); 
                 })
                 .then(data => data)
-                .catch(error => console.error('Error fetching images:', error));
+                .catch(error => {
+                    console.error('Error fetching images:', error);
+                    throw error;
+                });
     
     }
 
@@ -62,73 +66,98 @@ export default class extends Controller {
     
     async search(e, imageType, selectedLanguage = '') {
         const flashcardItem = e.currentTarget.closest(`.${this.flashcardItemWrapperClass}`);
-        if (!flashcardItem) 
+        if (flashcardItem.tagName !== "LI") 
             return;
 
         const currentFlashcardIndex = flashcardItem.dataset.index;
         const backField = this.flashcardBackTargets.find(element => flashcardItem.contains(element));
-
+        if (backField.tagName !== "INPUT") 
+            return;
+        
         const searchTermField = this.flashcardFrontTargets.find(element => flashcardItem.contains(element));
-        if (!searchTermField?.value) 
+        if (searchTermField.tagName !== "INPUT" || !searchTermField?.value) 
             return;
         
         const imageTypeField = this.flashcardImageTypeTargets.find(element => flashcardItem.contains(element));
-        if (imageTypeField) {
-            imageTypeField.value = imageType;
-        }
-          
-        const flashcardButtons = flashcardItem.querySelectorAll('button');
-        flashcardButtons.forEach(button => button.disabled = true);
+        if (imageTypeField.tagName !== "INPUT") 
+            return;
 
+        imageTypeField.value = imageType;
+     
+     
         const backFieldWrapper = backField?.closest(`.${this.backFieldWrapperClass}`);
-
+        if (backFieldWrapper.tagName !== "DIV") 
+            return;
+        this.manageFlashcardItemButtons(flashcardItem, true);
+        this.clearBackFieldWrapper(backFieldWrapper);
         
+        const loadingSpinner = this.createLoadingSpinnerElement();
+        backFieldWrapper.appendChild(loadingSpinner);
+
         try {
-            backFieldWrapper.querySelector(`.${this.selectionGridClass}`)?.remove();
-
-            const loadingSpinner = this.createLoadingSpinnerElement();
-            backFieldWrapper.appendChild(loadingSpinner);
-
             const images = await this.fetchImages({
                 'query': searchTermField?.value, 
                 'flashcardType': imageType,
                 'lang': selectedLanguage});
 
             if (!images) {
-                backFieldWrapper.querySelector(`.${this.loadingSpinnerClass}`)?.remove();
-                flashcardButtons.forEach(button => button.disabled = false);
-
+                this.clearBackFieldWrapper(backFieldWrapper);
+                this.manageFlashcardItemButtons(flashcardItem, false);
                 const errorParagraph = this.createErrorMessageElement();
-
-                if (!backFieldWrapper.querySelector(`.${this.errorMessageClass}`)) {
-                    backFieldWrapper.appendChild(errorParagraph);
-                }
+                backFieldWrapper.appendChild(errorParagraph);
                 return;
             }
 
-            const imageGridWrapper = this.createImageSelectionWrapperElement();
-
             if (images.length < 1) {
-                imageGridWrapper.innerHTML = `<p class="${this.errorMessageClass}">No images matched your search, but let's try something else!</p>`;
+                this.manageFlashcardItemButtons(flashcardItem, false);
+                this.clearBackFieldWrapper(backFieldWrapper);
+                const errorParagraph = this.createErrorMessageElement(`No images matched your search, but let's try something else!`);
+                backFieldWrapper.appendChild(errorParagraph);
+                return;
             }
+            
+            const imageGridWrapper = this.createImageSelectionWrapperElement();
             
             images?.forEach((image) => {
                 const imageElement = this.createImageElement(image, currentFlashcardIndex);
                 imageGridWrapper.appendChild(imageElement);
             });
 
-            backFieldWrapper.querySelector(`.${this.loadingSpinnerClass}`)?.remove();
-            backFieldWrapper.querySelector(`.${this.errorMessageClass}`)?.remove();
-
+            this.clearBackFieldWrapper(backFieldWrapper);
+            this.manageFlashcardItemButtons(flashcardItem, false);
             backFieldWrapper.appendChild(imageGridWrapper);
-            flashcardButtons.forEach(button => button.disabled = false);
+
+
 
           } catch (error) {
-            console.error('Error fetching images:', error);
+            this.manageFlashcardItemButtons(flashcardItem, false);
+            this.clearBackFieldWrapper(backFieldWrapper);
+            const errorParagraph = this.createErrorMessageElement();
+            backFieldWrapper.appendChild(errorParagraph);
           }
-
     }
 
+
+    clearBackFieldWrapper(backFieldWrapper) {
+        if (backFieldWrapper.className !== this.backFieldWrapperClass) 
+            return;
+        
+        backFieldWrapper.querySelector(`.${this.loadingSpinnerClass}`)?.remove();
+        backFieldWrapper.querySelector(`.${this.selectionGridClass}`)?.remove();
+        backFieldWrapper.querySelector(`.${this.errorMessageClass}`)?.remove();
+    }
+
+    manageFlashcardItemButtons(flashcardItem, isDisabled = false) {
+        if (flashcardItem.className !== this.flashcardItemWrapperClass) 
+            return;
+
+        if (typeof isDisabled !== 'boolean') {
+            return;
+        }
+
+        const flashcardButtons = flashcardItem.querySelectorAll('button');
+        flashcardButtons.forEach(button => button.disabled = isDisabled);
+    }
 
     searchImages(e) {
         this.search(e, 'image', this.selectedLanguage);
@@ -150,10 +179,10 @@ export default class extends Controller {
         backField.value = e.currentTarget.value;
     }
 
-    createErrorMessageElement() {
+    createErrorMessageElement(errorMessage = 'An error occurred, please try again') {
         const errorParagraph = document.createElement('p');
         errorParagraph.classList.add(this.errorMessageClass);
-        errorParagraph.textContent = 'An error occurred, please try again';
+        errorParagraph.textContent = errorMessage;
         return errorParagraph;
     }
 
@@ -167,7 +196,6 @@ export default class extends Controller {
     createImageElement(image, index) {
         const imageElement = document.createElement('div');
         imageElement.classList.add(this.imageFieldClass);
-
         imageElement.innerHTML = `
                         <label for="${image?.id}">
                             <input data-action="click->ajax-images#selectImage"
@@ -187,6 +215,7 @@ export default class extends Controller {
         loadingSpinnerElement.classList.add(this.loadingSpinnerClass);
         return loadingSpinnerElement;
     }
+
 
       
 }
