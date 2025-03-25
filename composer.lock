@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f451b17983163450e54e2f15a0ddcc77",
+    "content-hash": "e76a4a0b688538db70d5d6f8dc2e9289",
     "packages": [
         {
             "name": "composer/semver",
@@ -1748,6 +1748,123 @@
                 "source": "https://github.com/HughbertD/oauth2-unsplash/tree/master"
             },
             "time": "2017-12-14T13:08:42+00:00"
+        },
+        {
+            "name": "jolicode/jolinotif",
+            "version": "v3.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/jolicode/JoliNotif.git",
+                "reference": "146b7bfb730f0e1e8078b36e3dba8dde95e58f76"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/jolicode/JoliNotif/zipball/146b7bfb730f0e1e8078b36e3dba8dde95e58f76",
+                "reference": "146b7bfb730f0e1e8078b36e3dba8dde95e58f76",
+                "shasum": ""
+            },
+            "require": {
+                "jolicode/php-os-helper": "^0.1 || ^0.2",
+                "php": ">=8.2",
+                "psr/log": "^1.0 || ^2.0 || ^3.0",
+                "symfony/deprecation-contracts": "^3",
+                "symfony/process": "^5.4 || ^6.4 || ^7.1"
+            },
+            "require-dev": {
+                "symfony/finder": "^5.4 || ^6.4 || ^7.1",
+                "symfony/phpunit-bridge": "^5.4 || ^6.4 || ^7.1"
+            },
+            "suggest": {
+                "ext-ffi": "Needed to send notifications via libnotify on Linux"
+            },
+            "bin": [
+                "jolinotif"
+            ],
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Joli\\JoliNotif\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Loïck Piera",
+                    "email": "pyrech@gmail.com"
+                }
+            ],
+            "description": "Send desktop notifications on Windows, Linux, MacOS.",
+            "keywords": [
+                "MAC",
+                "growl",
+                "linux",
+                "notification",
+                "windows"
+            ],
+            "support": {
+                "issues": "https://github.com/jolicode/JoliNotif/issues",
+                "source": "https://github.com/jolicode/JoliNotif/tree/v3.1.0"
+            },
+            "funding": [
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/jolicode/jolinotif",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2025-02-17T10:54:39+00:00"
+        },
+        {
+            "name": "jolicode/php-os-helper",
+            "version": "v0.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/jolicode/php-os-helper.git",
+                "reference": "43d77908330943cf5b32c80bf51d07db04c7106f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/jolicode/php-os-helper/zipball/43d77908330943cf5b32c80bf51d07db04c7106f",
+                "reference": "43d77908330943cf5b32c80bf51d07db04c7106f",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=8.1"
+            },
+            "require-dev": {
+                "symfony/phpunit-bridge": "^6.3.1"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "JoliCode\\PhpOsHelper\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Loïck Piera",
+                    "email": "pyrech@gmail.com"
+                }
+            ],
+            "description": "Helpers to detect the OS of the machine where PHP is running.",
+            "keywords": [
+                "linux",
+                "os",
+                "osx",
+                "php",
+                "windows"
+            ],
+            "support": {
+                "issues": "https://github.com/jolicode/php-os-helper/issues",
+                "source": "https://github.com/jolicode/php-os-helper/tree/v0.2.0"
+            },
+            "time": "2024-10-02T19:51:05+00:00"
         },
         {
             "name": "league/oauth2-client",
@@ -4805,6 +4922,76 @@
                 }
             ],
             "time": "2024-11-25T14:26:33+00:00"
+        },
+        {
+            "name": "symfony/joli-notif-notifier",
+            "version": "v7.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/joli-notif-notifier.git",
+                "reference": "101bf84881d8003b4cefa1a9475ebf7d8a1c894b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/joli-notif-notifier/zipball/101bf84881d8003b4cefa1a9475ebf7d8a1c894b",
+                "reference": "101bf84881d8003b4cefa1a9475ebf7d8a1c894b",
+                "shasum": ""
+            },
+            "require": {
+                "jolicode/jolinotif": "^2.7.2|^3.0",
+                "php": ">=8.2",
+                "symfony/http-client": "^7.2",
+                "symfony/notifier": "^7.2"
+            },
+            "type": "symfony-notifier-bridge",
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Component\\Notifier\\Bridge\\JoliNotif\\": ""
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Ahmed Ghanem",
+                    "email": "ahmedghanem7361@gmail.com",
+                    "homepage": "https://github.com/ahmedghanem00"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Symfony JoliNotif Notifier Bridge",
+            "homepage": "https://symfony.com",
+            "keywords": [
+                "desktop-notifications",
+                "joli-notif",
+                "notifier"
+            ],
+            "support": {
+                "source": "https://github.com/symfony/joli-notif-notifier/tree/v7.2.0"
+            },
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2024-10-02T19:25:54+00:00"
         },
         {
             "name": "symfony/mailer",
@@ -11118,7 +11305,7 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {},
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
@@ -11126,6 +11313,6 @@
         "ext-ctype": "*",
         "ext-iconv": "*"
     },
-    "platform-dev": [],
+    "platform-dev": {},
     "plugin-api-version": "2.6.0"
 }
