@@ -74,7 +74,6 @@ export default class extends Controller {
       container.innerHTML = "";
       container.appendChild(sentencesList);
     } catch (error) {
-      console.error("Error fetching sentences:", error);
       container.innerHTML = "";
       const errorElement = this.createErrorMessageElement(
         "Something went wrong, please try again later!"
