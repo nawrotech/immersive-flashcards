@@ -16,7 +16,7 @@ use Symfony\Component\Routing\Attribute\Route;
 final class FlashcardController extends AbstractController
 {
     #[Route('/flashcard', name: 'app_flashcard')]
-    public function index(
+    public function images(
         #[Autowire(service: UnsplashApiService::class)] ImageProviderInterface $unsplashApiService,
         #[Autowire(service: GiphyApiService::class)] ImageProviderInterface $giphyApiService,
         #[MapQueryParameter()] string $query = "",
@@ -24,7 +24,11 @@ final class FlashcardController extends AbstractController
         #[MapQueryParameter()] string $lang = ""
     ): Response {
 
-        $images = $flashcardType == 'image' ?
+        if (empty($query)) {
+            return $this->json([]);
+        }
+
+        $images = $flashcardType === 'image' ?
             $unsplashApiService?->getImagesByQuery($query, $lang) :
             $giphyApiService?->getImagesByQuery($query, $lang);
 
@@ -38,6 +42,11 @@ final class FlashcardController extends AbstractController
         #[MapQueryParameter()] string $query = "",
         #[MapQueryParameter()] string $lang = "",
     ) {
+
+        if (empty($query)) {
+            return $this->json([]);
+        }
+
         return $this->json($sentenceService->getSentences($query, $lang));
     }
 }
