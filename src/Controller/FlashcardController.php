@@ -42,7 +42,6 @@ final class FlashcardController extends AbstractController
         #[MapQueryParameter()] string $query = "",
         #[MapQueryParameter()] string $lang = "",
     ) {
-
         if (empty($query)) {
             return $this->json([]);
         }
