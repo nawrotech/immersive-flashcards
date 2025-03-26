@@ -13,6 +13,7 @@
 
                 data-ajax-sentences-sentences-url-value="{{path('app_flashcard_sentences', {lang: sentencesLanguage })}}"
                 
+
                 data-ajax-sentences-loading-spinner-class="loading-spinner"
                 data-ajax-sentences-sound-button-class="sound-button"
                 data-ajax-sentences-hidden-class="hidden"
@@ -20,10 +21,11 @@
                 data-ajax-sentences-sentence-item-class="sentence-item"
                 data-ajax-sentences-author-class="author"
                 data-ajax-sentences-flow-class="flow"
+                data-ajax-sentences-error-class="error"
              
                 class="practice-flashcards-wrapper"
                 >
-               
+    
                 <button
                     {{ stimulus_action('flashcards-slider', 'reverseSides') }}  
                     type="button">
@@ -46,7 +48,6 @@
                                     >
 
                                     <div class="front">
-
                                         <div class="front-inner">
                                             <p>{{flashcard.front}}</p>
                                             <button 
@@ -62,7 +63,6 @@
                                             <div 
                                                 {{ stimulus_target('ajax-sentences', 'sentencesContainer') }}
                                                 class="sentences"
-                                              
                                                 data-ajax-sentences-id="{{ flashcard.id }}"
                                                 >
                                             </div>
