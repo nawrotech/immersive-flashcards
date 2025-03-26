@@ -14,7 +14,7 @@ class TatoebaApiService
     /**
      * @return ApiSentenceDto[]
      */
-    public function getSentences(string $query, ?string $lang = 'eng', ?string $hasAudio = 'any'): array
+    public function getSentences(string $query, string $lang = 'eng', ?string $hasAudio = 'any'): array
     {
         $response = $this->client->request('GET', "https://tatoeba.org/en/api_v0/search", [
             'query' => [
@@ -26,6 +26,7 @@ class TatoebaApiService
                 'direct' => 'only'
             ]
         ])->toArray();
+
 
         return array_map(
             function ($sentence) {
