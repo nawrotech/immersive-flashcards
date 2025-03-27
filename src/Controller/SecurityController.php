@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Notifier\CustomLoginLinkNotification;
 use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -33,7 +34,7 @@ class SecurityController extends AbstractController
 
             $loginLinkDetails = $loginLinkHandler->createLoginLink($user);
 
-            $notification = new LoginLinkNotification(
+            $notification = new CustomLoginLinkNotification(
                 $loginLinkDetails,
                 'Login to Immersive Flashcards'
             );
