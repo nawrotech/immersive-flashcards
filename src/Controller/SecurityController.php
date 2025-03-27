@@ -6,13 +6,17 @@ use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Notifier\NotifierInterface;
+use Symfony\Component\Notifier\Recipient\Recipient;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\LoginLink\LoginLinkHandlerInterface;
+use Symfony\Component\Security\Http\LoginLink\LoginLinkNotification;
 
 class SecurityController extends AbstractController
 {
     #[Route(path: '/login', name: 'app_login')]
     public function login(
+        NotifierInterface $notifier,
         LoginLinkHandlerInterface $loginLinkHandler,
         UserRepository $userRepository,
         Request $request,
@@ -22,10 +26,22 @@ class SecurityController extends AbstractController
             $email = $request->getPayload()->get('email');
             $user = $userRepository->findOneBy(['email' => $email]);
 
-            $loginLinkDetails = $loginLinkHandler->createLoginLink($user);
-            $loginLink = $loginLinkDetails->getUrl();
+            if (!$user) {
+                $this->addFlash("success", "Check your email for a login link");
+                return $this->redirectToRoute('app_login');
+            }
 
-            $this->addFlash("success", $loginLink);
+            $loginLinkDetails = $loginLinkHandler->createLoginLink($user);
+
+            $notification = new LoginLinkNotification(
+                $loginLinkDetails,
+                'Login to Immersive Flashcards'
+            );
+
+            $recipient = new Recipient($user->getEmail());
+            $notifier->send($notification, $recipient);
+
+            $this->addFlash("success", "Check your email for a login link");
 
             return $this->redirectToRoute('app_login');
         }
