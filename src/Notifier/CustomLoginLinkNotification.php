@@ -1,6 +1,6 @@
 <?php
 
-// src/Notifier/CustomLoginLinkNotification
+
 namespace App\Notifier;
 
 use Symfony\Component\Notifier\Message\EmailMessage;
@@ -15,6 +15,7 @@ class CustomLoginLinkNotification extends LoginLinkNotification
 
         /** @var NotificationEmail $email */
         $email = $emailMessage->getMessage();
+
         $email->htmlTemplate('emails/magic_link_email.html.twig');
 
         return $emailMessage;
