@@ -13,11 +13,9 @@ class CustomLoginLinkNotification extends LoginLinkNotification
     {
         $emailMessage = parent::asEmailMessage($recipient, $transport);
 
-        // get the NotificationEmail object and override the template
+        /** @var NotificationEmail $email */
         $email = $emailMessage->getMessage();
         $email->htmlTemplate('emails/magic_link_email.html.twig');
-
-        // $email->context($email->getContext());
 
         return $emailMessage;
     }
