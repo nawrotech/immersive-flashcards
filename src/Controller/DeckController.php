@@ -15,11 +15,12 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Email;
 use Symfony\Component\Routing\Attribute\Route;
 
 final class DeckController extends AbstractController
 {
-
     public const MAX_FLASHCARDS_IN_DECK = 30;
 
     public function __construct(private EntityManagerInterface $em) {}
@@ -29,7 +30,6 @@ final class DeckController extends AbstractController
     {
         return $this->render('deck/index.html.twig');
     }
-
 
     #[Route("/decks/create/{id?}", name: "app_deck_create")]
     public function create(
@@ -70,6 +70,7 @@ final class DeckController extends AbstractController
     ): Response {
 
         $flashcards = $flashcardRepository->findByDeck($deck, true);
+
         $deckResultSummary = $flashcardService->getDeckResultsSummary($flashcards);
 
         return $this->render('deck/results.html.twig', [
@@ -91,7 +92,7 @@ final class DeckController extends AbstractController
             ->findByDeck($deck, result: FlashcardResult::tryFrom($flashcardResult));
 
         $sentencesLanguage = $localeMappingService
-            ->getServiceMapping($deck->getLang(), 'sentence_service');
+            ->getServiceMappingForLocale($deck->getLang(), 'sentence_service');
 
         foreach ($flashcards as $flashcard) {
             $flashcard->setResult(FlashcardResult::UNANSWERED);
@@ -123,7 +124,6 @@ final class DeckController extends AbstractController
                     $flashcard->setResult(FlashcardResult::tryFrom($answers[$flashcard->getId()]));
                 }
             }
-
             $this->em->flush();
         }
 
