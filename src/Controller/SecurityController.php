@@ -11,7 +11,7 @@ use Symfony\Component\Notifier\NotifierInterface;
 use Symfony\Component\Notifier\Recipient\Recipient;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\LoginLink\LoginLinkHandlerInterface;
-use Symfony\Component\Security\Http\LoginLink\LoginLinkNotification;
+
 
 class SecurityController extends AbstractController
 {
@@ -28,7 +28,7 @@ class SecurityController extends AbstractController
             $user = $userRepository->findOneBy(['email' => $email]);
 
             if (!$user) {
-                $this->addFlash("success", "Check your email for a login link");
+                $this->addFlash("success", "Check your email for a signin link");
                 return $this->redirectToRoute('app_login');
             }
 
@@ -42,7 +42,7 @@ class SecurityController extends AbstractController
             $recipient = new Recipient($user->getEmail());
             $notifier->send($notification, $recipient);
 
-            $this->addFlash("success", "Check your email for a login link");
+            $this->addFlash("success", "Check your email for a signin link");
 
             return $this->redirectToRoute('app_login');
         }
