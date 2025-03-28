@@ -6,7 +6,7 @@ framework:
     headers:
       From: "Immersive Flashcards <support@immersiveflashcards.com>"
     dsn: "%env(MAILER_DSN)%"
-when@dev:
+when@test:
   framework:
     mailer:
       dsn: "null://null"
