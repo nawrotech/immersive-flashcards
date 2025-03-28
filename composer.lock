@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2d7a6e0dcbb5daa8e7c48c1b7c47952e",
+    "content-hash": "75d90ac4f9f2af92c9f9276b861d01c3",
     "packages": [
         {
             "name": "composer/semver",
@@ -5192,6 +5192,75 @@
             "time": "2025-01-27T11:08:17+00:00"
         },
         {
+            "name": "symfony/mailgun-mailer",
+            "version": "v7.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/mailgun-mailer.git",
+                "reference": "3c1dfd9ff0a487a4116baec42d11ae21a061e3f1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/mailgun-mailer/zipball/3c1dfd9ff0a487a4116baec42d11ae21a061e3f1",
+                "reference": "3c1dfd9ff0a487a4116baec42d11ae21a061e3f1",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=8.2",
+                "symfony/mailer": "^7.2"
+            },
+            "conflict": {
+                "symfony/http-foundation": "<6.4"
+            },
+            "require-dev": {
+                "symfony/http-client": "^6.4|^7.0",
+                "symfony/webhook": "^6.4|^7.0"
+            },
+            "type": "symfony-mailer-bridge",
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Component\\Mailer\\Bridge\\Mailgun\\": ""
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Symfony Mailgun Mailer Bridge",
+            "homepage": "https://symfony.com",
+            "support": {
+                "source": "https://github.com/symfony/mailgun-mailer/tree/v7.2.0"
+            },
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2024-09-28T08:24:38+00:00"
+        },
+        {
             "name": "symfony/messenger",
             "version": "v7.2.3",
             "source": {
@@ -8950,6 +9019,73 @@
         }
     ],
     "packages-dev": [
+        {
+            "name": "dama/doctrine-test-bundle",
+            "version": "v8.2.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/dmaicher/doctrine-test-bundle.git",
+                "reference": "eefe54fdf00d910f808efea9cfce9cc261064a0a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/dmaicher/doctrine-test-bundle/zipball/eefe54fdf00d910f808efea9cfce9cc261064a0a",
+                "reference": "eefe54fdf00d910f808efea9cfce9cc261064a0a",
+                "shasum": ""
+            },
+            "require": {
+                "doctrine/dbal": "^3.3 || ^4.0",
+                "doctrine/doctrine-bundle": "^2.11.0",
+                "php": "^7.4 || ^8.0",
+                "psr/cache": "^1.0 || ^2.0 || ^3.0",
+                "symfony/cache": "^5.4 || ^6.3 || ^7.0",
+                "symfony/framework-bundle": "^5.4 || ^6.3 || ^7.0"
+            },
+            "require-dev": {
+                "behat/behat": "^3.0",
+                "friendsofphp/php-cs-fixer": "^3.27",
+                "phpstan/phpstan": "^2.0",
+                "phpunit/phpunit": "^8.0 || ^9.0 || ^10.0 || ^11.0",
+                "symfony/phpunit-bridge": "^7.2",
+                "symfony/process": "^5.4 || ^6.3 || ^7.0",
+                "symfony/yaml": "^5.4 || ^6.3 || ^7.0"
+            },
+            "type": "symfony-bundle",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "8.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "DAMA\\DoctrineTestBundle\\": "src/DAMA/DoctrineTestBundle"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "David Maicher",
+                    "email": "mail@dmaicher.de"
+                }
+            ],
+            "description": "Symfony bundle to isolate doctrine database tests and improve test performance",
+            "keywords": [
+                "doctrine",
+                "isolation",
+                "performance",
+                "symfony",
+                "testing",
+                "tests"
+            ],
+            "support": {
+                "issues": "https://github.com/dmaicher/doctrine-test-bundle/issues",
+                "source": "https://github.com/dmaicher/doctrine-test-bundle/tree/v8.2.2"
+            },
+            "time": "2025-02-04T14:37:36+00:00"
+        },
         {
             "name": "doctrine/data-fixtures",
             "version": "2.0.2",
