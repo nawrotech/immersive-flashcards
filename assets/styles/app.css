@@ -1,51 +1,50 @@
 :root {
-    --ff-sans: sans-serif;
-    --ff-serif: serif;
+  --ff-sans: sans-serif;
+  --ff-serif: serif;
 
-    --fs-8: 0.5rem;
-    --fs-12: 0.75rem;
-    --fs-14: 0.875rem;
-    --fs-16: 1rem;
-    --fs-18: 1.125rem;
-    --fs-20: 1.25rem;
-    --fs-22: 1.1.25rem;
-    --fs-24: 1.5rem;
-    --fs-28: 1.75rem;
-    --fs-32: 2rem;
-    --fs-36: 2rem;
+  --fs-8: 0.5rem;
+  --fs-12: 0.75rem;
+  --fs-14: 0.875rem;
+  --fs-16: 1rem;
+  --fs-18: 1.125rem;
+  --fs-20: 1.25rem;
+  --fs-22: 1.1.25rem;
+  --fs-24: 1.5rem;
+  --fs-28: 1.75rem;
+  --fs-32: 2rem;
+  --fs-36: 2rem;
 
-    --spacing-8: 0.5rem;
-    --spacing-16: 1rem;
-    --spacing-24: 1.5rem;
-    --spacing-32: 2rem;
-    --spacing-40: 2.5rem;
-    --spacing-48: 3rem;
-    --spacing-56: 3.5rem;
-    --spacing-64: 4rem;
-    --spacing-130: 8.125rem;
+  --spacing-8: 0.5rem;
+  --spacing-16: 1rem;
+  --spacing-24: 1.5rem;
+  --spacing-32: 2rem;
+  --spacing-40: 2.5rem;
+  --spacing-48: 3rem;
+  --spacing-56: 3.5rem;
+  --spacing-64: 4rem;
+  --spacing-80: 5rem;
+  --spacing-130: 8.125rem;
 
-    --fw-400: 400;
-    --fw-700: 700;
+  --fw-400: 400;
+  --fw-700: 700;
 
-    --borr-circle: 100vh;
-    --borr: 0.5rem;
+  --borr-circle: 100vh;
+  --borr: 0.5rem;
 
-    --box-shadow-primary:0 8px 4px #0000001f;
-    --box-shadow-secondary: 0 0 2px #0000003d;
+  --box-shadow-primary: 0 8px 4px #0000001f;
+  --box-shadow-secondary: 0 0 2px #0000003d;
 
-    /* hsl */
-    --clr-primary-400: orangered;
-    --clr-secondary-400: white;
-    --clr-neutral-100: #fff;
-    --clr-neutral-400: #d3d3d3;
+  /* hsl */
+  --clr-primary-400: orangered;
+  --clr-secondary-400: white;
+  --clr-neutral-100: #fff;
+  --clr-neutral-400: #d3d3d3;
 
-    --clr-correct: green;
-    --clr-incorrect: red;
-    --clr-unanswered: var(--clr-neutral-400); 
+  --clr-correct: green;
+  --clr-incorrect: red;
+  --clr-unanswered: var(--clr-neutral-400);
 
-    --clr-overlay: rgba(0,0,0,0.87);
-
-
+  --clr-overlay: rgba(0, 0, 0, 0.87);
 }
 
 /* resets */
@@ -68,7 +67,7 @@ html:focus-within {
 
 a:not([class]) {
   text-decoration-skip-ink: auto;
-} 
+}
 
 a {
   color: currentColor;
@@ -76,7 +75,6 @@ a {
   &:hover {
     cursor: pointer;
   }
-
 }
 
 img,
@@ -84,7 +82,6 @@ picture {
   max-width: 100%;
   display: block;
 }
-
 
 input,
 button,
@@ -99,13 +96,23 @@ button {
   }
 }
 
-h1,h2,h3,h4,h5,h6 {
-    line-height: 1.1;
-    text-wrap: balance;
-
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  line-height: 1.1;
+  text-wrap: balance;
 }
 
-p, h1, h2, h3, h4, h5, h6 {
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   overflow-wrap: break-word;
 }
 
@@ -113,20 +120,19 @@ p {
   text-wrap: pretty;
 }
 
-
 @media (prefers-reduced-motion: reduce) {
-    html:focus-within {
-     scroll-behavior: auto;
-    }
-    
-    *,
-    *::before,
-    *::after {
-      animation-duration: 0.01ms !important;
-      animation-iteration-count: 1 !important;
-      transition-duration: 0.01ms !important;
-      scroll-behavior: auto !important;
-    }
+  html:focus-within {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
 
 body {
@@ -135,12 +141,12 @@ body {
 
 /* utils */
 .sr-only:not(:focus):not(:active) {
-  clip: rect(0 0 0 0); 
+  clip: rect(0 0 0 0);
   clip-path: inset(50%);
   height: 1px;
   overflow: hidden;
   position: absolute;
-  white-space: nowrap; 
+  white-space: nowrap;
   width: 1px;
 }
 
@@ -172,7 +178,6 @@ body {
 .container {
   max-width: min(calc(100% - 2rem), 996px);
   margin-inline: auto;
-  
 }
 
 .p-block {
@@ -196,23 +201,20 @@ a {
   min-height: 100vh;
   min-height: 100dvh;
   display: grid;
-  grid-template-rows: 
+  grid-template-rows:
     auto
     1fr
     auto;
 }
-
-
 
 /* nav */
 :is(nav, footer) {
   background-color: purple;
   padding-block: 2rem;
 
-  @media(width > 48em) {
+  @media (width > 48em) {
     padding-block: 2.25rem;
   }
-
 }
 
 nav {
@@ -225,12 +227,10 @@ footer {
   font-size: var(--fs-14);
 }
 
-
-
 /* deck create */
-form[name='deck'] {
+form[name="deck"] {
   .preview-flashcard-image {
-    width: 50px; 
+    width: 50px;
     height: 50px;
   }
 
@@ -240,54 +240,51 @@ form[name='deck'] {
 }
 
 .selection-grid {
-    --image-multiplier: 1;
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 0.5rem;
-    
-    .img {
-      inline-size: 100%;
-      block-size: calc(100px * var(--image-multiplier)); 
-      object-fit: fill; 
+  --image-multiplier: 1;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.5rem;
+
+  .img {
+    inline-size: 100%;
+    block-size: calc(100px * var(--image-multiplier));
+    object-fit: fill;
+  }
+
+  @media (width > 768px) {
+    --image-multiplier: 2;
+  }
+
+  &:has(.image-field input:checked) .image-field:not(:has(input:checked)) {
+    display: none;
+  }
+
+  .image-field {
+    position: relative;
+
+    &:has(input[type="radio"]:checked) {
+      outline: 2px solid green;
+      z-index: 10;
+      display: block;
+      inline-size: calc(100px * var(--image-multiplier));
+      block-size: calc(100px * var(--image-multiplier));
+      scale: 1;
     }
 
-    @media (width > 768px) {
-      --image-multiplier: 2;
+    &:hover {
+      scale: 1.25;
+      z-index: 10;
+      cursor: pointer;
     }
 
-    &:has(.image-field input:checked) .image-field:not(:has(input:checked)) {
-      display: none;
+    .img-radio-btn {
+      position: absolute;
+      z-index: -1;
+      inset-block-start: 0;
+      inset-block-end: 0;
     }
-
-    .image-field {
-        position: relative;
-
-        &:has(input[type='radio']:checked) {
-            outline: 2px solid green;
-            z-index: 10;
-            display: block;
-            inline-size: calc(100px * var(--image-multiplier)); 
-            block-size: calc(100px * var(--image-multiplier)); 
-            scale: 1;
-        } 
-    
-        &:hover {
-          scale: 1.25;
-          z-index: 10;
-          cursor: pointer;
-        }
-
-        .img-radio-btn {
-          position: absolute;
-          z-index: -1;
-          inset-block-start: 0;
-          inset-block-end: 0;
-      }
-    }
+  }
 }
-
-
-
 
 /* flashcard results */
 .flashcard-results {
@@ -300,7 +297,7 @@ form[name='deck'] {
 
     h1 {
       font-size: var(--fs-28);
-      @media(width > 48em) {
+      @media (width > 48em) {
         font-size: var(--fs-36);
       }
     }
@@ -331,11 +328,7 @@ form[name='deck'] {
   .incorrect {
     --main-theme: var(--clr-incorrect);
   }
-
-
-
 }
-
 
 /* _result_flashcard */
 .result-flashcard {
@@ -360,9 +353,9 @@ form[name='deck'] {
     }
 
     &:first-of-type {
-      border-inline-end: var(--border-width, 1px) solid var(--border-color, black);
+      border-inline-end: var(--border-width, 1px) solid
+        var(--border-color, black);
     }
-  
   }
 
   img {
@@ -374,7 +367,7 @@ form[name='deck'] {
   p {
     font-size: var(--fs-16);
     padding: 1rem;
-    @media(width > 48em) {
+    @media (width > 48em) {
       font-size: var(--fs-20);
     }
   }
@@ -390,10 +383,7 @@ form[name='deck'] {
   &.unanswered {
     border-inline-start: 8px solid var(--clr-unanswered);
   }
-
 }
-
-
 
 /* flashcard practice */
 .practice-flashcards-wrapper {
@@ -412,8 +402,6 @@ form[name='deck'] {
     backdrop-filter: blur(11.8px);
     -webkit-backdrop-filter: blur(11.8px);
   }
-
-
 }
 
 .practice-flashcards-slider {
@@ -423,13 +411,10 @@ form[name='deck'] {
   max-inline-size: 350px;
   overflow-x: hidden;
 
-
   & > * {
     flex: 0 0 350px;
   }
-
 }
-
 
 .slider-btn {
   position: absolute;
@@ -437,7 +422,7 @@ form[name='deck'] {
   align-content: center;
 
   &.hidden {
-     display: none;    
+    display: none;
   }
 
   &.left {
@@ -458,11 +443,9 @@ form[name='deck'] {
   translate: calc(-100% * var(--counter, 0));
   transition: translate 0.4s ease-in-out var(--delay, 0);
 
-
   .split {
     position: absolute;
   }
-
 }
 
 /* flashcard sentences */
@@ -473,7 +456,7 @@ form[name='deck'] {
   font-size: 0.875rem;
   padding: 1.25rem 2rem;
   max-block-size: 250px;
-  overflow-y: auto; 
+  overflow-y: auto;
   position: relative;
 
   .sentence-item {
@@ -488,7 +471,7 @@ form[name='deck'] {
   }
 
   .sound-button {
-    border: 1px solid black; 
+    border: 1px solid black;
     &:hover {
       cursor: pointer;
     }
@@ -506,7 +489,6 @@ form[name='deck'] {
   transition: all 0.8s ease;
   transform: rotateY(0deg);
 
-
   .front,
   .back {
     isolation: isolate;
@@ -523,7 +505,6 @@ form[name='deck'] {
     inline-size: 100%;
   }
 
-
   .front {
     transform: rotateY(0deg);
   }
@@ -537,40 +518,33 @@ form[name='deck'] {
     z-index: 2;
   }
 
-
-
   .score-buttons {
     inset-block-end: var(--card-buttons-bottom-spacing);
     position: absolute;
     overflow: hidden;
     inset-inline: 0;
     z-index: 3;
-
+    margin-inline: var(--spacing-80);
     .correct-btn {
       transition: translate 0.5s ease;
       translate: 100%;
-      
     }
 
     .incorrect-btn {
       transition: translate 0.5s ease;
       translate: -100%;
-
-  
     }
 
     .wrapper {
-      transition: translate .5s ease;
-      translate: 0 100%; 
-      padding-block: 0.5rem; 
+      transition: translate 0.5s ease;
+      translate: 0 100%;
+      padding-block: 0.5rem;
 
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 2.5rem;
     }
-
-   
   }
 
   .rotate-btn-wrapper {
@@ -581,7 +555,7 @@ form[name='deck'] {
     align-content: center;
     position: absolute;
     z-index: 100;
-  
+
     &:hover {
       cursor: pointer;
     }
@@ -605,31 +579,24 @@ form[name='deck'] {
     .incorrect-btn {
       translate: 0;
     }
-
-
   }
-
 
   &.inversed {
+    transform: rotateY(0deg);
+
+    &.rotated {
+      transform: rotateY(180deg);
+    }
+
+    .front {
+      transform: rotateY(180deg);
+    }
+
+    .back {
       transform: rotateY(0deg);
-
-      &.rotated {
-        transform: rotateY(180deg);
-      }  
-
-      .front {
-          transform: rotateY(180deg);
-      }
-
-      .back {
-        transform: rotateY(0deg);
-      }
+    }
   }
-
 }
-
-
-
 
 .scored {
   --border-thickness: 0.75rem;
@@ -641,36 +608,36 @@ form[name='deck'] {
   color: #222;
 
   &::before {
-    content: '';
+    content: "";
     position: absolute;
-    width: calc(100% + var(--border-thickness));  
+    width: calc(100% + var(--border-thickness));
     height: calc(100% + var(--border-thickness));
 
     inset-block-start: calc(-1 * var(--border-thickness) / 2);
     inset-inline-start: calc(-1 * var(--border-thickness) / 2);
 
-    background: 
-      linear-gradient(to right, var(--border-color) 0%, var(--border-color) 100%), 
-      linear-gradient(to top, var(--border-color) 50%, transparent 50%), 
-      linear-gradient(to top, var(--border-color) 50%, transparent 50%), 
-      linear-gradient(to right, var(--border-color) 0%, var(--border-color) 100%), 
+    background: linear-gradient(
+        to right,
+        var(--border-color) 0%,
+        var(--border-color) 100%
+      ),
+      linear-gradient(to top, var(--border-color) 50%, transparent 50%),
+      linear-gradient(to top, var(--border-color) 50%, transparent 50%),
+      linear-gradient(
+        to right,
+        var(--border-color) 0%,
+        var(--border-color) 100%
+      ),
       linear-gradient(to left, var(--border-color) 0%, var(--border-color) 100%);
-    background-size: 
-      100%  calc(var(--border-thickness) / 2),  /* bottom */
-      calc(var(--border-thickness) / 2) 200%,  /* left */
-      calc(var(--border-thickness) / 2) 200%,  /* right */
-      0% calc(var(--border-thickness) / 2),    /* top-right */
-      0% calc(var(--border-thickness) / 2);    /* top-left */
-    background-position: 
-      50% 100%,  /* bottom */
-      0% 0%,     /* left */
-      100% 0%,   /* right */
-      100% 0%,   /* top-right */
-      0% 0%;     /* top-left */
+    background-size: 100% calc(var(--border-thickness) / 2),
+      /* bottom */ calc(var(--border-thickness) / 2) 200%,
+      /* left */ calc(var(--border-thickness) / 2) 200%,
+      /* right */ 0% calc(var(--border-thickness) / 2),
+      /* top-right */ 0% calc(var(--border-thickness) / 2); /* top-left */
+    background-position: 50% 100%, /* bottom */ 0% 0%, /* left */ 100% 0%,
+      /* right */ 100% 0%, /* top-right */ 0% 0%; /* top-left */
     background-repeat: no-repeat;
-    transition: 
-      transform 0.3s ease-in-out,
-      background-position 0.3s ease-in-out,
+    transition: transform 0.3s ease-in-out, background-position 0.3s ease-in-out,
       background-size 0.3s ease-in-out;
     transform: scaleX(0);
     transition-delay: 0.6s, 0.3s, 0s;
@@ -678,20 +645,15 @@ form[name='deck'] {
 
   /* &::before { */
   &.active::before {
-    background-size: 
-    200% calc(var(--border-thickness) / 2),   /* bottom */
-    calc(var(--border-thickness) / 2) 400%,   /* left */
-    calc(var(--border-thickness) / 2) 400%,   /* right */
-    55% calc(var(--border-thickness) / 2),    /* top-right */
-    55% calc(var(--border-thickness) / 2);    /* top-left */
-  background-position: 
-    50% 100%,   /* bottom */
-    0% 100%,    /* left */
-    100% 100%,  /* right */
-    100% 0%,    /* top-right */
-    0% 0%;      /* top-left */
-  transform: scaleX(1);
-  transition-delay: 0s, 0.3s, 0.6s;
+    background-size: 200% calc(var(--border-thickness) / 2),
+      /* bottom */ calc(var(--border-thickness) / 2) 400%,
+      /* left */ calc(var(--border-thickness) / 2) 400%,
+      /* right */ 55% calc(var(--border-thickness) / 2),
+      /* top-right */ 55% calc(var(--border-thickness) / 2); /* top-left */
+    background-position: 50% 100%, /* bottom */ 0% 100%, /* left */ 100% 100%,
+      /* right */ 100% 0%, /* top-right */ 0% 0%; /* top-left */
+    transform: scaleX(1);
+    transition-delay: 0s, 0.3s, 0.6s;
   }
 
   &.correct,
@@ -701,17 +663,12 @@ form[name='deck'] {
 
   &.correct {
     --border-color: var(--color-success, green);
-
   }
 
   &.incorrect {
     --border-color: var(--color-danger, red);
   }
-
 }
-
-
-
 
 /* decks-column component */
 .decks-column {
@@ -732,8 +689,6 @@ form[name='deck'] {
   }
 }
 
-
-
 /* loading spinner */
 .loading-spinner {
   inline-size: 48px;
@@ -744,15 +699,13 @@ form[name='deck'] {
   display: block;
   animation: rotation 1s linear infinite;
   margin-inline: auto;
-
 }
 
 @keyframes rotation {
-0% {
+  0% {
     transform: rotate(0deg);
-}
-100% {
+  }
+  100% {
     transform: rotate(360deg);
+  }
 }
-} 
-
