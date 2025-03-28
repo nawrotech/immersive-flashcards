@@ -1,7 +1,12 @@
 framework:
   mailer:
     envelope:
-      sender: "random@example.com"
+      sender: "Immersive Flashcards <support@immersiveflashcards.com>"
+
     headers:
-      From: "Immersive Flashcards <random@example.com>"
+      From: "Immersive Flashcards <support@immersiveflashcards.com>"
     dsn: "%env(MAILER_DSN)%"
+when@dev:
+  framework:
+    mailer:
+      dsn: "null://null"
