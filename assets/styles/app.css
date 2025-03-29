@@ -249,6 +249,8 @@ form[name="deck"] {
     inline-size: 100%;
     block-size: calc(100px * var(--image-multiplier));
     object-fit: fill;
+    object-position: center;
+    aspect-ratio: 1 / 1;
   }
 
   @media (width > 768px) {
