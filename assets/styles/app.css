@@ -360,7 +360,16 @@ form[name="deck"] {
     }
   }
 
-  img {
+  .media-content {
+    inline-size: 100%;
+    block-size: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+  }
+
+  img,
+  video {
     inline-size: 100%;
     block-size: 100%;
     object-fit: cover;
@@ -505,6 +514,18 @@ form[name="deck"] {
     inset-inline-start: 0;
     block-size: 100%;
     inline-size: 100%;
+  }
+
+  .back-inner {
+    video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transform: translateZ(0);
+      will-change: transform;
+      position: relative;
+      z-index: 1;
+    }
   }
 
   .front {

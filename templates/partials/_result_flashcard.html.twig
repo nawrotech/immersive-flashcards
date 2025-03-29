@@ -9,7 +9,13 @@
     </div>
 
     <div class="side-wrapper">
-        <img src="{{ flashcard.back }}" alt="{{ flashcard.front }}">
+
+        {% if flashcard.imageType == 'gif' %}
+            <video src="{{ flashcard.back }}" controls muted loop class="media-content"></video>
+        {% else %}
+            <img src="{{ flashcard.back }}" alt="{{ flashcard.front }}" class="media-content">
+        {% endif %}
+
     </div>
 
 </article>
