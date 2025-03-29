@@ -17,7 +17,6 @@
             'index': form.flashcards|length > 0 ? form.flashcards|last.vars.name + 1 : 0,
             'maxFlashcardsInDeck': constant('App\\Controller\\DeckController::MAX_FLASHCARDS_IN_DECK'),
             'defaultLanguage': form.lang.vars.choices|first.value
-
         },
         {
             'hidden': 'hidden',
@@ -54,8 +53,10 @@
         
                             <div class="split">
                                 {{ form_row(flashcardForm.back) }}
-                                {% if flashcardForm.vars.value.back is not null %}
+                                {% if flashcardForm.vars.value.back is not null and flashcardForm.vars.value.imageType == "image" %}
                                     <img class="preview-flashcard-image" src="{{ flashcardForm.vars.value.back }}" alt="{{ flashcardForm.vars.value.front }}">
+                                   {% else %}
+                                    <video class="preview-flashcard-image" src="{{ flashcardForm.vars.value.back }}" autoplay muted loop playsinline></video>
                                 {% endif %}
                             </div>
                      
