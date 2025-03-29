@@ -3,7 +3,7 @@
 namespace App\Service;
 
 use App\Contract\ImageProviderInterface;
-use App\Dto\ImageDto;
+use App\Dto\Api\ApiGifDto;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
@@ -30,8 +30,9 @@ class GiphyApiService implements ImageProviderInterface
 
         return array_map(
             function ($gif) {
-                return new ImageDto(
+                return new ApiGifDto(
                     $gif['id'],
+                    $gif['images']['original']['mp4'],
                     $gif['images']['original']['url'],
                     $gif['alt_text'] ?? "",
                     'giphy'

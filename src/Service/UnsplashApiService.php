@@ -3,7 +3,7 @@
 namespace App\Service;
 
 use App\Contract\ImageProviderInterface;
-use App\Dto\ImageDto;
+use App\Dto\Api\ApiImageDto;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
@@ -29,7 +29,7 @@ class UnsplashApiService implements ImageProviderInterface
 
         return array_map(
             function ($image) {
-                return new ImageDto(
+                return new ApiImageDto(
                     $image['id'],
                     $image['urls']['small'],
                     $image['alt_description'] ?? "",

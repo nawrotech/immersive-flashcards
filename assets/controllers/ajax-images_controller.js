@@ -136,6 +136,8 @@ export default class extends Controller {
         imageGridWrapper.innerHTML = `<p class="${this.errorMessageClass}">No images matched your search, but let's try something else!</p>`;
       }
 
+      console.log(images);
+
       images?.forEach((image) => {
         const imageElement = this.createImageElement(
           image,
@@ -149,7 +151,6 @@ export default class extends Controller {
 
       this.manageFlashcardButtons(flashcardItem, false);
     } catch (error) {
-      console.log(error);
       this.manageFlashcardButtons(flashcardItem, false);
       this.purifyBackFieldWrapper(backFieldWrapper);
       const errorParagraph = this.createErrorMessageElement(
@@ -224,6 +225,10 @@ export default class extends Controller {
   createImageElement(image, index) {
     const imageElement = document.createElement("div");
     imageElement.classList.add(this.imageFieldClass);
+
+    const imageUrl = image?.url || image?.imageUrl;
+    const valueUrl = image?.videoUrl || image?.url;
+
     imageElement.innerHTML = `
                         <label for="image-${index}-${image?.id}">
                             <input data-action="click->ajax-images#selectImage"
@@ -231,9 +236,9 @@ export default class extends Controller {
                                 name="selected-image-${index}" 
                                 id="image-${index}-${image?.id}" 
                                 class=${this.imageRadioButtonClass}
-                                value="${image?.url}"
+                                value="${valueUrl}"
                                 type="radio">
-                            <img class="img" src="${image?.url}" alt="${image?.alt}">
+                            <img class="img" src="${imageUrl}" alt="${image?.alt}">
                         </label>
                     `;
     return imageElement;
