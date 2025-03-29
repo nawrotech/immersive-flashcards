@@ -170,20 +170,23 @@ export default class extends Controller {
   }
 
   playAudio({ currentTarget }) {
+    this.audioTargets.forEach(audio => {
+      audio.pause();
+      audio.currentTime = 0;
+    });
+
     const button = currentTarget;
     const audioSrc = button.dataset.ajaxSentencesAudioSrcValue;
+    const audioContainer = button.parentElement;
 
-    // Check if audio element already exists in this container
-    let audioElement = button.parentNode.querySelector(
-      '[data-ajax-sentences-target="audio"]'
+    let audioElement = this.audioTargets.find(
+      (audio) => audio.parentElement === audioContainer
     );
 
     if (!audioElement) {
-      // Create and add audio element only on first click
       audioElement = this.createAudioElement(audioSrc);
       button.parentNode.appendChild(audioElement);
     } else if (audioElement.src !== audioSrc) {
-      // Update source if changed
       audioElement.src = audioSrc;
     }
 
