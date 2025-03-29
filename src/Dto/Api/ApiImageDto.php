@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Dto;
+namespace App\Dto\Api;
 
-class ImageDto
+class ApiImageDto
 {
     public function __construct(
         public string $id,

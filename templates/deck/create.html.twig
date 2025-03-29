@@ -5,9 +5,12 @@
 {% block title %}Deck form{% endblock %}
 
 {% block body %}
-    {{ form_start(form, {'attr': {
-        'novalidate': 'novalidate'
-    }}) }}
+
+    <section class="deck-form">
+    <div class="container">
+        {{ form_start(form, {'attr': {
+            'novalidate': 'novalidate'
+        }}) }}
         <div {{ stimulus_controller('ajax-images', 
         {
             'imagesUrl': path("app_flashcard"),
@@ -78,8 +81,10 @@
                 Add flashcard
             </button>
         </div>
-
     {{ form_end(form) }}
+    </div>      
+    </section>
+    
 
 
 {% endblock %}
