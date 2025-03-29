@@ -110,7 +110,7 @@ export default class extends Controller {
     );
     if (backFieldWrapper.tagName !== "DIV") return;
 
-    this.purifyBackFieldWrapper(backFieldWrapper);
+    this.clearBackFieldWrapper(backFieldWrapper);
 
     const loadingSpinner = this.createLoadingSpinnerElement();
     backFieldWrapper.appendChild(loadingSpinner);
@@ -123,7 +123,7 @@ export default class extends Controller {
       });
 
       if (!images) {
-        this.purifyBackFieldWrapper(backFieldWrapper);
+        this.clearBackFieldWrapper(backFieldWrapper);
         this.manageFlashcardButtons(flashcardItem, false);
         const errorParagraph = this.createErrorMessageElement();
         backFieldWrapper.appendChild(errorParagraph);
@@ -146,13 +146,13 @@ export default class extends Controller {
         imageGridWrapper.appendChild(imageElement);
       });
 
-      this.purifyBackFieldWrapper(backFieldWrapper);
+      this.clearBackFieldWrapper(backFieldWrapper);
       backFieldWrapper.appendChild(imageGridWrapper);
 
       this.manageFlashcardButtons(flashcardItem, false);
     } catch (error) {
       this.manageFlashcardButtons(flashcardItem, false);
-      this.purifyBackFieldWrapper(backFieldWrapper);
+      this.clearBackFieldWrapper(backFieldWrapper);
       const errorParagraph = this.createErrorMessageElement(
         "Something went wrong, please try again later!"
       );
@@ -160,7 +160,7 @@ export default class extends Controller {
     }
   }
 
-  purifyBackFieldWrapper(backFieldWrapper) {
+  clearBackFieldWrapper(backFieldWrapper) {
     if (backFieldWrapper.className !== this.backFieldWrapperClass) return;
 
     backFieldWrapper.querySelector(`.${this.loadingSpinnerClass}`)?.remove();
