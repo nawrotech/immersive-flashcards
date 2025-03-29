@@ -2,7 +2,12 @@ import { Controller } from "@hotwired/stimulus";
 
 /* stimulusFetch: 'lazy' */
 export default class extends Controller {
-  static targets = ["sentencesContainer", "searchButton"];
+  static targets = [
+    "sentencesContainer",
+    "searchButton",
+    "audio",
+    "soundButton",
+  ];
 
   static classes = [
     "loadingSpinner",
@@ -17,6 +22,7 @@ export default class extends Controller {
 
   static values = {
     sentencesUrl: String,
+    audioSrc: String,
   };
 
   async fetchSentences(query) {
@@ -112,16 +118,20 @@ export default class extends Controller {
     const audioContainer = document.createElement("div");
 
     const soundButtonElement = this.createSoundButtonElement();
-    const audioElement = this.createAudioElement(audioSrc);
-    audioElement.preload = "auto";
+    soundButtonElement.setAttribute(
+      "data-ajax-sentences-audio-src-value",
+      audioSrc
+    );
+    soundButtonElement.setAttribute(
+      "data-ajax-sentences-target",
+      "soundButton"
+    );
+    soundButtonElement.setAttribute(
+      "data-action",
+      "click->ajax-sentences#playAudio"
+    );
 
-    soundButtonElement.addEventListener("click", () => {
-      audioElement.play();
-    });
-
-    audioContainer.appendChild(audioElement);
     audioContainer.appendChild(soundButtonElement);
-
     return audioContainer;
   }
 
@@ -129,7 +139,7 @@ export default class extends Controller {
     const audioElement = document.createElement("audio");
     audioElement.src = audioSrc;
     audioElement.classList.add(this.hiddenClass);
-
+    audioElement.setAttribute("data-ajax-sentences-target", "audio");
     return audioElement;
   }
 
@@ -157,5 +167,26 @@ export default class extends Controller {
     errorElement.classList.add(this.errorClass);
     errorElement.textContent = errorMessage;
     return errorElement;
+  }
+
+  playAudio({ currentTarget }) {
+    const button = currentTarget;
+    const audioSrc = button.dataset.ajaxSentencesAudioSrcValue;
+
+    // Check if audio element already exists in this container
+    let audioElement = button.parentNode.querySelector(
+      '[data-ajax-sentences-target="audio"]'
+    );
+
+    if (!audioElement) {
+      // Create and add audio element only on first click
+      audioElement = this.createAudioElement(audioSrc);
+      button.parentNode.appendChild(audioElement);
+    } else if (audioElement.src !== audioSrc) {
+      // Update source if changed
+      audioElement.src = audioSrc;
+    }
+
+    audioElement.play();
   }
 }
