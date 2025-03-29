@@ -1,8 +1,10 @@
 {% extends 'base.html.twig' %} {% block title %}Deck details{% endblock %} {%
 block body %}
-<div class="flashcard-results | flow">
-  <header class="header">
-    <h1>Deck name: {{ deck.name }}</h1>
+
+<div class="container">
+  <div class="flashcard-results | flow">
+    <header class="header">
+      <h1>Deck name: {{ deck.name }}</h1>
     <p>Number of cards: {{ deck.flashcards.count }}</p>
   </header>
 
@@ -53,5 +55,7 @@ block body %}
     })
   }}
 </div>
+  </div>
+
 
 {% endblock %}
