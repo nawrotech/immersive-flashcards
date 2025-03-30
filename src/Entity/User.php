@@ -29,12 +29,14 @@ class User implements UserInterface
     #[ORM\Column]
     private array $roles = [];
 
-
     /**
      * @var Collection<int, Deck>
      */
     #[ORM\OneToMany(targetEntity: Deck::class, mappedBy: 'creator')]
     private Collection $decks;
+
+    #[ORM\Column]
+    private bool $isVerified = false;
 
     public function __construct()
     {
@@ -128,6 +130,18 @@ class User implements UserInterface
                 $deck->setCreator(null);
             }
         }
+
+        return $this;
+    }
+
+    public function isVerified(): bool
+    {
+        return $this->isVerified;
+    }
+
+    public function setIsVerified(bool $isVerified): static
+    {
+        $this->isVerified = $isVerified;
 
         return $this;
     }
