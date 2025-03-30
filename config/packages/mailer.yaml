@@ -1,10 +1,10 @@
 framework:
   mailer:
     envelope:
-      sender: "Immersive Flashcards <support@immersiveflashcards.com>"
+      sender: "Immersive Flashcards <support@immersive-flashcards.tech>"
 
     headers:
-      From: "Immersive Flashcards <support@immersiveflashcards.com>"
+      From: "Immersive Flashcards <support@immersive-flashcards.tech>"
     dsn: "%env(MAILER_DSN)%"
 when@test:
   framework:
