@@ -2,6 +2,7 @@
 
 namespace App\Twig\Components;
 
+use App\Entity\User;
 use App\Repository\DeckRepository;
 use Symfony\UX\LiveComponent\Attribute\AsLiveComponent;
 use Symfony\UX\LiveComponent\Attribute\LiveAction;
@@ -21,6 +22,9 @@ class DecksColumn
     #[LiveProp]
     public string $searchTerm = '';
 
+    #[LiveProp]
+    public User $user;
+
     public function __construct(private DeckRepository $deckRepository) {}
 
     #[LiveAction]
@@ -32,14 +36,14 @@ class DecksColumn
     public function hasMore(): bool
     {
         $deckCount = $this->deckRepository
-            ->findDecksPaginator(searchTerm: $this->searchTerm)->count();
+            ->findDecksPaginator(0, $this->user, $this->searchTerm)->count();
         return $deckCount - DeckRepository::PER_PAGE > ($this->page * DeckRepository::PER_PAGE);
     }
 
     public function getDecks()
     {
         $offset = $this->page * DeckRepository::PER_PAGE;
-        $decks = $this->deckRepository->findDecksPaginator($offset, $this->searchTerm);
+        $decks = $this->deckRepository->findDecksPaginator($offset, $this->user, $this->searchTerm);
         return $decks;
     }
 }

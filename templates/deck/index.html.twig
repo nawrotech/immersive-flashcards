@@ -19,6 +19,6 @@
         </form>
     </search>
 
-    {{ component('DecksColumn', {searchTerm: q}) }}
+    {{ component('DecksColumn', {searchTerm: q, user: app.user}) }}
 
 {% endblock %}
