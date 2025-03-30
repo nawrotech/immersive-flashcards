@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Deck;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use Doctrine\Persistence\ManagerRegistry;
@@ -34,9 +35,10 @@ class DeckRepository extends ServiceEntityRepository
         ;
     }
 
-    public function findDecksPaginator(int $offset = 0, ?string $searchTerm = null): Paginator
+    public function findDecksPaginator(int $offset = 0, User $user, ?string $searchTerm = null): Paginator
     {
-        $qb = $this->createQueryBuilder('d');
+        $qb = $this->createQueryBuilder('d')->andWhere('d.creator = :user')
+            ->setParameter('user', $user);
 
         if ($searchTerm != null) {
             $qb = $qb->andWhere('d.name LIKE :searchTerm')
