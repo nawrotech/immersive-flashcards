@@ -3,11 +3,18 @@
 namespace App\Tests\Application\Controller;
 
 use App\Entity\User;
-use Doctrine\ORM\EntityManagerInterface;
+use App\Factory\UserFactory;
+use Symfony\Bundle\FrameworkBundle\Test\MailerAssertionsTrait;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Zenstruck\Foundry\Test\Factories;
+use Zenstruck\Foundry\Test\ResetDatabase;
 
 class SecurityControllerTest extends WebTestCase
 {
+    use Factories;
+    use MailerAssertionsTrait;
+    use ResetDatabase;
+
     const TEST_USER_EMAIL = 'test-user@example.com';
 
     public function testLoginPageRendersCorrectly(): void
@@ -21,24 +28,20 @@ class SecurityControllerTest extends WebTestCase
 
     private function createUser(): User
     {
-        $container = static::getContainer();
-        $em = $container->get(EntityManagerInterface::class);
-        $user = new User();
-        $user->setEmail(self::TEST_USER_EMAIL);
-        $user->setPassword('password');
-        $em->persist($user);
-        $em->flush();
-
-        return $user;
+        return UserFactory::createOne([
+            'email' => self::TEST_USER_EMAIL
+        ])->_real();
     }
 
     public function testLoginSendsEmailForExistingUser(): void
     {
         $client = static::createClient();
-
+        $crawler = $client->request('GET', '/login');
+        
         $user = $this->createUser();
-
-        $client->request('POST', '/login', [
+        
+        $form = $crawler->selectButton('Send Login Link')->form();
+        $client->submit($form, [
             'email' => $user->getEmail(),
         ]);
 
@@ -52,8 +55,10 @@ class SecurityControllerTest extends WebTestCase
     public function testLoginWithNonExistentEmailDoesNotSendEmail(): void
     {
         $client = static::createClient();
-
-        $client->request('POST', '/login', [
+        $crawler = $client->request('GET', '/login');
+        
+        $form = $crawler->selectButton('Send Login Link')->form();
+        $client->submit($form, [
             'email' => 'nonexistent@example.com',
         ]);
 
@@ -64,9 +69,11 @@ class SecurityControllerTest extends WebTestCase
     public function testSameFlashMessageRegardlessOfEmailExistence(): void
     {
         $client = static::createClient();
-
+        
         // First with non-existent email
-        $client->request('POST', '/login', [
+        $crawler = $client->request('GET', '/login');
+        $form = $crawler->selectButton('Send Login Link')->form();
+        $client->submit($form, [
             'email' => 'nonexistent@example.com',
         ]);
 
@@ -76,8 +83,10 @@ class SecurityControllerTest extends WebTestCase
 
         // Then with a real user
         $this->createUser();
-
-        $client->request('POST', '/login', [
+        
+        $crawler = $client->request('GET', '/login');
+        $form = $crawler->selectButton('Send Login Link')->form();
+        $client->submit($form, [
             'email' => self::TEST_USER_EMAIL,
         ]);
 
@@ -89,10 +98,12 @@ class SecurityControllerTest extends WebTestCase
     public function testLoginEmailContentIsCorrect(): void
     {
         $client = static::createClient();
-
+        
         $this->createUser();
-
-        $client->request('POST', '/login', [
+        
+        $crawler = $client->request('GET', '/login');
+        $form = $crawler->selectButton('Send Login Link')->form();
+        $client->submit($form, [
             'email' => self::TEST_USER_EMAIL,
         ]);
 
