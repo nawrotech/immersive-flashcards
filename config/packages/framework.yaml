@@ -2,8 +2,19 @@
 framework:
     secret: '%env(APP_SECRET)%'
 
-    # Note that the session will be started ONLY if you read or write from it.
+    router:
+        default_uri: https://immersive-flashcards.tech
+
     session: true
+when@dev:
+    parameters:
+        env(SYMFONY_PROJECT_DEFAULT_ROUTE_URL): "http://localhost"
+
+    framework:
+        router:
+            default_uri: "%env(SYMFONY_PROJECT_DEFAULT_ROUTE_URL)"
+    # Note that the session will be started ONLY if you read or write from it.
+
 
     #esi: true
     #fragments: true

@@ -23,6 +23,11 @@ class SecurityController extends AbstractController
         Request $request,
     ): Response {
 
+
+        if ($this->isGranted('ROLE_USER')) {
+            return $this->redirectToRoute('app_deck');
+        }
+
         if ($request->isMethod('POST')) {
             $email = $request->getPayload()->get('email');
             $user = $userRepository->findOneBy(['email' => $email]);
