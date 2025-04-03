@@ -17,19 +17,20 @@ security:
     main:
       lazy: true
       provider: app_user_provider
-      form_login:
-        login_path: app_login
+      entry_point: App\Security\LoginLinkEntryPoint
+
       login_link:
         check_route: login_check
         signature_properties: ["email"]
         max_uses: 3
+        # failure_path: "/login"
       logout:
         path: app_logout
         target: app_login
 
   access_control:
-    - { path: ^/login, roles: PUBLIC_ACCESS }
-    - { path: ^/, roles: ROLE_USER }
+    # - { path: ^/login, roles: PUBLIC_ACCESS }
+    # - { path: ^/, roles: ROLE_USER }
 
       # activate different ways to authenticate
       # https://symfony.com/doc/current/security.html#the-firewall

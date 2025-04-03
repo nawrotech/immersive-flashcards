@@ -19,9 +19,7 @@ use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
 
 class RegistrationController extends AbstractController
 {
-    public function __construct(private EmailVerifier $emailVerifier)
-    {
-    }
+    public function __construct(private EmailVerifier $emailVerifier) {}
 
     #[Route('/register', name: 'app_register')]
     public function register(Request $request, EntityManagerInterface $entityManager): Response
@@ -39,7 +37,9 @@ class RegistrationController extends AbstractController
             $entityManager->persist($user);
             $entityManager->flush();
 
-            $this->emailVerifier->sendEmailConfirmation('app_verify_email', $user,
+            $this->emailVerifier->sendEmailConfirmation(
+                'app_verify_email',
+                $user,
                 (new TemplatedEmail())
                     ->from(new Address('support@immersive-flashcards.tech', 'Support Immersive Flashcards'))
                     ->to((string) $user->getEmail())
@@ -58,12 +58,13 @@ class RegistrationController extends AbstractController
     }
 
     #[Route('/verify/email', name: 'app_verify_email')]
-    public function verifyUserEmail(Request $request, 
-        TranslatorInterface $translator, 
+    public function verifyUserEmail(
+        Request $request,
+        TranslatorInterface $translator,
         UserRepository $userRepository,
         EntityManagerInterface $em,
-        Security $security): Response
-    {
+        Security $security
+    ): Response {
         $id = $request->query->get('id');
         if (null === $id) {
             return $this->redirectToRoute('app_deck');
