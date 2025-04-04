@@ -19,7 +19,7 @@ class FlashcardResultsDisplay
     public int $page = 0;
 
     #[LiveProp]
-    public int $deckId;
+    public string $deckId;
 
     private int $deckCount = 0;
 

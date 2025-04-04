@@ -66,7 +66,6 @@ class FlashcardRepository extends ServiceEntityRepository
                     END AS HIDDEN sort_order
                 ")->orderBy('sort_order', 'ASC')
             ->andWhere('IDENTITY(f.deck) = :deckId')
-
             ->setParameter('deckId', $deckId);
 
         $query = $qb->setFirstResult($offset)

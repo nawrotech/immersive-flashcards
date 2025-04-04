@@ -10,6 +10,7 @@ use App\Repository\FlashcardRepository;
 use App\Service\FlashcardService;
 use App\Service\LocaleMappingService;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -31,11 +32,11 @@ final class DeckController extends AbstractController
         return $this->render('deck/index.html.twig');
     }
 
-    #[Route("/decks/create/{id?}", name: "app_deck_create")]
+    #[Route("/decks/{ulid?}", name: "app_deck_create")]
     public function create(
         Request $request,
         LocaleMappingService $localeMappingService,
-        ?Deck $deck = null
+        #[MapEntity(mapping: ["ulid" => "ulid"])] ?Deck $deck = null
     ): Response {
 
         if ($deck == null) {
@@ -61,9 +62,9 @@ final class DeckController extends AbstractController
         ]);
     }
 
-    #[Route("/decks/{id}/results", name: "app_deck_results")]
+    #[Route("/decks/{ulid}/results", name: "app_deck_results")]
     public function results(
-        Deck $deck,
+        #[MapEntity(mapping: ["ulid" => "ulid"])] Deck $deck,
         FlashcardRepository $flashcardRepository,
         FlashcardService $flashcardService
     ): Response {
@@ -79,9 +80,9 @@ final class DeckController extends AbstractController
     }
 
 
-    #[Route("/decks/practice/{id}", name: "app_deck_practice")]
+    #[Route("/decks/practice/{ulid}", name: "app_deck_practice")]
     public function practice(
-        Deck $deck,
+        #[MapEntity(mapping: ["ulid" => "ulid"])] Deck $deck,
         FlashcardRepository $flashcardRepository,
         LocaleMappingService $localeMappingService,
         #[MapQueryParameter()] ?string $flashcardResult = null
@@ -105,13 +106,15 @@ final class DeckController extends AbstractController
         ]);
     }
 
-    #[Route("/decks/practice/results/{id}", name: "app_deck_store_practice_results", methods: ['POST'])]
+    #[Route("/decks/practice/results/{ulid}", name: "app_deck_store_practice_results", methods: ['POST'])]
     public function storePracticeResults(
         Request $request,
-        Deck $deck,
+        #[MapEntity(mapping: ["ulid" => "ulid"])] Deck $deck,
         FlashcardRepository $flashcardRepository
     ): JsonResponse {
+
         if ($request->isXmlHttpRequest()) {
+            
             $data = $request->toArray();
             $answers = array_column($data, 'result', 'id');
 
@@ -129,7 +132,7 @@ final class DeckController extends AbstractController
         return $this->json([
             'redirect' => true,
             'url' => $this->generateUrl("app_deck_results", [
-                'id' => $deck->getId()
+                'ulid' => $deck->getUlid()
             ])
         ]);
     }

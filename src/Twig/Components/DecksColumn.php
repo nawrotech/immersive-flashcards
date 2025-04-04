@@ -36,14 +36,14 @@ class DecksColumn
     public function hasMore(): bool
     {
         $deckCount = $this->deckRepository
-            ->findDecksPaginator(0, $this->user, $this->searchTerm)->count();
+            ->findDecksPaginator($this->user, 0, $this->searchTerm)->count();
         return $deckCount - DeckRepository::PER_PAGE > ($this->page * DeckRepository::PER_PAGE);
     }
 
     public function getDecks()
     {
         $offset = $this->page * DeckRepository::PER_PAGE;
-        $decks = $this->deckRepository->findDecksPaginator($offset, $this->user, $this->searchTerm);
+        $decks = $this->deckRepository->findDecksPaginator($this->user, $offset, $this->searchTerm);
         return $decks;
     }
 }

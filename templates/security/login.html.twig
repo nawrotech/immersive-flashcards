@@ -4,13 +4,16 @@
 
 {% block body %}
 
-<fieldset>
-    <legend>Sign in</legend>
+
+    <p>Sign in</p>
     <form action="{{ path('app_login') }}" method="POST">
         <input type="email" name="email">
         <button type="submit">Send Login Link</button>
     </form>
-</fieldset>
+
+    <a href="{{ path('app_register') }}">Create an account</a>
+
+
 
 
 {% endblock %}

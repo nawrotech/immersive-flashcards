@@ -117,13 +117,19 @@ export default class extends Controller {
       },
       body: JSON.stringify(this.result),
     })
-      .then((response) => response.json())
-      .then((data) => {
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`Server responded with ${response.status}: ${response.statusText}`);
+        }
+        return response.json();
+      })
+      .then(data => {
         if (data.redirect) {
           window.location.href = data.url;
         }
       })
-      .catch((error) => console.error("Error fetching images:", error));
+      .catch(error => {
+      });
   }
 
   correct(e) {
