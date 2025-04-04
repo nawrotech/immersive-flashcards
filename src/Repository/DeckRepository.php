@@ -35,7 +35,7 @@ class DeckRepository extends ServiceEntityRepository
         ;
     }
 
-    public function findDecksPaginator(int $offset = 0, User $user, ?string $searchTerm = null): Paginator
+    public function findDecksPaginator(User $user, int $offset = 0, ?string $searchTerm = null): Paginator
     {
         $qb = $this->createQueryBuilder('d')->andWhere('d.creator = :user')
             ->setParameter('user', $user);

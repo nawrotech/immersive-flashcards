@@ -21,7 +21,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[IsGranted('ROLE_USER')]
 final class DeckController extends AbstractController
 {
-    public const MAX_FLASHCARDS_IN_DECK = 30;
+    public const MAX_FLASHCARDS_IN_DECK = 20;
 
     public function __construct(private EntityManagerInterface $em) {}
 
@@ -50,7 +50,6 @@ final class DeckController extends AbstractController
         $serviceLocalesMapping = $localeMappingService->getServiceMappings(['image_service']);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $deck = $form->getData();
             $this->em->persist($deck);
             $this->em->flush();
             return $this->redirectToRoute('app_deck');
