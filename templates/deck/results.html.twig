@@ -10,7 +10,7 @@ block body %}
 
   <a
     class="practice-link"
-    href="{{ path('app_deck_practice', { id: deck.id }) }}"
+    href="{{ path('app_deck_practice', { ulid: deck.ulid }) }}"
     >Practice deck</a
   >
 
@@ -19,7 +19,7 @@ block body %}
     class="practice-link correct"
     href="{{
       path('app_deck_practice', {
-        id: deck.id,
+        ulid: deck.ulid,
         flashcardResult: enum('App\\Enum\\FlashcardResult').CORRECT.value
       })
     }}"
@@ -30,7 +30,7 @@ block body %}
     class="practice-link incorrect"
     href="{{
       path('app_deck_practice', {
-        id: deck.id,
+        ulid: deck.ulid,
         flashcardResult: enum('App\\Enum\\FlashcardResult').INCORRECT.value
       })
     }}"
@@ -41,7 +41,7 @@ block body %}
     class="practice-link unanswered"
     href="{{
       path('app_deck_practice', {
-        id: deck.id,
+        ulid: deck.ulid,
         flashcardResult: enum('App\\Enum\\FlashcardResult').UNANSWERED.value
       })
     }}"
@@ -51,7 +51,7 @@ block body %}
 
   {{
     component("FlashcardResultsDisplay", {
-      deckId: app.current_route_parameters.id
+      deckId: deck.id
     })
   }}
 </div>

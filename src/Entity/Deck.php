@@ -6,8 +6,10 @@ use App\Repository\DeckRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\Index;
+use Symfony\Component\Uid\Ulid;
 
-
+#[Index(name: "ulid_idx", columns: ["ulid"])]
 #[ORM\Entity(repositoryClass: DeckRepository::class)]
 class Deck
 {
@@ -31,9 +33,13 @@ class Deck
     #[ORM\OneToMany(targetEntity: Flashcard::class, mappedBy: 'deck', cascade: ['persist'], orphanRemoval: true)]
     private Collection $flashcards;
 
+    #[ORM\Column(length: 26, unique: true)]
+    private ?string $ulid = null;
+
     public function __construct()
     {
         $this->flashcards = new ArrayCollection();
+        $this->ulid = new Ulid();
     }
 
     public function getId(): ?int
@@ -103,6 +109,18 @@ class Deck
                 $flashcard->setDeck(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getUlid(): ?string
+    {
+        return $this->ulid;
+    }
+
+    public function setUlid(string $ulid): static
+    {
+        $this->ulid = $ulid;
 
         return $this;
     }

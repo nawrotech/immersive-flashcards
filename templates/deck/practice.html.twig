@@ -8,7 +8,7 @@
         <div
             {{stimulus_controller('flashcards-slider ajax-sentences')}}
                 data-flashcards-slider-num-of-cards-value="{{ flashcards|length }}"
-                data-flashcards-slider-store-practice-results-url-value="{{  path('app_deck_store_practice_results', {id: app.current_route_parameters.id}) }}"
+                data-flashcards-slider-store-practice-results-url-value="{{  path('app_deck_store_practice_results', {ulid: app.current_route_parameters.ulid}) }}"
                 data-flashcards-slider-sliding-transition-delay-value="0.8s"
 
                 data-ajax-sentences-sentences-url-value="{{path('app_flashcard_sentences', {lang: sentencesLanguage })}}"
