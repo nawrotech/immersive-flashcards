@@ -50,6 +50,10 @@ class DeckType extends AbstractType
                 'allow_delete' => true,
                 'by_reference' => false,
                 "error_bubbling" => false,
+                "entry_options" => [
+                    "error_bubbling" => false,
+
+                ],
                 'constraints' => [
                     new Count([
                         'min' => 1,
@@ -67,9 +71,6 @@ class DeckType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Deck::class,
-            "error_mapping" => [
-                "count" => "lang"
-            ]
         ]);
     }
 }

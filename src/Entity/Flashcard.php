@@ -29,6 +29,12 @@ class Flashcard
     #[ORM\Column(enumType: FlashcardResult::class)]
     private ?FlashcardResult $result = FlashcardResult::UNANSWERED;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $authorName = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $authorProfileUrl = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -90,6 +96,30 @@ class Flashcard
     public function setResult(FlashcardResult $result): static
     {
         $this->result = $result;
+
+        return $this;
+    }
+
+    public function getAuthorName(): ?string
+    {
+        return $this->authorName;
+    }
+
+    public function setAuthorName(?string $authorName): static
+    {
+        $this->authorName = $authorName;
+
+        return $this;
+    }
+
+    public function getAuthorProfileUrl(): ?string
+    {
+        return $this->authorProfileUrl;
+    }
+
+    public function setAuthorProfileUrl(?string $authorProfileUrl): static
+    {
+        $this->authorProfileUrl = $authorProfileUrl;
 
         return $this;
     }

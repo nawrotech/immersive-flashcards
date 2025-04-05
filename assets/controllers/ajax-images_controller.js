@@ -8,6 +8,8 @@ export default class extends Controller {
     "collectionContainer",
     "removeButton",
     "addButton",
+    "authorName",
+    "authorProfileUrl"
   ];
 
   static values = {
@@ -34,6 +36,9 @@ export default class extends Controller {
 
   connect() {
     this.hideAddButton();
+
+    console.log(this.authorProfileUrlTarget);    
+    console.log(this.authorNameTarget);    
   }
 
   async fetchImages(params) {
@@ -141,8 +146,16 @@ export default class extends Controller {
       images?.forEach((image) => {
         const imageElement = this.createImageElement(
           image,
-          currentFlashcardIndex
+          currentFlashcardIndex,
+          image?.authorName ?? "",
+          image?.authorProfileUrl ?? ""
         );
+
+        if (imageType == "image") {
+          const attributionElement = this.createUnsplashAttributionElement(image.authorName, image.authorProfileUrl);
+          imageElement.insertAdjacentHTML("beforeend", attributionElement);
+        }
+
         imageGridWrapper.appendChild(imageElement);
       });
 
@@ -202,6 +215,27 @@ export default class extends Controller {
         flashcardIndex
     );
 
+    const authorNameInputElement = this.authorNameTargets.find(
+      (element) => element.closest(`.${this.flashcardItemWrapperClass}`)?.dataset.index ===
+      flashcardIndex
+    );
+
+    if (authorNameInputElement.tagName !== "INPUT") return;
+
+    const authorProfileUrlInputElement = this.authorProfileUrlTargets.find(
+      (element) => element.closest(`.${this.flashcardItemWrapperClass}`)?.dataset.index ===
+      flashcardIndex
+    );
+
+    if (authorProfileUrlInputElement.tagName !== "INPUT") return;
+
+    authorProfileUrlInputElement.value = e.currentTarget.dataset.authorProfileUrl;
+    authorNameInputElement.value = e.currentTarget.dataset.authorName;
+
+    console.log(authorProfileUrlInputElement);
+    console.log(authorNameInputElement);
+
+
     if (backField) {
       backField.value = e.currentTarget.value;
     }
@@ -222,7 +256,7 @@ export default class extends Controller {
     return imageSelectionGrid;
   }
 
-  createImageElement(image, index) {
+  createImageElement(image, index, authorName, authorProfileUrl) {
     const imageElement = document.createElement("div");
     imageElement.classList.add(this.imageFieldClass);
 
@@ -237,11 +271,23 @@ export default class extends Controller {
                                 id="image-${index}-${image?.id}" 
                                 class=${this.imageRadioButtonClass}
                                 value="${valueUrl}"
+                                data-author-profile-url="${authorProfileUrl}"
+                                data-author-name="${authorName}"
                                 type="radio">
                             <img class="img" src="${imageUrl}" alt="${image?.alt}">
                         </label>
                     `;
+
     return imageElement;
+  }
+
+
+  createUnsplashAttributionElement(authorName, authorProfileUrl) {
+    return `<p  
+        class="bg-white"
+        >Photo by <a target='_blank' href='${authorProfileUrl}?utm_source=immersive-flashcards.tech&utm_medium=referral'> 
+      ${authorName}</a> on <a target='_blank' href='https://unsplash.com/?utm_source=immersive-flashcards.tech&utm_medium=referral'> 
+      Unsplash</a></p>`;    
   }
 
   createLoadingSpinnerElement() {

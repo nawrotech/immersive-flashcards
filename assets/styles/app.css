@@ -162,6 +162,10 @@ body {
   display: none;
 }
 
+.mx-auto {
+  margin-inline: auto;
+}
+
 .text-center {
   text-align: center;
 }
@@ -692,6 +696,14 @@ footer {
       scale: 1;
       inline-size: clamp(100px, 10vw + 1rem, 200px);
       block-size: clamp(100px, 10vw + 1rem, 200px);
+
+      p {
+        position: absolute;
+        inset-inline-start: calc(100% + 18px);
+        inset-block: 0;
+
+        align-content: center;
+      }
     }
 
     &:hover {
@@ -704,17 +716,26 @@ footer {
       position: absolute;
       z-index: -1;
       inset-block-start: 0;
-      
     }
   }
 }
 
+.bg-white {
+  background-color: #fff;
+}
+
+/* .deck-form,
+.practice-results {
+  block-size: 600px;
+  overflow: auto;
+} */
 
 .deck-create-form {
   --flow-space: 0.75rem;
   max-inline-size: 600px;
   margin-inline: auto;
 
+    
   .preview-flashcard-image {
     inline-size: clamp(100px, 10vw + 1rem, 200px);
     block-size: clamp(100px, 10vw + 1rem, 200px);
