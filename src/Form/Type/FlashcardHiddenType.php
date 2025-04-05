@@ -3,7 +3,7 @@
 namespace App\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 class FlashcardHiddenType extends AbstractType
 {
@@ -12,8 +12,9 @@ class FlashcardHiddenType extends AbstractType
         return 'flashcard_hidden';
     }
 
+    
     public function getParent(): string
     {
-        return HiddenType::class;
+        return TextType::class;
     }
 }

@@ -114,7 +114,7 @@ final class DeckController extends AbstractController
     ): JsonResponse {
 
         if ($request->isXmlHttpRequest()) {
-            
+
             $data = $request->toArray();
             $answers = array_column($data, 'result', 'id');
 

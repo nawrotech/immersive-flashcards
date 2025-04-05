@@ -13,11 +13,11 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\Count;
+use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
 class DeckType extends AbstractType
 {
-
 
     public function __construct(private LocaleMappingService $localeMappingService) {}
 
@@ -25,14 +25,18 @@ class DeckType extends AbstractType
     {
         $languageChoices = array_flip($this->localeMappingService->getLanguagesMapping());
 
-
         $builder
             ->add('name', TextType::class, [
                 'constraints' => [
                     new NotBlank(),
+                    new Length(max: 100, maxMessage: "Name cannot exceed 100 characters")
                 ]
             ])
             ->add('lang', ChoiceType::class, [
+                'constraints' => [
+                    new NotBlank(),
+                    new Length(exactly: 2),
+                ],
                 'choices' => $languageChoices,
                 'choice_label' => function ($choice, string $key) {
                     return ucfirst($key);
@@ -40,17 +44,18 @@ class DeckType extends AbstractType
             ])
             ->add('flashcards', CollectionType::class, [
                 'entry_type' => FlashcardFormType::class,
-                'entry_options' => ['label' => false],
+                "label" => false,
                 'prototype' => true,
                 'allow_add' => true,
                 'allow_delete' => true,
                 'by_reference' => false,
+                "error_bubbling" => false,
                 'constraints' => [
                     new Count([
                         'min' => 1,
                         'max' => DeckController::MAX_FLASHCARDS_IN_DECK,
-                        'minMessage' => 'At least {{ limit }} flashcard(s) has(have) to be added.',
-                        'maxMessage' => 'There can\'t be more than {{ limit }} flashcards',
+                        'minMessage' => 'At least {{ limit }} flashcard has to be added.',
+                        'maxMessage' => 'There can\'t be more than {{ limit }} flashcards in deck',
                     ])
                 ],
             ])
@@ -62,6 +67,9 @@ class DeckType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Deck::class,
+            "error_mapping" => [
+                "count" => "lang"
+            ]
         ]);
     }
 }

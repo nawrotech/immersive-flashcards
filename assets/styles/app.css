@@ -139,8 +139,9 @@ body {
   text-rendering: optimizeSpeed;
 }
 
+
 /* utils */
-.sr-only:not(:focus):not(:active) {
+.sr-only {
   clip: rect(0 0 0 0);
   clip-path: inset(50%);
   height: 1px;
@@ -148,9 +149,16 @@ body {
   position: absolute;
   white-space: nowrap;
   width: 1px;
+
+  pointer-events: none;
+  visibility: hidden;
 }
 
 .hidden {
+  display: none;
+}
+
+.d-none {
   display: none;
 }
 
@@ -207,6 +215,10 @@ a {
     auto;
 }
 
+.error-message {
+  color: red;
+}
+
 /* nav */
 :is(nav, footer) {
   background-color: purple;
@@ -227,66 +239,6 @@ footer {
   font-size: var(--fs-14);
 }
 
-/* deck create */
-form[name="deck"] {
-  .preview-flashcard-image {
-    width: 50px;
-    height: 50px;
-  }
-
-  .split {
-    align-items: center;
-  }
-}
-
-.selection-grid {
-  --image-multiplier: 1;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 0.5rem;
-
-  .img {
-    inline-size: 100%;
-    block-size: calc(100px * var(--image-multiplier));
-    object-fit: fill;
-    object-position: center;
-    aspect-ratio: 1 / 1;
-  }
-
-  @media (width > 768px) {
-    --image-multiplier: 2;
-  }
-
-  &:has(.image-field input:checked) .image-field:not(:has(input:checked)) {
-    display: none;
-  }
-
-  .image-field {
-    position: relative;
-
-    &:has(input[type="radio"]:checked) {
-      outline: 2px solid green;
-      z-index: 10;
-      display: block;
-      inline-size: calc(100px * var(--image-multiplier));
-      block-size: calc(100px * var(--image-multiplier));
-      scale: 1;
-    }
-
-    &:hover {
-      scale: 1.25;
-      z-index: 10;
-      cursor: pointer;
-    }
-
-    .img-radio-btn {
-      position: absolute;
-      z-index: -1;
-      inset-block-start: 0;
-      inset-block-end: 0;
-    }
-  }
-}
 
 /* flashcard results */
 .flashcard-results {
@@ -712,6 +664,127 @@ form[name="deck"] {
   }
 }
 
+/* deck creation form */
+.selection-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.5rem;
+
+  .img {
+    inline-size: 100%;
+    block-size: 100%;
+    object-fit: fill;
+    object-position: center;
+    aspect-ratio: 1 / 1;
+  }
+
+  &:has(.image-field input:checked) .image-field:not(:has(input:checked)) {
+    display: none;
+  }
+
+  .image-field {
+    position: relative;
+
+    &:has(input[type="radio"]:checked) {
+      border: 2px solid var(--clr-accent, green);
+      z-index: 10;
+      display: block;
+      scale: 1;
+      inline-size: clamp(100px, 10vw + 1rem, 200px);
+      block-size: clamp(100px, 10vw + 1rem, 200px);
+    }
+
+    &:hover {
+      scale: 1.25;
+      z-index: 10;
+      cursor: pointer;
+    }
+
+    .img-radio-btn {
+      position: absolute;
+      z-index: -1;
+      inset-block-start: 0;
+      
+    }
+  }
+}
+
+
+.deck-create-form {
+  --flow-space: 0.75rem;
+  max-inline-size: 600px;
+  margin-inline: auto;
+
+  .preview-flashcard-image {
+    inline-size: clamp(100px, 10vw + 1rem, 200px);
+    block-size: clamp(100px, 10vw + 1rem, 200px);
+  }
+
+  .split {
+    inline-size: 100%;
+    align-items: center;
+  }
+
+  :is(input, select) {
+    padding: 0.5rem 1.25rem;
+    border-radius: 50vh;
+    border: 1px solid navy;
+    inline-size: 100%;
+  }
+
+  select {
+    border-radius: 0.25rem;
+  }
+
+  label {
+    display: block;
+    margin-bottom: 0.35rem;
+  }
+}
+
+/* components */
+
+/* button */
+.button {
+  display: inline-flex;
+  justify-content: center;
+  cursor: pointer;
+  text-decoration: none;
+  line-height: 1;
+  font-size: 1rem;
+  text-transform: none;
+  font-weight: 400;
+  padding-inline: 1.25em;
+  padding-block: 0.5em;
+  border: 2px solid black;
+  border-radius: 2rem;
+  transition: 275ms ease;
+
+  &.d-none {
+    display: none;
+  }
+
+  &[data-type="accent"] {
+    background-color: var(--button-accent-bg);
+    color: var(--button-accent-color);
+
+    &:is(:hover, :focus) {
+      background-color: var(--button-accent-active-bg);
+      color:  var(--button-accent-active-color);
+    }
+  }
+
+  &[data-type="primary"] {
+    background-color: var(--button-primary-bg);
+    color: var(--button-primary-color);
+
+    &:is(:hover, :focus) {
+      background-color: var(--button-primary-active-bg);
+      color:  var(--button-primary-active-color);
+    }
+  }
+}
+
 /* loading spinner */
 .loading-spinner {
   inline-size: 48px;
@@ -732,3 +805,5 @@ form[name="deck"] {
     transform: rotate(360deg);
   }
 }
+
+

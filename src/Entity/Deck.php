@@ -7,8 +7,10 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\Index;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Uid\Ulid;
 
+#[UniqueEntity("name", message: "Name already taken, try something else")]
 #[Index(name: "ulid_idx", columns: ["ulid"])]
 #[ORM\Entity(repositoryClass: DeckRepository::class)]
 class Deck

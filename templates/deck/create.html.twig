@@ -6,12 +6,14 @@
 
 {% block body %}
 
-    <section class="deck-form">
+<section class="deck-form">
     <div class="container">
         {{ form_start(form, {'attr': {
-            'novalidate': 'novalidate'
+            'novalidate': 'novalidate',
+            'class': 'deck-create-form'
         }}) }}
-        <div {{ stimulus_controller('ajax-images', 
+
+        <div class="form-inner flow" {{ stimulus_controller('ajax-images', 
         {
             'imagesUrl': path("app_flashcard"),
             'index': form.flashcards|length > 0 ? form.flashcards|last.vars.name + 1 : 0,
@@ -19,7 +21,7 @@
             'defaultLanguage': form.lang.vars.choices|first.value
         },
         {
-            'hidden': 'hidden',
+            'hidden': 'd-none',
             'errorMessage': 'error-message',
             'flashcardItemWrapper': flashcardItemWrapper,
             'backFieldWrapper': 'back-wrapper',
@@ -31,60 +33,55 @@
        
         ) }}
             data-ajax-images-service-locales-value="{{ serviceLocalesMapping|json_encode|e('html_attr') }}"
-            data-ajax-images-prototype-value="{{ form_widget(form.flashcards.vars.prototype)|e('html_attr') }}"
+            data-ajax-images-prototype-value="{{ include('partials/_flashcard_prototype.html.twig', {prototype: form.flashcards.vars.prototype, is_prototype: true})|e('html_attr') }}"
 
         >
-
-
-            {{form_row(form.name)}}
+        {{form_row(form.name, {
+                "row_attr": {
+                    "class": "form-group"
+                }
+            })}}
             {{form_row(form.lang, {
                 'attr': {
                     'data-action': 'change->ajax-images#selectLanguage',
                 }
             })}}
-  
-            <ul class="flashcards-collection-container" {{ stimulus_target('ajax-images', 'collectionContainer') }}>
+
+            {{ form_errors(form.flashcards) }}
+
+            <ul class="flashcards-collection-container flow" {{ stimulus_target('ajax-images', 'collectionContainer') }}>
                 {% for flashcardForm in form.flashcards %}
                     <li 
                         data-index="{{ loop.index0 }}"
-                        class="{{ flashcardItemWrapper }}">
+                        class="{{ flashcardItemWrapper }} flow">
                
-                            {{ form_row(flashcardForm.front) }}
-        
-                            <div class="split">
-                                {{ form_row(flashcardForm.back) }}
-                                {% if flashcardForm.vars.value.back is not null and flashcardForm.vars.value.imageType == "image" %}
-                                    <img class="preview-flashcard-image" src="{{ flashcardForm.vars.value.back }}" alt="{{ flashcardForm.vars.value.front }}">
-                                   {% else %}
-                                    <video class="preview-flashcard-image" src="{{ flashcardForm.vars.value.back }}" autoplay muted loop playsinline></video>
-                                {% endif %}
-                            </div>
-                     
+                        {{ include('partials/_flashcard_prototype.html.twig', {prototype: flashcardForm, is_prototype: false}) }}
 
-                            <div class="split">
-                                {{ form_row(flashcardForm.searchGifs) }}
-                                {{ form_row(flashcardForm.searchImages) }}
-                            </div>
-
-                            {{ form_row(flashcardForm.imageType) }}
-                            
-                            {{form_row(flashcardForm.deleteFlashcard)}}
                     </li>
                 {% endfor %}
             </ul>
 
             <button 
-                class="btn btn-success"
+                class="button"
                 type="button" 
                 {{ stimulus_action('ajax-images', 'addFlashcard') }}
                 {{ stimulus_target('ajax-images', 'addButton') }}
                 >
                 Add flashcard
             </button>
+
+            {{ form_row(form.submit, {
+                "attr": {
+                    "class": "button",
+                    "data-type": "accent"
+                }
+            }) }}
+
+            {{ form_row(form._token) }}
         </div>
-    {{ form_end(form) }}
+        {{ form_end(form, {'render_rest': false}) }}
     </div>      
-    </section>
+</section>
     
 
 
