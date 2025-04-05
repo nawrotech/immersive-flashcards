@@ -32,6 +32,8 @@ class UnsplashApiService implements ImageProviderInterface
                 return new ApiImageDto(
                     $image['id'],
                     $image['urls']['small'],
+                    $image['user']['name'],
+                    $image['user']['links']['html'],
                     $image['alt_description'] ?? "",
                     'unsplash'
                 );
