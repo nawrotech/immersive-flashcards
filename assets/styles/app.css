@@ -288,6 +288,13 @@ footer {
   }
 }
 
+
+.bg-glass {
+  background: rgba(255, 255, 255, 0.65);
+  backdrop-filter: blur(11.8px);
+  -webkit-backdrop-filter: blur(11.8px);
+}
+
 /* _result_flashcard */
 .result-flashcard {
   --border-width: 1px;
@@ -297,38 +304,33 @@ footer {
   text-align: center;
   border: var(--border-width, 1px) solid var(--border-color, black);
 
+
   & > * {
     flex: 1;
   }
 
   .side-wrapper {
-    overflow-block: auto;
     block-size: 200px;
     align-content: center;
+    position: relative;
+    overflow: hidden;
+
 
     @media (width > 48em) {
       block-size: 300px;
     }
 
     &:first-of-type {
-      border-inline-end: var(--border-width, 1px) solid
-        var(--border-color, black);
+      border-inline-end: var(--border-width, 1px) solid  var(--border-color, black);
     }
   }
 
-  .media-content {
+  video {
     inline-size: 100%;
     block-size: 100%;
     object-fit: cover;
     object-position: center;
     display: block;
-  }
-
-  img,
-  video {
-    inline-size: 100%;
-    block-size: 100%;
-    object-fit: cover;
   }
 
   p {
@@ -351,6 +353,25 @@ footer {
     border-inline-start: 8px solid var(--clr-unanswered);
   }
 }
+
+
+.result-flashcard-image-wrapper {
+  overflow-block: auto;
+
+  img {
+    inline-size: 100%;
+    height: auto;
+    object-fit: contain;
+    
+  }
+
+  p  {
+    position: absolute;
+    inset-block-end: 0;
+    inset-inline: 0;
+  }
+}
+
 
 /* flashcard practice */
 .practice-flashcards-wrapper {
@@ -447,10 +468,10 @@ footer {
 
 .practice-flashcard {
   --card-buttons-bottom-spacing: 3rem;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  inset-block-start: 0;
+  inset-inline-start: 0;
+  inline-size: 100%;
+  block-size: 100%;
   border-radius: 10px;
   transform-style: preserve-3d;
   transition: all 0.8s ease;
@@ -724,11 +745,6 @@ footer {
   background-color: #fff;
 }
 
-/* .deck-form,
-.practice-results {
-  block-size: 600px;
-  overflow: auto;
-} */
 
 .deck-create-form {
   --flow-space: 0.75rem;
