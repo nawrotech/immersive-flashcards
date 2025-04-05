@@ -10,10 +10,18 @@
 
     <div class="side-wrapper">
 
-        {% if flashcard.imageType == 'gif' %}
+        {% if flashcard.imageType == "gif" %}
             <video src="{{ flashcard.back }}" controls muted loop class="media-content"></video>
-        {% else %}
-            <img src="{{ flashcard.back }}" alt="{{ flashcard.front }}" class="media-content">
+        {% elseif flashcard.imageType == "image" %}
+            <figure class="result-flashcard-image-wrapper">
+                <img src="{{ flashcard.back }}" alt="{{ flashcard.front }}">
+                <figcaption>
+                    {{ include("partials/_unsplash_attribution_paragraph.html.twig", {
+                        authorName: flashcard.authorName,
+                        authorProfileUrl: flashcard.authorProfileUrl
+                    }) }}
+                </figcaption>
+            </figure>
         {% endif %}
 
     </div>
