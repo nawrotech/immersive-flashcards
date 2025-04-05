@@ -12,6 +12,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\Choice;
+use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
 class FlashcardFormType extends AbstractType
@@ -21,7 +22,8 @@ class FlashcardFormType extends AbstractType
         $builder
             ->add('front', TextType::class, [
                 'constraints' => [
-                    new NotBlank()
+                    new NotBlank(),
+                    new Length(max: 255)
                 ],
                 'attr' => [
                     'data-ajax-images-target' => 'flashcardFront'
@@ -29,7 +31,8 @@ class FlashcardFormType extends AbstractType
             ])
             ->add('back', FlashcardHiddenType::class, [
                 'constraints' => [
-                    new NotBlank(),
+                    new NotBlank(message: "You have to choose an image or a gif"),
+                    new Length(max: 255)
                 ],
                 'attr' => [
                     'data-ajax-images-target' => "flashcardBack",
@@ -38,6 +41,8 @@ class FlashcardFormType extends AbstractType
             ->add('imageType', HiddenType::class, [
                 'constraints' => [
                     new Choice(callback: [Image::class, 'values']),
+                    new NotBlank()
+
                 ],
                 'attr' => [
                     'data-ajax-images-target' => 'flashcardImageType',
@@ -46,16 +51,19 @@ class FlashcardFormType extends AbstractType
             ->add('searchGifs', ButtonType::class, [
                 'attr' => [
                     'data-action' => 'ajax-images#searchGifs',
+                    "class" => "button "
                 ]
             ])
             ->add('searchImages', ButtonType::class, [
                 'attr' => [
                     'data-action' => 'ajax-images#searchImages',
+                    "class" => "button"
                 ]
             ])
             ->add('deleteFlashcard', ButtonType::class, [
                 'attr' => [
                     'data-action' => 'ajax-images#deleteFlashcard',
+                    "class" => "button"
                 ]
             ])
 

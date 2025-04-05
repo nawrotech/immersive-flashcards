@@ -32,6 +32,10 @@ export default class extends Controller {
 
   selectedLanguage = this.defaultLanguageValue;
 
+  connect() {
+    this.hideAddButton();
+  }
+
   async fetchImages(params) {
     const queryString = new URLSearchParams(params).toString();
 
@@ -44,7 +48,6 @@ export default class extends Controller {
       })
       .then((data) => data)
       .catch((error) => {
-        console.error("Error fetching images:", error);
         throw error;
       });
   }
@@ -57,7 +60,7 @@ export default class extends Controller {
 
   addFlashcard() {
     const item = document.createElement("li");
-    item.className = this.flashcardItemWrapperClass;
+    item.classList.add(this.flashcardItemWrapperClass, "flow");
     item.dataset.index = this.indexValue;
     item.innerHTML = this.prototypeValue.replace(/__name__/g, this.indexValue);
     this.collectionContainerTarget.appendChild(item);
@@ -134,8 +137,6 @@ export default class extends Controller {
       if (images.length < 1) {
         imageGridWrapper.innerHTML = `<p class="${this.errorMessageClass}">No images matched your search, but let's try something else!</p>`;
       }
-
-      console.log(images);
 
       images?.forEach((image) => {
         const imageElement = this.createImageElement(

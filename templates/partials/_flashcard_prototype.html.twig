@@ -1,0 +1,21 @@
+{% apply spaceless %}
+    {{ form_row(prototype.front) }}
+
+      {% if not is_prototype|default(false) %}
+            {% if prototype.vars.value.back is not null and prototype.vars.value.imageType == "image" %}
+                <img class="preview-flashcard-image" src="{{ prototype.vars.value.back }}" alt="{{ prototype.vars.value.front }}">
+            {% elseif prototype.vars.value.back is not null and prototype.vars.value.imageType == "gif" %}
+                <video class="preview-flashcard-image" src="{{ prototype.vars.value.back }}" autoplay muted loop playsinline></video>
+            {% endif %}
+      {% endif %}
+
+    {{ form_row(prototype.back) }}
+
+    <div class="split">
+        {{ form_widget(prototype.searchGifs) }}
+        {{ form_widget(prototype.searchImages) }}
+    </div>
+
+    {{ form_row(prototype.imageType) }}
+    {{ form_row(prototype.deleteFlashcard) }}
+{% endapply %}
