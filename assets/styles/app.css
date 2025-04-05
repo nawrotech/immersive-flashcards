@@ -149,7 +149,6 @@ body {
   position: absolute;
   white-space: nowrap;
   width: 1px;
-
   pointer-events: none;
   visibility: hidden;
 }
@@ -200,6 +199,9 @@ body {
   }
 }
 
+
+
+
 /* base */
 a {
   text-decoration: underline;
@@ -221,6 +223,13 @@ a {
 
 .error-message {
   color: red;
+}
+
+
+.bg-glass {
+  background: rgba(255, 255, 255, 0.65);
+  backdrop-filter: blur(11.8px);
+  -webkit-backdrop-filter: blur(11.8px);
 }
 
 /* nav */
@@ -289,11 +298,6 @@ footer {
 }
 
 
-.bg-glass {
-  background: rgba(255, 255, 255, 0.65);
-  backdrop-filter: blur(11.8px);
-  -webkit-backdrop-filter: blur(11.8px);
-}
 
 /* _result_flashcard */
 .result-flashcard {
@@ -511,7 +515,17 @@ footer {
 
   .back {
     transform: rotateY(180deg);
+    position: relative;
+
+
+    .unsplash-attribution {
+      position: absolute;
+      inset-block-start: 0;
+      inset-inline: 0;
+    }
   }
+
+
 
   .front:has(.sentences-list),
   .back:has(.senteces-list) {

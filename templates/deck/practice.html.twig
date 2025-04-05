@@ -80,6 +80,10 @@
                                             </video>
                                             {% else %}
                                                 <img src="{{ flashcard.back }}" alt="{{ flashcard.front }}" class="medisa-content">
+                                                {{ include("partials/_unsplash_attribution_paragraph.html.twig", {
+                                                    authorName: flashcard.authorName,
+                                                    authorProfileUrl: flashcard.authorProfileUrl
+                                                }) }}
                                             {% endif %}
                                         </div>
                                     </div>
