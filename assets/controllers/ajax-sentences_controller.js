@@ -22,12 +22,23 @@ export default class extends Controller {
   static values = {
     sentencesUrl: String,
     audioSrc: String,
+    csrfToken: String
   };
+
+  connect() {
+    console.log(this.csrfTokenValue);
+  }
 
   async fetchSentences(query) {
     const queryString = new URLSearchParams({ query }).toString();
     try {
-      const response = await fetch(`${this.sentencesUrlValue}&${queryString}`);
+      const response = await fetch(`${this.sentencesUrlValue}&${queryString}`, {
+        method: "GET",
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRF-TOKEN': this.csrfTokenValue
+        }
+      });
       if (!response.ok) {
         throw new Error(
           `Server error: ${response.status} ${response.statusText}`
