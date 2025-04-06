@@ -2,7 +2,8 @@
 framework:
     secret: '%env(APP_SECRET)%'
 
-    csrf_protection: ~
+    csrf_protection: 
+        enabled: true
 
     router:
         default_uri: https://immersive-flashcards.tech

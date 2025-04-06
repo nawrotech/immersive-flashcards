@@ -1,0 +1,21 @@
+<div
+    class="{{ dialogCSSClass|default("") }}"
+    {{ stimulus_controller("dialog") }}>
+    <dialog 
+        {{ stimulus_target("dialog", "dialog") }}
+        class="dialog flow">
+        {% block dialog_content %}
+        {% endblock %}
+        
+        <div class="dialog-choice-buttons-wrapper">
+            {% block dialog_action %}
+            {% endblock %}
+            <button {{ stimulus_action("dialog", "close") }} autofocus>{{ dialogCloseButtonText ?? "Cancel" }}</button>
+        </div>
+    
+    </dialog>
+
+    <button {{ stimulus_action("dialog", "open") }}>
+        {{ dialogOpenButtonText ?? "Open dialog" }}
+    </button>
+</div>

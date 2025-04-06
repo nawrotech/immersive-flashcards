@@ -5,20 +5,19 @@
 {% set q = app.request.query.get('q', '') %}
 
 {% block body %}
-
-    <search>
-        <form method="GET">
-            <input 
-                type="search" 
-                name="q" 
-                placeholder="Search decks..." 
-                value="{{ q }}"
-                aria-label="Search decks"
-            >
-            <button type="submit">Search</button>
-        </form>
-    </search>
-
-    {{ component('DecksColumn', {searchTerm: q, user: app.user}) }}
-
+    <section class="decks flow">
+        <search>
+            <form method="GET">
+                <input 
+                    type="search" 
+                    name="q" 
+                    placeholder="Search decks..." 
+                    value="{{ q }}"
+                    aria-label="Search decks"
+                >
+                <button type="submit">Search</button>
+            </form>
+        </search>
+        {{ component('DecksColumn', {searchTerm: q, user: app.user}) }}
+    </section>
 {% endblock %}

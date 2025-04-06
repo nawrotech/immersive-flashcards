@@ -10,6 +10,7 @@ use App\Repository\FlashcardRepository;
 use App\Service\FlashcardService;
 use App\Service\LocaleMappingService;
 use Doctrine\ORM\EntityManagerInterface;
+use PhpParser\Builder\Method;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -79,6 +80,18 @@ final class DeckController extends AbstractController
         ]);
     }
 
+    #[Route("/decks/practice/{ulid}", name: "app_deck_delete", methods: ["DELETE"])]
+    public function delete(
+        #[MapEntity(mapping: ["ulid" => "ulid"])] Deck $deck,
+    ): Response {
+
+        $this->em->remove($deck);
+        $this->em->flush();
+
+        $this->addFlash("success", "Deck successfully deleted");
+
+        return $this->redirectToRoute("app_deck");
+    }
 
     #[Route("/decks/practice/{ulid}", name: "app_deck_practice")]
     public function practice(
