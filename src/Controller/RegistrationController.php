@@ -13,6 +13,7 @@ use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mime\Address;
+use Symfony\Component\RateLimiter\RateLimiterFactory;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Authenticator\Passport\Badge\RememberMeBadge;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -23,18 +24,29 @@ class RegistrationController extends AbstractController
     public function __construct(private EmailVerifier $emailVerifier) {}
 
     #[Route('/register', name: 'app_register')]
-    public function register(Request $request, EntityManagerInterface $entityManager): Response
-    {
+    public function register(
+        Request $request,
+        EntityManagerInterface $entityManager,
+        RateLimiterFactory $registrationLimiter
+    ): Response {
 
         if ($this->isGranted('ROLE_USER')) {
             return $this->redirectToRoute('app_deck');
         }
+
+
 
         $user = new User();
         $form = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $limiter = $registrationLimiter->create($request->getClientIp());
+            if (false === $limiter->consume(1)->isAccepted()) {
+                $this->addFlash('error', 'Too many attempts. Try again later.');
+                return $this->redirectToRoute('app_register');
+            }
+
             $entityManager->persist($user);
             $entityManager->flush();
 

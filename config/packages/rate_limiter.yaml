@@ -1,0 +1,10 @@
+framework:
+    rate_limiter:
+        login_link_request:
+            policy: 'fixed_window'
+            limit: 5
+            interval: '60 minutes'
+        registration:
+            policy: 'fixed_window'
+            limit: 3
+            interval: '1 day'

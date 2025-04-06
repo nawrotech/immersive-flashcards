@@ -7,8 +7,10 @@ use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\TooManyRequestsHttpException;
 use Symfony\Component\Notifier\NotifierInterface;
 use Symfony\Component\Notifier\Recipient\Recipient;
+use Symfony\Component\RateLimiter\RateLimiterFactory;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\LoginLink\LoginLinkHandlerInterface;
 
@@ -21,14 +23,19 @@ class SecurityController extends AbstractController
         LoginLinkHandlerInterface $loginLinkHandler,
         UserRepository $userRepository,
         Request $request,
+        RateLimiterFactory $loginLinkRequestLimiter
     ): Response {
-
-
         if ($this->isGranted('ROLE_USER')) {
             return $this->redirectToRoute('app_deck');
         }
 
         if ($request->isMethod('POST')) {
+            $limiter = $loginLinkRequestLimiter->create($request->getClientIp());
+            if (false === $limiter->consume(1)->isAccepted()) {
+                $this->addFlash('error', 'Too many attempts. Try again later.');
+                return $this->redirectToRoute('app_login');
+            }
+
             $email = $request->getPayload()->get('email');
             $user = $userRepository->findOneBy(['email' => $email]);
 
