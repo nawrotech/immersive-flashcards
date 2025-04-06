@@ -1,0 +1,12 @@
+{% embed "partials/_dialog.html.twig" with {
+    "dialogOpenButtonText": "Delete",
+    "dialogCSSClass": "deck-delete-dialog"
+} %}
+    {% block dialog_content %}
+        <p>Are you sure you wanna remove this deck?</p>
+    {% endblock %}
+
+    {% block dialog_action %}
+        {{ include("deck/_delete_deck_form.html.twig") }}
+    {% endblock %}
+{% endembed %}

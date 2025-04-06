@@ -18,6 +18,11 @@
                         <a href="{{ path('app_deck_create', { ulid: deck.ulid }) }}">Edit deck</a>
             
                         <a href="{{ path('app_deck_practice', { ulid: deck.ulid })  }}">Practice deck</a>
+
+                        {{ include("deck/_delete_deck_dialog.html.twig", {
+                            deckUlid: deck.ulid                            
+                        } )}}
+
                     </div>
        
                 </article>

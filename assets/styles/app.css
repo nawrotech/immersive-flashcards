@@ -339,7 +339,7 @@ footer {
 
   p {
     font-size: var(--fs-16);
-    padding: 1rem;
+    /* padding: 1rem; */
     @media (width > 48em) {
       font-size: var(--fs-20);
     }
@@ -364,15 +364,17 @@ footer {
 
   img {
     inline-size: 100%;
-    height: auto;
-    object-fit: contain;
-    
+    block-size: 100%;
+    object-fit: cover;
+    object-position: center;
   }
 
   p  {
     position: absolute;
     inset-block-end: 0;
     inset-inline: 0;
+    font-size: 1rem;
+
   }
 }
 
@@ -793,7 +795,38 @@ footer {
   }
 }
 
+
+
+.deck-delete-dialog {
+  dialog {
+    --flow-space: 2rem;
+  }
+}
+
 /* components */
+
+/* dialog */
+::backdrop {
+  background-image: linear-gradient(rgba(0,0,0,0.3));
+}
+
+.dialog {
+  max-inline-size: 50ch;
+  padding: 2rem;
+  margin: auto;
+}
+
+.dialog-close-button {
+  justify-self: end;
+}
+
+.dialog-choice-buttons-wrapper {
+  display: flex;
+  justify-content: end;
+  gap: 0.5rem;
+}
+
+
 
 /* button */
 .button {
