@@ -18,7 +18,8 @@
             'imagesUrl': path("app_flashcard"),
             'index': form.flashcards|length > 0 ? form.flashcards|last.vars.name + 1 : 0,
             'maxFlashcardsInDeck': constant('App\\Controller\\DeckController::MAX_FLASHCARDS_IN_DECK'),
-            'defaultLanguage': form.lang.vars.choices|first.value
+            'defaultLanguage': form.lang.vars.choices|first.value,
+            "csrfToken": csrf_token("get_images")
         },
         {
             'hidden': 'd-none',

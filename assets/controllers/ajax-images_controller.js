@@ -19,6 +19,7 @@ export default class extends Controller {
     maxFlashcardsInDeck: Number,
     serviceLocales: Object,
     defaultLanguage: String,
+    csrfToken: String
   };
 
   static classes = [
@@ -37,14 +38,19 @@ export default class extends Controller {
   connect() {
     this.hideAddButton();
 
-    console.log(this.authorProfileUrlTarget);    
-    console.log(this.authorNameTarget);    
+
   }
 
   async fetchImages(params) {
     const queryString = new URLSearchParams(params).toString();
 
-    return fetch(`${this.imagesUrlValue}?${queryString}`)
+    return fetch(`${this.imagesUrlValue}?${queryString}`, {
+      method: "GET",
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRF-TOKEN': this.csrfTokenValue
+      }
+    })
       .then((response) => {
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);

@@ -12,6 +12,7 @@
                 data-flashcards-slider-sliding-transition-delay-value="0.8s"
 
                 data-ajax-sentences-sentences-url-value="{{path('app_flashcard_sentences', {lang: sentencesLanguage })}}"
+                data-ajax-sentences-csrf-token-value="{{ csrf_token('get_sentences') }}"
                 
                 data-ajax-sentences-loading-spinner-class="loading-spinner"
                 data-ajax-sentences-sound-button-class="sound-button"
