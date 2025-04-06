@@ -11,7 +11,7 @@ class AppFixtures extends Fixture
     public function load(ObjectManager $manager): void
     {
 
-        DeckFactory::createMany(30);
+        // DeckFactory::createMany(1);
 
         $manager->flush();
     }
