@@ -10,7 +10,6 @@ use App\Repository\FlashcardRepository;
 use App\Service\FlashcardService;
 use App\Service\LocaleMappingService;
 use Doctrine\ORM\EntityManagerInterface;
-use PhpParser\Builder\Method;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -54,6 +53,8 @@ final class DeckController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->em->persist($deck);
             $this->em->flush();
+
+            $this->addFlash("success", "Deck successfully created!");
             return $this->redirectToRoute('app_deck');
         }
 
