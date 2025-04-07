@@ -8,7 +8,11 @@ framework:
     router:
         default_uri: https://immersive-flashcards.tech
 
-    session: true
+    session: 
+        enabled: true
+        cookie_secure: "auto"
+        cookie_samesite: "lax"
+
 when@dev:
     parameters:
         env(SYMFONY_PROJECT_DEFAULT_ROUTE_URL): "http://localhost"
