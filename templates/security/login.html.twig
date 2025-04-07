@@ -4,13 +4,14 @@
 
 {% block body %}
 
-    <section>
-        <div class="container">
-            <p>Sign in</p>
-            
-            <form action="{{ path('app_login') }}" method="POST">
-                <input type="email" name="email">
-                <button type="submit">Send Login Link</button>
+    <section class="login-section">
+        <div class="container flow">
+            <form action="{{ path('app_login') }}" method="POST" class="flow">
+                <div class="flow">
+                    <label for="email">Sign in</label>
+                    <input id="email" type="email" name="email">
+                </div>
+                <button class="button" type="submit">Send Login Link</button>
             </form>
         
             <a href="{{ path('app_register') }}">Create an account</a>
