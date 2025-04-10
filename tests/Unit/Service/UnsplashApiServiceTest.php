@@ -11,6 +11,7 @@ use Symfony\Component\HttpClient\Response\JsonMockResponse;
 class UnsplashApiServiceTest extends TestCase
 {
     private const TEST_API_KEY = 'test_api_key';
+    private const TEST_URL = 'https://api.unsplash.com/photos/123/download';
 
     protected function createServiceWithResponse(JsonMockResponse $response): UnsplashApiService
     {
@@ -29,15 +30,16 @@ class UnsplashApiServiceTest extends TestCase
 
     public function testLackOfLangParameterThrowsException(): void
     {
-        $response = new JsonMockResponse(["results" => []], ["http_code" => 400]);
+        $response = new JsonMockResponse('{"error": "Invalid language"}', [
+            'http_code' => 400,
+        ]);
+
         $service = $this->createServiceWithResponse($response);
 
-        try {
-            $service->getImagesByQuery("ball", "wrongLanguageCode");
-            $this->fail('Expected exception was not thrown');
-        } catch (\RuntimeException $e) {
-            $this->assertEquals(400, $e->getCode());
-        }
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionCode(400);
+
+        $service->getImagesByQuery("ball", "wrongLanguageCode");
     }
 
     public function testSuccessfulResponse(): void
@@ -45,11 +47,20 @@ class UnsplashApiServiceTest extends TestCase
         $response = new JsonMockResponse(["results" => [
             [
                 "urls" => [
-                    "small" => "https://example.com/image.jpg"
+                    "small" => "urls_small_value"
                 ],
-                "id" => "foo",
-                "alt_description" => "soemthing",
-                "source" => "unsplash"
+                "user" => [
+                    "name" => "user_name_value",
+                    "links" => [
+                        "html" => "user_links_html_value"
+                    ]
+                ],
+                "links" => [
+                    "download_location" => "links_download_location_value"
+                ],
+                "id" => "id_value",
+                "alt_description" => "alt_description_value",
+                "source" => "source_value"
             ]
         ], ["http_code" => 200]]);
 
@@ -61,10 +72,12 @@ class UnsplashApiServiceTest extends TestCase
         $this->assertNotEmpty($result);
 
         $firstImage = $result[0];
-        $this->assertEquals("foo", $firstImage->id);
-        $this->assertEquals("https://example.com/image.jpg", $firstImage->url);
-        $this->assertEquals("soemthing", $firstImage->alt);
-        $this->assertEquals("unsplash", $firstImage->source);
+        $this->assertEquals("id_value", $firstImage->id);
+        $this->assertEquals("urls_small_value", $firstImage->url);
+        $this->assertEquals("alt_description_value", $firstImage->alt);
+        $this->assertEquals("user_name_value", $firstImage->authorName);
+        $this->assertEquals("user_links_html_value", $firstImage->authorProfileUrl);
+        $this->assertEquals("links_download_location_value", $firstImage->downloadLocation);
     }
 
 
@@ -75,6 +88,7 @@ class UnsplashApiServiceTest extends TestCase
 
         $this->expectException(\RuntimeException::class);
         $this->expectExceptionCode(503);
+        $this->expectExceptionMessage("HTTP 503 returned for");
         $service->getImagesByQuery('query', 'en');
     }
 
@@ -83,8 +97,10 @@ class UnsplashApiServiceTest extends TestCase
         $response = new JsonMockResponse('invalid json', ['http_code' => 200]);
         $service = $this->createServiceWithResponse($response);
 
-        $this->expectException(\Symfony\Component\HttpClient\Exception\JsonException::class);
-        $this->expectExceptionMessage('JSON content was expected to decode to an array');
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('Invalid API response format');
         $service->getImagesByQuery('query', 'en');
     }
+
+
 }
