@@ -25,7 +25,7 @@ block body %}
         flashcardResult: enum('App\\Enum\\FlashcardResult').CORRECT.value
       })
     }}"
-    >Practice Correct part
+    >Practice Correct part ({{deckResultSummary.hasCorrect|length}})
   </a>
   {% endif %} {% if deckResultSummary.hasIncorrect %}
   <a
@@ -36,7 +36,7 @@ block body %}
         flashcardResult: enum('App\\Enum\\FlashcardResult').INCORRECT.value
       })
     }}"
-    >Practice Incorrect part
+    >Practice Incorrect part ({{deckResultSummary.hasIncorrect|length}})
   </a>
   {% endif %} {% if deckResultSummary.hasUnanswered %}
   <a
@@ -47,7 +47,7 @@ block body %}
         flashcardResult: enum('App\\Enum\\FlashcardResult').UNANSWERED.value
       })
     }}"
-    >Practice Unanswered part
+    >Practice Unanswered part ({{deckResultSummary.hasUnanswered|length}})
   </a>
   {% endif %}
 

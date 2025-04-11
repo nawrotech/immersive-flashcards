@@ -7,6 +7,7 @@ use App\Entity\Flashcard;
 use App\Enum\FlashcardResult;
 use App\Form\DeckType;
 use App\Repository\FlashcardRepository;
+use App\Service\FlashcardResultService;
 use App\Service\FlashcardService;
 use App\Service\LocaleMappingService;
 use Doctrine\ORM\EntityManagerInterface;
@@ -22,7 +23,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[IsGranted('ROLE_USER')]
 final class DeckController extends AbstractController
 {
-    public const MAX_FLASHCARDS_IN_DECK = 20;
+    public const MAX_FLASHCARDS_IN_DECK = 30;
 
     public function __construct(private EntityManagerInterface $em) {}
 
@@ -68,12 +69,12 @@ final class DeckController extends AbstractController
     public function results(
         #[MapEntity(mapping: ["ulid" => "ulid"])] Deck $deck,
         FlashcardRepository $flashcardRepository,
-        FlashcardService $flashcardService
+        FlashcardResultService $flashcardResultService
     ): Response {
 
         $flashcards = $flashcardRepository->findByDeck($deck, true);
 
-        $deckResultSummary = $flashcardService->getDeckResultsSummary($flashcards);
+        $deckResultSummary = $flashcardResultService->getDeckResultsSummary($flashcards);
 
         return $this->render('deck/results.html.twig', [
             'deck' => $deck,
