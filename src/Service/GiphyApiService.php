@@ -4,6 +4,7 @@ namespace App\Service;
 
 use App\Contract\ImageProviderInterface;
 use App\Dto\Api\ApiGifDto;
+use App\Exception\GiphyApiException;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
@@ -26,7 +27,18 @@ class GiphyApiService implements ImageProviderInterface
                 'limit' => self::GIFS_PER_PAGE,
                 'lang' => $lang
             ]
-        ])->toArray();
+        ]);
+
+        if (200 !== $response->getStatusCode()) {
+            throw new GiphyApiException(sprintf(
+                'Giphy API error: Received status code %d for query "%s" and lang "%s"',
+                $response->getStatusCode(),
+                $query,
+                $lang
+            ));
+        }
+
+        $responseData = $response->toArray();
 
         return array_map(
             function ($gif) {
@@ -38,7 +50,7 @@ class GiphyApiService implements ImageProviderInterface
                     'giphy'
                 );
             },
-            $response['data']
+            $responseData['data']
         );
     }
 }

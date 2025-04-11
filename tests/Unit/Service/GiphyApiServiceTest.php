@@ -2,7 +2,9 @@
 
 namespace App\Tests;
 
+use App\Exception\GiphyApiException;
 use App\Service\GiphyApiService;
+use JsonException;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\JsonMockResponse;
@@ -26,17 +28,14 @@ class GiphyApiServiceTest extends TestCase
         $this->assertEmpty($result);
     }
 
-    public function testLackOfLangParameterThrowsException(): void
+    public function testFailedResponseThrowsGiphyApiException(): void
     {
-        $response = new JsonMockResponse(["data" => []], ["http_code" => 400]);
+        $response = new JsonMockResponse(["data" => []], ["http_code" => 500]);
         $service = $this->createServiceWithResponse($response);
 
-        try {
-            $service->getImagesByQuery("ball", "wrongLanguageCode");
-            $this->fail('Expected exception was not thrown');
-        } catch (\RuntimeException $e) {
-            $this->assertEquals(400, $e->getCode());
-        }
+        $this->expectException(GiphyApiException::class);
+        $this->expectExceptionMessage('Giphy API error: Received status code 500 for query "query" and lang "lang"');
+        $service->getImagesByQuery("query", "lang");
     }
 
     public function testSuccessfulResponse(): void
@@ -46,13 +45,14 @@ class GiphyApiServiceTest extends TestCase
                 "id" => "foo",
                 "images" => [
                     "original" => [
+                        "mp4" => "https://example.com/gif.mp4",
                         "url" => "https://example.com/gif.gif"
                     ]
                 ],
                 "alt_text" => "something",
                 "source" => "giphy"
             ]
-        ], ["http_code" => 200]]);
+        ]]);
 
         $service = $this->createServiceWithResponse($response);
         $result = $service->getImagesByQuery("blue", "en");
@@ -63,19 +63,10 @@ class GiphyApiServiceTest extends TestCase
 
         $firstImage = $result[0];
         $this->assertEquals("foo", $firstImage->id);
-        $this->assertEquals("https://example.com/gif.gif", $firstImage->url);
+        $this->assertEquals("https://example.com/gif.gif", $firstImage->imageUrl);
+        $this->assertEquals("https://example.com/gif.mp4", $firstImage->videoUrl);
         $this->assertEquals("something", $firstImage->alt);
         $this->assertEquals("giphy", $firstImage->source);
-    }
-
-    public function testNetworkErrorHandling(): void
-    {
-        $response = new JsonMockResponse([], ['http_code' => 503]);
-        $service = $this->createServiceWithResponse($response);
-
-        $this->expectException(\RuntimeException::class);
-        $this->expectExceptionCode(503);
-        $service->getImagesByQuery('query', 'en');
     }
 
     public function testInvalidJsonResponse(): void
@@ -83,7 +74,7 @@ class GiphyApiServiceTest extends TestCase
         $response = new JsonMockResponse('invalid json', ['http_code' => 200]);
         $service = $this->createServiceWithResponse($response);
 
-        $this->expectException(\Symfony\Component\HttpClient\Exception\JsonException::class);
+        $this->expectException(JsonException::class);
         $this->expectExceptionMessage('JSON content was expected to decode to an array');
         $service->getImagesByQuery('query', 'en');
     }
