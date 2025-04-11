@@ -3,27 +3,32 @@
 namespace App\Service;
 
 use App\Enum\FlashcardResult;
-use Doctrine\Common\Collections\ArrayCollection;
 
 class FlashcardService
 {
 
-    public function hasFlashcardsWithResult(array $flashcards, FlashcardResult $result): bool
-    {
-
-        return (new ArrayCollection($flashcards))
-            ->exists(
-                fn($key, $flashcard) =>
-                $flashcard->getResult() === $result
-            );
-    }
-
     public function getDeckResultsSummary(array $flashcards)
     {
+        $correct = [];
+        $incorrect = [];
+        $unanswered = [];
+
+        foreach ($flashcards as $flashcard) {
+            $result = $flashcard->getResult();
+
+            if ($result === FlashcardResult::CORRECT) {
+                $correct[] = $flashcard;
+            } elseif ($result === FlashcardResult::INCORRECT) {
+                $incorrect[] = $flashcard;
+            } elseif ($result === FlashcardResult::UNANSWERED) {
+                $unanswered[] = $flashcard;
+            }
+        }
+
         return [
-            'hasCorrect' => $this->hasFlashcardsWithResult($flashcards, FlashcardResult::CORRECT),
-            'hasIncorrect' =>  $this->hasFlashcardsWithResult($flashcards, FlashcardResult::INCORRECT),
-            'hasUnanswered' => $this->hasFlashcardsWithResult($flashcards, FlashcardResult::UNANSWERED),
+            'hasCorrect' => array_values($correct),
+            'hasIncorrect' => array_values($incorrect),
+            'hasUnanswered' => array_values($unanswered),
         ];
     }
 }
