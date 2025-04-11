@@ -10,6 +10,7 @@ class ApiImageDto
         public string $authorName,
         public string $authorProfileUrl,
         public string $alt,
+        public string $downloadLocation,
         public string $source,
     ) {}
 }

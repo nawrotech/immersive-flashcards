@@ -2,7 +2,9 @@
 
 namespace App\Tests;
 
+use App\Exception\UnsplashApiException;
 use App\Service\UnsplashApiService;
+use JsonException;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\JsonMockResponse;
@@ -28,7 +30,8 @@ class UnsplashApiServiceTest extends TestCase
         $this->assertEmpty($result);
     }
 
-    public function testLackOfLangParameterThrowsException(): void
+
+    public function testLackOfLangParameterThrowsUnplashApiException(): void
     {
         $response = new JsonMockResponse('{"error": "Invalid language"}', [
             'http_code' => 400,
@@ -36,9 +39,8 @@ class UnsplashApiServiceTest extends TestCase
 
         $service = $this->createServiceWithResponse($response);
 
-        $this->expectException(\RuntimeException::class);
-        $this->expectExceptionCode(400);
-
+        $this->expectException(UnsplashApiException::class);
+        $this->expectExceptionMessage('Unsplash API error: Received status code 400 for query "ball" and lang "wrongLanguageCode"');
         $service->getImagesByQuery("ball", "wrongLanguageCode");
     }
 
@@ -62,7 +64,7 @@ class UnsplashApiServiceTest extends TestCase
                 "alt_description" => "alt_description_value",
                 "source" => "source_value"
             ]
-        ], ["http_code" => 200]]);
+        ]]);
 
         $service = $this->createServiceWithResponse($response);
         $result = $service->getImagesByQuery("blue", "en");
@@ -86,21 +88,27 @@ class UnsplashApiServiceTest extends TestCase
         $response = new JsonMockResponse([], ['http_code' => 503]);
         $service = $this->createServiceWithResponse($response);
 
-        $this->expectException(\RuntimeException::class);
-        $this->expectExceptionCode(503);
-        $this->expectExceptionMessage("HTTP 503 returned for");
+        $this->expectException(UnsplashApiException::class);
+        $this->expectExceptionMessage('Unsplash API error: Received status code 503 for query "query" and lang "en"');
+
         $service->getImagesByQuery('query', 'en');
     }
 
     public function testInvalidJsonResponse(): void
     {
-        $response = new JsonMockResponse('invalid json', ['http_code' => 200]);
+        $response = new JsonMockResponse('invalid json');
         $service = $this->createServiceWithResponse($response);
 
-        $this->expectException(\RuntimeException::class);
-        $this->expectExceptionMessage('Invalid API response format');
+        $this->expectException(JsonException::class);
         $service->getImagesByQuery('query', 'en');
     }
 
+    public function testDownloadLocationLinkThrowsUnplashApiException(): void
+    {
+        $response = new JsonMockResponse([], ['http_code' => 503]);
+        $service = $this->createServiceWithResponse($response);
 
+        $this->expectException(UnsplashApiException::class);
+        $service->getDownloadLocationLink(self::TEST_URL);
+    }
 }
