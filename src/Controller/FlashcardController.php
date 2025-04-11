@@ -13,8 +13,9 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-
+#[IsGranted('ROLE_USER')]
 final class FlashcardController extends AbstractController
 {
     #[Route('/flashcard', name: 'app_flashcard')]
@@ -36,11 +37,15 @@ final class FlashcardController extends AbstractController
             return $this->json([]);
         }
 
-        $images = $flashcardType === 'image' ?
-            $unsplashApiService?->getImagesByQuery($query, $lang) :
-            $giphyApiService?->getImagesByQuery($query, $lang);
+        try {
+            $images = $flashcardType === 'image' ?
+                $unsplashApiService?->getImagesByQuery($query, $lang) :
+                $giphyApiService?->getImagesByQuery($query, $lang);
 
-        return $this->json($images);
+            return $this->json($images);
+        } catch (\Exception $e) {
+            return $this->json(['error' => 'Download fetching images: ' . $e->getMessage()], 500);
+        }
     }
 
 
@@ -60,6 +65,10 @@ final class FlashcardController extends AbstractController
             return $this->json([]);
         }
 
-        return $this->json($sentenceService->getSentences($query, $lang));
+        try {
+            return $this->json($sentenceService->getSentences($query, $lang));
+        } catch (\Exception $e) {
+            return $this->json(['error' => 'Download fetching sentences: ' . $e->getMessage()], 500);
+        }
     }
 }

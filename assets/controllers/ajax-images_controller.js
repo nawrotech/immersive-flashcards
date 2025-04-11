@@ -14,6 +14,7 @@ export default class extends Controller {
 
   static values = {
     imagesUrl: String,
+    unsplashDownloadLocationUrl: String,
     index: Number,
     prototype: String,
     maxFlashcardsInDeck: Number,
@@ -37,8 +38,6 @@ export default class extends Controller {
 
   connect() {
     this.hideAddButton();
-
-
   }
 
   async fetchImages(params) {
@@ -154,12 +153,14 @@ export default class extends Controller {
           image,
           currentFlashcardIndex,
           image?.authorName ?? "",
-          image?.authorProfileUrl ?? ""
+          image?.authorProfileUrl ?? "",
+          image?.downloadLocation ?? ""
         );
 
         if (imageType == "image") {
           const attributionElement = this.createUnsplashAttributionElement(image.authorName, image.authorProfileUrl);
           imageElement.insertAdjacentHTML("beforeend", attributionElement);
+
         }
 
         imageGridWrapper.appendChild(imageElement);
@@ -207,11 +208,17 @@ export default class extends Controller {
   }
 
   selectImage(e) {
+    const downloadLocationLink = e.currentTarget.dataset?.downloadLocation;
+    if (downloadLocationLink) {
+      this.makeUnsplashDownloadLocationRequest(downloadLocationLink);
+    }
+
     const flashcardIndex = e.currentTarget.dataset.flashcardIndex;
 
     const flashcardItem = Array.from(
       this.element.querySelectorAll(`.${this.flashcardItemWrapperClass}`)
     ).find((item) => item.dataset.index === flashcardIndex);
+
 
     if (flashcardItem.tagName !== "LI") return;
 
@@ -238,13 +245,33 @@ export default class extends Controller {
     authorProfileUrlInputElement.value = e.currentTarget.dataset.authorProfileUrl;
     authorNameInputElement.value = e.currentTarget.dataset.authorName;
 
-    console.log(authorProfileUrlInputElement);
-    console.log(authorNameInputElement);
-
-
     if (backField) {
       backField.value = e.currentTarget.value;
     }
+  }
+
+  async makeUnsplashDownloadLocationRequest(url) {
+    const encodedUrl = encodeURIComponent(url);
+    fetch(`${this.unsplashDownloadLocationUrlValue}?` + new URLSearchParams({
+      url: encodedUrl
+    }).toString(), {
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRF-TOKEN': this.csrfTokenValue
+      }
+    })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      return response.json();
+    })
+    .then((data) => {
+      return data;
+    })
+    .catch((error) => {
+      throw error;
+    });
   }
 
   createErrorMessageElement(
@@ -262,7 +289,7 @@ export default class extends Controller {
     return imageSelectionGrid;
   }
 
-  createImageElement(image, index, authorName, authorProfileUrl) {
+  createImageElement(image, index, authorName, authorProfileUrl, downloadLocation) {
     const imageElement = document.createElement("div");
     imageElement.classList.add(this.imageFieldClass);
 
@@ -279,6 +306,7 @@ export default class extends Controller {
                                 value="${valueUrl}"
                                 data-author-profile-url="${authorProfileUrl}"
                                 data-author-name="${authorName}"
+                                data-download-location="${downloadLocation}"
                                 type="radio">
                             <img class="img" src="${imageUrl}" alt="${image?.alt}">
                         </label>
