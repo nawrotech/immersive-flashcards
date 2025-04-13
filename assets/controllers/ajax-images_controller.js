@@ -50,9 +50,11 @@ export default class extends Controller {
         'X-CSRF-TOKEN': this.csrfTokenValue
       }
     })
-      .then((response) => {
+      .then(async (response) => {
         if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
+          return response.json().then(errorData => {
+            throw new Error(errorData.message || 'An error occurred, please try again later');
+        });
         }
         return response.json();
       })
@@ -160,7 +162,6 @@ export default class extends Controller {
         if (imageType == "image") {
           const attributionElement = this.createUnsplashAttributionElement(image.authorName, image.authorProfileUrl);
           imageElement.insertAdjacentHTML("beforeend", attributionElement);
-
         }
 
         imageGridWrapper.appendChild(imageElement);
@@ -174,7 +175,7 @@ export default class extends Controller {
       this.manageFlashcardButtons(flashcardItem, false);
       this.clearBackFieldWrapper(backFieldWrapper);
       const errorParagraph = this.createErrorMessageElement(
-        "Something went wrong, please try again later!"
+        error?.message 
       );
       backFieldWrapper.appendChild(errorParagraph);
     }

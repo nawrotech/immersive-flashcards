@@ -26,6 +26,8 @@ class UnsplashApiService implements ImageProviderInterface
                 'per_page' => self::IMAGES_PER_PAGE,
                 'lang' => $lang,
             ],
+            "timeout" => 5.0
+
         ]);
 
         if (200 !== $response->getStatusCode()) {

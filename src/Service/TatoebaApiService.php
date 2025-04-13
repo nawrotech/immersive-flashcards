@@ -3,6 +3,7 @@
 namespace App\Service;
 
 use App\Dto\Api\ApiSentenceDto;
+use App\Exception\TatoebaApiException;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class TatoebaApiService
@@ -24,9 +25,20 @@ class TatoebaApiService
                 'has_audio' => $hasAudio,
                 'sort' => 'random',
                 'direct' => 'only'
-            ]
-        ])->toArray();
+            ],
+            "timeout" => 5.0
+        ]);
 
+        if (200 !== $response->getStatusCode()) {
+            throw new TatoebaApiException(sprintf(
+                'Tatoeba API error: Received status code %d for query "%s" and lang "%s"',
+                $response->getStatusCode(),
+                $query,
+                $lang
+            ));
+        }
+
+        $responseData = $response->toArray();
 
         return array_map(
             function ($sentence) {
@@ -37,7 +49,7 @@ class TatoebaApiService
                     $sentence['audios'][0]['id'] ?? null,
                 );
             },
-            $response['results']
+            $responseData['results']
         );
     }
 }

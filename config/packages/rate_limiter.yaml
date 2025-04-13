@@ -8,3 +8,11 @@ framework:
             policy: 'fixed_window'
             limit: 3
             interval: '1 day'
+        sentence_request:
+            policy: 'fixed_window'
+            limit: 60
+            interval: '60 minutes'
+        image_request: 
+            policy: 'fixed_window'
+            limit: 240
+            interval: '60 minutes'

@@ -25,10 +25,6 @@ export default class extends Controller {
     csrfToken: String
   };
 
-  connect() {
-    console.log(this.csrfTokenValue);
-  }
-
   async fetchSentences(query) {
     const queryString = new URLSearchParams({ query }).toString();
     try {
@@ -40,8 +36,9 @@ export default class extends Controller {
         }
       });
       if (!response.ok) {
+        const errorData = await response.json();
         throw new Error(
-          `Server error: ${response.status} ${response.statusText}`
+          errorData?.message || "Something went wrong, please try again later!"
         );
       }
       return await response.json();
@@ -92,7 +89,7 @@ export default class extends Controller {
     } catch (error) {
       container.innerHTML = "";
       const errorElement = this.createErrorMessageElement(
-        "Something went wrong, please try again later!"
+        error.message
       );
       container.appendChild(errorElement);
     }

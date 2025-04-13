@@ -8,10 +8,6 @@ export default class extends Controller {
         prototype: String,
         wrapperClassName: String
     }
-    
-    connect() {
-        console.log(this.prototypeValue);
-    }
 
     addCollectionElement()
     {

@@ -12,6 +12,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\RateLimiter\RateLimiterFactory;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
@@ -23,6 +24,7 @@ final class FlashcardController extends AbstractController
         #[Autowire(service: UnsplashApiService::class)] ImageProviderInterface $unsplashApiService,
         #[Autowire(service: GiphyApiService::class)] ImageProviderInterface $giphyApiService,
         Request $request,
+        RateLimiterFactory $imageRequestLimiter,
         #[MapQueryParameter()] string $query = "",
         #[MapQueryParameter()] string $flashcardType = "",
         #[MapQueryParameter()] string $lang = ""
@@ -35,6 +37,11 @@ final class FlashcardController extends AbstractController
 
         if (empty($query)) {
             return $this->json([]);
+        }
+
+        $limiter = $imageRequestLimiter->create($request->getClientIp());
+        if (false === $limiter->consume(1)->isAccepted()) {
+            return $this->json(['message' => 'Too many requests. Please try again later.'], 429);
         }
 
         try {
@@ -53,12 +60,19 @@ final class FlashcardController extends AbstractController
     public function sentences(
         SentenceService $sentenceService,
         Request $request,
+        RateLimiterFactory $sentenceRequestLimiter,
         #[MapQueryParameter()] string $query = "",
         #[MapQueryParameter()] string $lang = "",
     ) {
+
         $token = $request->headers->get('X-CSRF-TOKEN');
         if (!$this->isCsrfTokenValid('get_sentences', $token)) {
             throw new AccessDeniedHttpException('Invalid CSRF token');
+        }
+
+        $limiter = $sentenceRequestLimiter->create($request->getClientIp());
+        if (false === $limiter->consume(1)->isAccepted()) {
+            return $this->json(['message' => 'Too many requests. Please try again later.'], 429);
         }
 
         if (empty($query)) {
