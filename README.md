@@ -7,7 +7,17 @@ This app revolutionizes language learning by letting you **create vivid mental a
 
 ## 🔥 Key Features
 
-### 1. Words in Context
+### 1. Visual Vocabulary
+
+![Searching image](showcase/image_search.gif)  
+Find the perfect image to anchor the word in your mind.
+
+### 2. Animated Learning
+
+![Searching GIF](showcase/gif_search.gif)  
+GIFs make abstract words _click_ (e.g., "to run" = �️ Usain Bolt sprinting).
+
+### 3. Words in Context
 
 ![Practice](showcase/practice.gif)  
 See your target word in **real-life sentences**—like watching a movie clip!
@@ -17,16 +27,6 @@ _Supercharge your learning:_
 - Many sentences include **native speaker audio** (click the 🔊 icon)
 - Reinforce pronunciation while absorbing natural flow
 - _Not all examples have audio!_
-
-### 2. Visual Vocabulary
-
-![Searching image](showcase/image_search.gif)  
-Find the perfect image to anchor the word in your mind.
-
-### 3. Animated Learning
-
-![Searching GIF](showcase/gif_search.gif)  
-GIFs make abstract words _click_ (e.g., "to run" = �️ Usain Bolt sprinting).
 
 ---
 
